@@ -5,14 +5,13 @@ const nu_prompt_const = {
     prompt_utils_path: (["~" ".config" "nupm" "utils" "prompt-utils.nu"] | path join | path expand)
 }
 
-use $nu_prompt_const.prompt_utils_path *
-
 do --env {
+    use $nu_prompt_const.prompt_utils_path *
     if not ($nu_prompt_const.config_path | path exists) {
         touch $nu_prompt_const.config_path
         let config = {
             enable: "off"
-            theme: "azure"
+            theme: "simple-minimal"
         }
         $config | to yaml | save $nu_prompt_const.config_path -f
     }
@@ -61,4 +60,25 @@ def "nupm off" [] {
     $config | to yaml | save $nu_prompt_const.config_path -f
 
     exec $nu.current-exe
+}
+
+# List prompt
+def "nupm list" [] {
+    let description_path = ([$nu_prompt_const.exe_path "themes" ".description.yml"] | path join)
+    open $description_path
+}
+
+# Show help information
+def nupm [] {
+    print "nupm - Nushell Prompt Manager"
+    print ""
+    print "USAGE:"
+    print "    nupm <COMMAND>"
+    print ""
+    print "COMMANDS:"
+    print "    list                List prompt"
+    print "    off                 Disable prompt"
+    print "    on                  Enable prompt"
+    print "    set <theme_name>    Set prompt theme"
+    print ""
 }
