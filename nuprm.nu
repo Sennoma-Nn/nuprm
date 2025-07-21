@@ -1,8 +1,8 @@
 const nu_prompt_const = {
-    exe_path: (["~" ".config" "nupm"] | path join | path expand)
-    config_path: (["~" ".config" "nupm" "config.yml"] | path join | path expand)
-    load_path: (["~" ".config" "nupm" "load.nu"] | path join | path expand)
-    prompt_utils_path: (["~" ".config" "nupm" "utils" "prompt-utils.nu"] | path join | path expand)
+    exe_path: (["~" ".config" "nuprm"] | path join | path expand)
+    config_path: (["~" ".config" "nuprm" "config.yml"] | path join | path expand)
+    load_path: (["~" ".config" "nuprm" "load.nu"] | path join | path expand)
+    prompt_utils_path: (["~" ".config" "nuprm" "utils" "prompt-utils.nu"] | path join | path expand)
 }
 
 do --env {
@@ -28,7 +28,7 @@ do --env {
 }
 
 # Set prompt theme
-def "nupm set" [
+def "nuprm set" [
     theme_name # Theme name
 ] {
     mut config = (open $nu_prompt_const.config_path)
@@ -45,7 +45,7 @@ def "nupm set" [
 }
 
 # Enable prompt
-def "nupm on" [] {
+def "nuprm on" [] {
     mut config = (open $nu_prompt_const.config_path)
     $config.enable = "on"
     $config | to yaml | save $nu_prompt_const.config_path -f
@@ -54,7 +54,7 @@ def "nupm on" [] {
 }
 
 # Disable prompt
-def "nupm off" [] {
+def "nuprm off" [] {
     mut config = (open $nu_prompt_const.config_path)
     $config.enable = "off"
     $config | to yaml | save $nu_prompt_const.config_path -f
@@ -63,17 +63,17 @@ def "nupm off" [] {
 }
 
 # List prompt
-def "nupm list" [] {
+def "nuprm list" [] {
     let description_path = ([$nu_prompt_const.exe_path "themes" ".description.yml"] | path join)
     open $description_path
 }
 
 # Show help information
-def nupm [] {
-    print "nupm - Nushell Prompt Manager"
+def nuprm [] {
+    print "nuprm - Nushell Prompt Manager"
     print ""
     print "USAGE:"
-    print "    nupm <COMMAND>"
+    print "    nuprm <COMMAND>"
     print ""
     print "COMMANDS:"
     print "    list                List prompt"

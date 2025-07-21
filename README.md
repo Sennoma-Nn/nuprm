@@ -1,4 +1,4 @@
-# Nushell Prompt Manager (nupm)
+# Nushell Prompt Manager (nuprm)
 
 [English](#english) | [中文](#中文)
 
@@ -8,7 +8,7 @@
 
 ### Overview
 
-**nupm** (Nushell Prompt Manager) is a powerful and flexible prompt theme manager for Nushell. It allows you to easily switch between different prompt themes, customize your terminal appearance, and manage prompt configurations with simple commands.
+**nuprm** (Nushell Prompt Manager) is a powerful and flexible prompt theme manager for Nushell. It allows you to easily switch between different prompt themes, customize your terminal appearance, and manage prompt configurations with simple commands.
 
 ### Features
 
@@ -22,12 +22,12 @@
 
 1. Clone this repository to your Nushell configuration directory:
 ```bash
-git clone https://github.com/Sennoma-Nn/nupm.git ~/.config/nupm
+git clone https://github.com/Sennoma-Nn/nuprm.git ~/.config/nuprm
 ```
 
 2. Add the following line to your Nushell configuration file (`~/.config/nushell/config.nu`):
 ```nushell
-source ~/.config/nupm/nupm.nu
+source ~/.config/nuprm/nuprm.nu
 ```
 
 3. Restart your Nushell session.
@@ -50,40 +50,40 @@ source ~/.config/nupm/nupm.nu
 
 ```nushell
 # Show help information
-nupm
+nuprm
 
 # List all available themes
-nupm list
+nuprm list
 
 # Set a specific theme
-nupm set <theme_name>
+nuprm set <theme_name>
 
 # Enable prompt themes
-nupm on
+nuprm on
 
 # Disable prompt themes
-nupm off
+nuprm off
 ```
 
 #### Examples
 
 ```nushell
 # Switch to the neon-night theme
-nupm set neon-night
+nuprm set neon-night
 
 # Enable prompt theming
-nupm on
+nuprm on
 
 # View all available themes
-nupm list
+nuprm list
 
 # Disable prompt theming (use default)
-nupm off
+nuprm off
 ```
 
 ### Configuration
 
-The configuration file is automatically created at `~/.config/nupm/config.yml` with the following structure:
+The configuration file is automatically created at `~/.config/nuprm/config.yml` with the following structure:
 
 ```yaml
 enable: "off"  # "on" or "off"
@@ -115,7 +115,7 @@ Contributions are welcome! Feel free to:
 
 ### 概述
 
-**nupm**（Nushell 提示符管理器）是一个强大而灵活的 Nushell 提示符主题管理器。它让您可以轻松地在不同的提示符主题之间切换，自定义终端外观，并通过简单的命令管理提示符配置。
+**nuprm**（Nushell 提示符管理器）是一个强大而灵活的 Nushell 提示符主题管理器。它让您可以轻松地在不同的提示符主题之间切换，自定义终端外观，并通过简单的命令管理提示符配置。
 
 ### 特性
 
@@ -129,12 +129,12 @@ Contributions are welcome! Feel free to:
 
 1. 将此仓库克隆到您的 Nushell 配置目录：
 ```bash
-git clone https://github.com/Sennoma-Nn/nupm.git ~/.config/nupm
+git clone https://github.com/Sennoma-Nn/nuprm.git ~/.config/nuprm
 ```
 
 2. 在您的 Nushell 配置文件（`~/.config/nushell/config.nu`）中添加以下行：
 ```nushell
-source ~/.config/nupm/nupm.nu
+source ~/.config/nuprm/nuprm.nu
 ```
 
 3. 重启您的 Nushell 会话。
@@ -157,40 +157,40 @@ source ~/.config/nupm/nupm.nu
 
 ```nushell
 # 显示帮助信息
-nupm
+nuprm
 
 # 列出所有可用主题
-nupm list
+nuprm list
 
 # 设置特定主题
-nupm set <主题名称>
+nuprm set <主题名称>
 
 # 启用提示符主题
-nupm on
+nuprm on
 
 # 禁用提示符主题
-nupm off
+nuprm off
 ```
 
 #### 示例
 
 ```nushell
 # 切换到 neon-night 主题
-nupm set neon-night
+nuprm set neon-night
 
 # 启用提示符主题
-nupm on
+nuprm on
 
 # 查看所有可用主题
-nupm list
+nuprm list
 
 # 禁用提示符主题（使用默认）
-nupm off
+nuprm off
 ```
 
 ### 配置
 
-配置文件会自动创建在 `~/.config/nupm/config.yml`，结构如下：
+配置文件会自动创建在 `~/.config/nuprm/config.yml`，结构如下：
 
 ```yaml
 enable: "off"  # "on" 或 "off"
@@ -220,7 +220,7 @@ theme: "simple-minimal"  # 默认主题
 
 ## Repository
 
-🔗 **GitHub**: [https://github.com/Sennoma-Nn/nupm](https://github.com/Sennoma-Nn/nupm)
+🔗 **GitHub**: [https://github.com/Sennoma-Nn/nuprm](https://github.com/Sennoma-Nn/nuprm)
 
 ---
 
