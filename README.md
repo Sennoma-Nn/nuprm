@@ -1,0 +1,1 @@
+# Nushell Prompt Manager (nupm)
