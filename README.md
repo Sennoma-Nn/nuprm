@@ -34,15 +34,15 @@ source ~/.config/nupm/nupm.nu
 
 ### Available Themes
 
-| Theme Name | Author | Style | Description |
-|------------|--------|-------|-------------|
-| `azure` | Sennoma-Nn | Minimalist | Clean and simple blue-themed prompt |
-| `power-blocks` | Sennoma-Nn | Power Line | Modern powerline-style blocks |
-| `gxy` | Sennoma-Nn | Power Line, Multiple Lines | Galaxy-inspired multi-line powerline |
-| `neon-night` | Sennoma-Nn | Multiple Lines | Vibrant neon colors for night coding |
-| `retro-console` | Sennoma-Nn | Retro | Classic terminal aesthetic |
-| `simple-minimal` | Sennoma-Nn | Minimalist | Ultra-clean minimal design |
-| `galaxy-dream` | Sennoma-Nn | Emoji, Multiple Lines | Dreamy space theme with emojis |
+| Theme Name | Author | Style |
+|------------|--------|-------|
+| `azure` | Sennoma-Nn | Minimalist |
+| `power-blocks` | Sennoma-Nn | Power Line |
+| `gxy` | Sennoma-Nn | Power Line, Multiple Lines |
+| `neon-night` | Sennoma-Nn | Multiple Lines |
+| `retro-console` | Sennoma-Nn | Retro |
+| `simple-minimal` | Sennoma-Nn | Minimalist |
+| `galaxy-dream` | Sennoma-Nn | Emoji, Multiple Lines |
 
 ### Usage
 
@@ -68,8 +68,8 @@ nupm off
 #### Examples
 
 ```nushell
-# Switch to the galaxy-dream theme
-nupm set galaxy-dream
+# Switch to the neon-night theme
+nupm set neon-night
 
 # Enable prompt theming
 nupm on
@@ -109,10 +109,6 @@ Contributions are welcome! Feel free to:
 - Contribute new theme designs
 - Improve documentation
 
-### License
-
-This project is open source. Please check the repository for license details.
-
 ---
 
 ## 中文
@@ -145,15 +141,15 @@ source ~/.config/nupm/nupm.nu
 
 ### 可用主题
 
-| 主题名称 | 作者 | 风格 | 描述 |
-|----------|------|------|------|
-| `azure` | Sennoma-Nn | 极简主义 | 简洁的蓝色主题提示符 |
-| `power-blocks` | Sennoma-Nn | Power Line | 现代 powerline 风格块状设计 |
-| `gxy` | Sennoma-Nn | Power Line, 多行 | 银河系风格的多行 powerline |
-| `neon-night` | Sennoma-Nn | 多行 | 适合夜间编程的霓虹色彩 |
-| `retro-console` | Sennoma-Nn | 复古 | 经典终端美学 |
-| `simple-minimal` | Sennoma-Nn | 极简主义 | 超简洁的最小化设计 |
-| `galaxy-dream` | Sennoma-Nn | 表情符号, 多行 | 梦幻太空主题配表情符号 |
+| 主题名称 | 作者 | 风格 |
+|----------|------|------|
+| `azure` | Sennoma-Nn | 极简主义 |
+| `power-blocks` | Sennoma-Nn | Power Line |
+| `gxy` | Sennoma-Nn | Power Line, 多行 |
+| `neon-night` | Sennoma-Nn | 多行 |
+| `retro-console` | Sennoma-Nn | 复古 |
+| `simple-minimal` | Sennoma-Nn | 极简主义 |
+| `galaxy-dream` | Sennoma-Nn | 表情符号, 多行 |
 
 ### 使用方法
 
@@ -179,8 +175,8 @@ nupm off
 #### 示例
 
 ```nushell
-# 切换到 galaxy-dream 主题
-nupm set galaxy-dream
+# 切换到 neon-night 主题
+nupm set neon-night
 
 # 启用提示符主题
 nupm on
@@ -219,10 +215,6 @@ theme: "simple-minimal"  # 默认主题
 - 请求新主题
 - 贡献新的主题设计
 - 改进文档
-
-### 许可证
-
-本项目为开源项目。请查看仓库了解许可证详情。
 
 ---
 
