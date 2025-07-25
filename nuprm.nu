@@ -9,6 +9,7 @@ do --env {
             enable: "off"
             theme: "simple-minimal"
             use_full_name: "no"
+            disable_system_icon: "no"
         }
         $config | to yaml | save $nu_prompt_const.config_path -f
     }
@@ -25,7 +26,7 @@ do --env {
 }
 
 # Set prompt theme
-def "nuprm set" [
+def "nuprm set theme" [
     theme_name: string # Theme name
 ] {
     mut config = (open $nu_prompt_const.config_path)
@@ -41,12 +42,29 @@ def "nuprm set" [
     }
 }
 
+# List prompt
+def "nuprm list" [] {
+    let description_path = ([$nu_prompt_const.exe_path "themes" ".description.yml"] | path join)
+    open $description_path
+}
+
 # Enable / Disable use full name
-def "nuprm fullname" [
+def "nuprm set full-name" [
     enable: bool # Use `true` or `false` to enable or disable full name
 ] {
     mut config = (open $nu_prompt_const.config_path)
     $config.use_full_name = if $enable { "yes" } else { "no" }
+    $config | to yaml | save $nu_prompt_const.config_path -f
+
+    exec $nu.current-exe
+}
+
+# Enable / Disable use system icon
+def "nuprm set system-icon" [
+    enable: bool # Use `true` or `false` to enable or disable full name
+] {
+    mut config = (open $nu_prompt_const.config_path)
+    $config.disable_system_icon = if not $enable { "yes" } else { "no" }
     $config | to yaml | save $nu_prompt_const.config_path -f
 
     exec $nu.current-exe
@@ -61,10 +79,4 @@ def nuprm [
     $config | to yaml | save $nu_prompt_const.config_path -f
 
     exec $nu.current-exe
-}
-
-# List prompt
-def "nuprm list" [] {
-    let description_path = ([$nu_prompt_const.exe_path "themes" ".description.yml"] | path join)
-    open $description_path
 }

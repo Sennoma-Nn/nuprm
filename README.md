@@ -60,7 +60,7 @@ nuprm --help
 nuprm list
 
 # Set a specific theme
-nuprm set <theme_name>
+nuprm set theme <theme_name>
 
 # Enable prompt themes
 nuprm true
@@ -69,17 +69,23 @@ nuprm true
 nuprm false
 
 # Enable full name display
-nuprm fullname true
+nuprm set full-name true
 
 # Disable full name display
-nuprm fullname false
+nuprm set full-name false
+
+# Enable system icon display
+nuprm set system-icon true
+
+# Disable system icon display
+nuprm set system-icon false
 ```
 
 #### Examples
 
 ```nushell
 # Switch to the neon-night theme
-nuprm set neon-night
+nuprm set theme neon-night
 
 # Enable prompt theming
 nuprm true
@@ -91,7 +97,10 @@ nuprm list
 nuprm false
 
 # Enable full name display
-nuprm fullname true
+nuprm set full-name true
+
+# Enable system icon display
+nuprm set system-icon true
 ```
 
 ### Configuration
@@ -102,6 +111,7 @@ The configuration file is automatically created at `~/.config/nuprm/config.yml` 
 enable: "off"  # "on" or "off"
 theme: "simple-minimal"  # default theme
 use_full_name: "no"  # "yes" or "no"
+disable_system_icon: "no"  # "yes" or "no"
 ```
 
 ### Utility Functions
@@ -184,7 +194,7 @@ nuprm --help
 nuprm list
 
 # 设置特定主题
-nuprm set <主题名称>
+nuprm set theme <主题名称>
 
 # 启用提示符主题
 nuprm true
@@ -193,17 +203,23 @@ nuprm true
 nuprm false
 
 # 启用全名显示
-nuprm fullname true
+nuprm set full-name true
 
 # 禁用全名显示
-nuprm fullname false
+nuprm set full-name false
+
+# 启用系统图标显示
+nuprm set system-icon true
+
+# 禁用系统图标显示
+nuprm set system-icon false
 ```
 
 #### 示例
 
 ```nushell
 # 切换到 neon-night 主题
-nuprm set neon-night
+nuprm set theme neon-night
 
 # 启用提示符主题
 nuprm true
@@ -215,7 +231,10 @@ nuprm list
 nuprm false
 
 # 启用全名显示
-nuprm fullname true
+nuprm set full-name true
+
+# 启用系统图标显示
+nuprm set system-icon true
 ```
 
 ### 配置
@@ -226,6 +245,7 @@ nuprm fullname true
 enable: "off"  # "on" 或 "off"
 theme: "simple-minimal"  # 默认主题
 use_full_name: "no"  # "yes" 或 "no"
+disable_system_icon: "no"  # "yes" 或 "no"
 ```
 
 ### 实用函数
