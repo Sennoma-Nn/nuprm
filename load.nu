@@ -1,1 +1,1 @@
-source /home/laism/.config/nuprm/themes/neon-night.nu
+source /home/laism/.config/nuprm/themes/sunset-ocean.nu

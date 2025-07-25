@@ -1,3 +1,22 @@
+export const nu_prompt_const = {
+    exe_path: (["~" ".config" "nuprm"] | path join | path expand)
+    config_path: (["~" ".config" "nuprm" "config.yml"] | path join | path expand)
+    load_path: (["~" ".config" "nuprm" "load.nu"] | path join | path expand)
+}
+
+# Get user config
+def get-config [
+    item: string
+    default: string
+] {
+    let user_config = open $nu_prompt_const.config_path
+    if $item in $user_config {
+        return ($user_config | get $item)
+    } else {
+        return $default
+    }
+}
+
 # Replaces the home directory path in a given string with a tilde (~)
 export def home-to-tilde [
     path: string  # The input path to process
@@ -75,8 +94,91 @@ export def is-windows [] {
     return $is_windows
 }
 
+# Checks if the current operating system is android
+export def is-android [] {
+    let is_android = if $nu.os-info.name == "android" { true } else { false }
+    return $is_android
+}
+
 # Retrieves current username from environment variables
 export def get-user-name [] {
     let username = ($env.USERNAME? | default $env.USER? | default (whoami))
+    try {
+        if ((get-config "use_full_name" "no") == "yes") {
+            if not (is-windows) {
+                if not (is-android) {
+                    let full_name = open /etc/passwd
+                        | lines
+                        | split column ":"
+                        | where column1 == $username
+                        | get column5
+                        | first
+                        | str replace "," " " --all
+                        | str trim
+                    return $full_name
+                }
+            }
+        }
+    } catch { }
     return $username
+}
+
+# Get system icon (Nerd Font)
+export def get-system-icon [
+    --left_char: string (-l) = ""   # Left decorator for system icon
+    --right_char: string (-r) = ""  # Right decorator for system icon
+] {
+    let disable_system_icon = (get-config "disable_system_icon" "yes")
+
+    if $disable_system_icon == no {
+        let system_type = $nu.os-info.name
+        let system_name = (sys host | get name | str downcase)
+
+        let icon = match $system_type {
+            "windows"   => { "" }
+            "linux"     => {
+                match $system_name {
+                    "alma"                  => ""
+                    "almalinux"             => ""
+                    "almalinux9"            => ""
+                    "alpine"                => ""
+                    "aosc"                  => ""
+                    "arch linux"            => "" # Tested
+                    "centos"                => ""
+                    "coreos"                => ""
+                    "debian"                => ""
+                    "deepin"                => "" # Tested
+                    "devuan"                => ""
+                    "elementary"            => ""
+                    "endeavouros"           => ""
+                    "fedora linux"          => ""
+                    "gentoo"                => ""
+                    "mageia"                => ""
+                    "manjaro"               => ""
+                    "mint"                  => ""
+                    "nixos"                 => "" # Tested
+                    "opensuse"              => ""
+                    "opensuse-tumbleweed"   => ""
+                    "raspbian"              => ""
+                    "redhat"                => ""
+                    "rocky"                 => ""
+                    "sabayon"               => ""
+                    "slackware"             => ""
+                    "ubuntu"                => "" # Tested
+                    _                       => "" # Tested
+                }
+            }
+            "android"   => { "" }
+            "macos"     => { "" }
+            _           => { "" }
+        }
+
+        return (
+            if $icon != "" {
+                (
+                    [$left_char, $icon, $right_char] | str join ""
+                )
+            } else { "" }
+        )
+    } else { "" }
 }

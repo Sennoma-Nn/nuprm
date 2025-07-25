@@ -48,7 +48,7 @@ def create-prompt [] {
 
     mut prompt = $"($reset)┌ "
     $prompt += $"($blue_fg)($reset)"
-    $prompt += $"($blue_bg)($black_fg) NU▕ ($user)($shells_info) ($reset)"
+    $prompt += $"($blue_bg)($black_fg) (get-system-icon -r ' ▕ ')($user)($shells_info) ($reset)"
     $prompt += $"(if $shells_info != "" { $dark_blue_fg } else { $blue_fg })($reset)"
     $prompt += $"($dark_blue_fg)"
     $prompt += $"($dark_blue_bg)($blue_fg) ($path) ($reset)"
@@ -86,6 +86,11 @@ $env.PROMPT_COMMAND = { create-prompt }
 $env.PROMPT_COMMAND_RIGHT = ""
 $env.PROMPT_INDICATOR = $reset + "> "
 $env.PROMPT_MULTILINE_INDICATOR = "┆ - "
+$env.PROMPT_INDICATOR_VI_INSERT = $reset + ": "
+$env.PROMPT_INDICATOR_VI_NORMAL = $env.PROMPT_INDICATOR
 $env.TRANSIENT_PROMPT_COMMAND = {|| transient-create-left-prompt}
+$env.TRANSIENT_PROMPT_COMMAND_RIGHT = ""
 $env.TRANSIENT_PROMPT_INDICATOR = " "
-$env.TRANSIENT_PROMPT_MULTILINE_INDICATOR = {||}
+$env.TRANSIENT_PROMPT_MULTILINE_INDICATOR = " "
+$env.TRANSIENT_PROMPT_INDICATOR_VI_INSERT = " "
+$env.TRANSIENT_PROMPT_INDICATOR_VI_NORMAL = " "

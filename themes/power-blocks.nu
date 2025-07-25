@@ -6,37 +6,45 @@ let prompt_chars = {
     right_char: ""
     wrong_char: ""
     root_icon: ""
+    icon_fg: (color2ansi 255 146 72 fg)
+    icon_bg: (color2ansi 255 146 72 bg)
     name_fg: (color2ansi 255 146 72 fg)
     name_bg: (color2ansi 255 146 72 bg)
     path_fg: (color2ansi 52 100 164 fg)
     path_bg: (color2ansi 52 100 164 bg)
-    git_fg: (color2ansi 196 134 191 fg)
-    git_bg: (color2ansi 196 134 191 bg)
+    git_fg: (color2ansi 196 110 170 fg)
+    git_bg: (color2ansi 196 110 170 bg)
     status_fg: (color2ansi 46 149 153 fg)
     status_bg: (color2ansi 46 149 153 bg)
     status_err_fg: (color2ansi 240 83 80 fg)
     status_err_bg: (color2ansi 240 83 80 bg)
+    shells_fg: (color2ansi 122 64 152 fg)
+    shells_bg: (color2ansi 122 64 152 bg)
     root_fg: (color2ansi 248 102 122 fg)
     root_bg: (color2ansi 248 102 122 bg)
+    vi_fg: (color2ansi 78 144 61 fg)
+    vi_bg: (color2ansi 78 144 61 bg)
 }
 
 def create-left-prompt [] {
     let status = {
+        icon: (get-system-icon -r " ")
         user: (get-user-name)
         path: (
             if (is-windows) {
-                ("\e[1m" + (home-to-tilde $env.PWD) | str replace --all "\\" $"\e[2m\\\e[0;1m($prompt_chars.path_bg)")
+                ("\e[1;37m" + (home-to-tilde $env.PWD) | str replace --all "\\" $"\e[2m\\\e[0;1;37m($prompt_chars.path_bg)")
             } else {
-                ("\e[1m" + (home-to-tilde $env.PWD) | str replace --all "/" $"\e[2m/\e[0;1m($prompt_chars.path_bg)")
+                ("\e[1;37m" + (home-to-tilde $env.PWD) | str replace --all "/" $"\e[2m/\e[0;1;37m($prompt_chars.path_bg)")
             }
         )
         git: (get-git-info)
         exit: $env.LAST_EXIT_CODE
         admin: (is-admin)
+        shells: (get-where-shells -dl "#")
     }
     return (
         [
-            (prompt-block "" "" $prompt_chars.name_fg $prompt_chars.name_bg $status.user $prompt_chars.black_fg "")
+            (prompt-block "" "" $prompt_chars.name_fg $prompt_chars.name_bg $status.user $prompt_chars.black_fg $status.icon)
             (prompt-block "" "" $prompt_chars.path_fg $prompt_chars.path_bg $status.path $prompt_chars.white_fg " ")
             (
                 if $status.git != "" {
@@ -51,6 +59,11 @@ def create-left-prompt [] {
                 }
             )
             (
+                if $status.shells != "" {
+                    prompt-block "" "" $prompt_chars.shells_fg $prompt_chars.shells_bg $status.shells $prompt_chars.white_fg " "
+                } else { "" }
+            )
+            (
                 if $status.admin {
                     prompt-block "" "" $prompt_chars.root_fg $prompt_chars.root_bg $prompt_chars.root_icon $prompt_chars.white_fg ""
                 } else { "" }
@@ -61,11 +74,27 @@ def create-left-prompt [] {
 }
 
 def transient-create-left-prompt [] {
-    let path = ("\e[1m" + (home-to-tilde $env.PWD) | str replace --all "/" $"\e[2m/\e[0;1m($prompt_chars.path_bg)")
+    let path = if (is-windows) {
+        ("\e[1;37m" + (home-to-tilde $env.PWD) | str replace --all "\\" $"\e[2m\\\e[0;1;37m($prompt_chars.path_bg)")
+    } else {
+        ("\e[1;37m" + (home-to-tilde $env.PWD) | str replace --all "/" $"\e[2m/\e[0;1;37m($prompt_chars.path_bg)")
+    }
     
     return (
         prompt-block "" " " $prompt_chars.path_fg $prompt_chars.path_bg $path $prompt_chars.white_fg " "
     )
+}
+
+def vi-ins-prompt [] {
+    let prompt = (prompt-block "\b" " " $prompt_chars.vi_fg $prompt_chars.vi_bg "I" $prompt_chars.white_fg " ")
+
+    return $prompt
+}
+
+def vi-nor-prompt [] {
+    let prompt = (prompt-block "\b" " " $prompt_chars.vi_fg $prompt_chars.vi_bg "N" $prompt_chars.white_fg " ")
+
+    return $prompt
 }
 
 def prompt-block [
@@ -98,6 +127,11 @@ $env.PROMPT_COMMAND = {|| create-left-prompt }
 $env.PROMPT_COMMAND_RIGHT = {||}
 $env.PROMPT_INDICATOR = $""
 $env.PROMPT_MULTILINE_INDICATOR = $"($prompt_chars.name_fg)➥ "
-$env.TRANSIENT_PROMPT_COMMAND = {|| transient-create-left-prompt}
+$env.PROMPT_INDICATOR_VI_INSERT = {|| vi-ins-prompt }
+$env.PROMPT_INDICATOR_VI_NORMAL = {|| vi-nor-prompt }
+$env.TRANSIENT_PROMPT_COMMAND = {|| transient-create-left-prompt }
+$env.TRANSIENT_PROMPT_COMMAND_RIGHT = ""
 $env.TRANSIENT_PROMPT_INDICATOR = $""
 $env.TRANSIENT_PROMPT_MULTILINE_INDICATOR = $"($prompt_chars.path_fg)➥ "
+$env.TRANSIENT_PROMPT_INDICATOR_VI_INSERT = ""
+$env.TRANSIENT_PROMPT_INDICATOR_VI_NORMAL = ""

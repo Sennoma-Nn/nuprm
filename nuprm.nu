@@ -1,17 +1,14 @@
-const nu_prompt_const = {
-    exe_path: (["~" ".config" "nuprm"] | path join | path expand)
-    config_path: (["~" ".config" "nuprm" "config.yml"] | path join | path expand)
-    load_path: (["~" ".config" "nuprm" "load.nu"] | path join | path expand)
-    prompt_utils_path: (["~" ".config" "nuprm" "utils" "prompt-utils.nu"] | path join | path expand)
-}
+const prompt_utils_path = (["~" ".config" "nuprm" "utils" "prompt-utils.nu"] | path join | path expand)
+use $prompt_utils_path nu_prompt_const
 
 do --env {
-    use $nu_prompt_const.prompt_utils_path *
+    use $prompt_utils_path *
     if not ($nu_prompt_const.config_path | path exists) {
         touch $nu_prompt_const.config_path
         let config = {
             enable: "off"
             theme: "simple-minimal"
+            use_full_name: "no"
         }
         $config | to yaml | save $nu_prompt_const.config_path -f
     }
@@ -29,7 +26,7 @@ do --env {
 
 # Set prompt theme
 def "nuprm set" [
-    theme_name # Theme name
+    theme_name: string # Theme name
 ] {
     mut config = (open $nu_prompt_const.config_path)
     $config.theme = $theme_name
@@ -44,19 +41,23 @@ def "nuprm set" [
     }
 }
 
-# Enable prompt
-def "nuprm on" [] {
+# Enable / Disable use full name
+def "nuprm fullname" [
+    enable: bool # Use `true` or `false` to enable or disable full name
+] {
     mut config = (open $nu_prompt_const.config_path)
-    $config.enable = "on"
+    $config.use_full_name = if $enable { "yes" } else { "no" }
     $config | to yaml | save $nu_prompt_const.config_path -f
 
     exec $nu.current-exe
 }
 
-# Disable prompt
-def "nuprm off" [] {
+# Enable / Disable prompt
+def nuprm [
+    enable: bool # Use `true` or `false` to enable or disable nuprm
+] {
     mut config = (open $nu_prompt_const.config_path)
-    $config.enable = "off"
+    $config.enable = if $enable { "on" } else { "off" }
     $config | to yaml | save $nu_prompt_const.config_path -f
 
     exec $nu.current-exe
@@ -66,19 +67,4 @@ def "nuprm off" [] {
 def "nuprm list" [] {
     let description_path = ([$nu_prompt_const.exe_path "themes" ".description.yml"] | path join)
     open $description_path
-}
-
-# Show help information
-def nuprm [] {
-    print "nuprm - Nushell Prompt Manager"
-    print ""
-    print "USAGE:"
-    print "    nuprm <COMMAND>"
-    print ""
-    print "COMMANDS:"
-    print "    list                List prompt"
-    print "    off                 Disable prompt"
-    print "    on                  Enable prompt"
-    print "    set <theme_name>    Set prompt theme"
-    print ""
 }

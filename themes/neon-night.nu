@@ -34,11 +34,15 @@ def create-right-prompt [] {
 }
 
 # --- Assign components to environment variables ---
-
 $env.PROMPT_COMMAND = {|| create-left-prompt }
 $env.PROMPT_COMMAND_RIGHT = {|| create-right-prompt }
 $env.PROMPT_INDICATOR = $"($colors.cyan)❯ ($colors.reset)"
 $env.PROMPT_MULTILINE_INDICATOR = $"($colors.grey)· ($colors.reset)"
+$env.PROMPT_INDICATOR_VI_INSERT = $"($colors.cyan): ($colors.reset)"
+$env.PROMPT_INDICATOR_VI_NORMAL = $env.PROMPT_INDICATOR
 $env.TRANSIENT_PROMPT_COMMAND = {||}
+$env.TRANSIENT_PROMPT_COMMAND_RIGHT = ""
 $env.TRANSIENT_PROMPT_INDICATOR = $env.PROMPT_INDICATOR
 $env.TRANSIENT_PROMPT_MULTILINE_INDICATOR = $env.PROMPT_MULTILINE_INDICATOR
+$env.TRANSIENT_PROMPT_INDICATOR_VI_INSERT = $env.PROMPT_INDICATOR_VI_INSERT
+$env.TRANSIENT_PROMPT_INDICATOR_VI_NORMAL = $env.PROMPT_INDICATOR_VI_NORMAL

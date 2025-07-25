@@ -12,11 +12,14 @@
 
 ### Features
 
-- 🎨 **Multiple Themes**: Choose from 7 beautiful pre-built themes
+- 🎨 **Multiple Themes**: Choose from 8 beautiful pre-built themes
 - 🔧 **Easy Management**: Simple commands to enable, disable, and switch themes
 - ⚡ **Fast Switching**: Instant theme switching with automatic shell restart
 - 📝 **Theme Descriptions**: View detailed information about each theme
 - 🛠️ **Utility Functions**: Built-in helper functions for prompt customization
+- 🎯 **VI Mode Support**: Full support for Nushell's VI editing mode
+- 🖥️ **System Icons**: Display system-specific icons (Nerd Font required)
+- 👤 **Full Name Display**: Option to show full user name instead of username
 
 ### Installation
 
@@ -43,6 +46,7 @@ source ~/.config/nuprm/nuprm.nu
 | `retro-console` | Sennoma-Nn | Retro |
 | `simple-minimal` | Sennoma-Nn | Minimalist |
 | `galaxy-dream` | Sennoma-Nn | Emoji, Multiple Lines |
+| `sunset-ocean` | Sennoma-Nn | Power Line, Multiple Lines |
 
 ### Usage
 
@@ -50,7 +54,7 @@ source ~/.config/nuprm/nuprm.nu
 
 ```nushell
 # Show help information
-nuprm
+nuprm --help
 
 # List all available themes
 nuprm list
@@ -59,10 +63,16 @@ nuprm list
 nuprm set <theme_name>
 
 # Enable prompt themes
-nuprm on
+nuprm true
 
 # Disable prompt themes
-nuprm off
+nuprm false
+
+# Enable full name display
+nuprm fullname true
+
+# Disable full name display
+nuprm fullname false
 ```
 
 #### Examples
@@ -72,13 +82,16 @@ nuprm off
 nuprm set neon-night
 
 # Enable prompt theming
-nuprm on
+nuprm true
 
 # View all available themes
 nuprm list
 
 # Disable prompt theming (use default)
-nuprm off
+nuprm false
+
+# Enable full name display
+nuprm fullname true
 ```
 
 ### Configuration
@@ -88,6 +101,7 @@ The configuration file is automatically created at `~/.config/nuprm/config.yml` 
 ```yaml
 enable: "off"  # "on" or "off"
 theme: "simple-minimal"  # default theme
+use_full_name: "no"  # "yes" or "no"
 ```
 
 ### Utility Functions
@@ -99,7 +113,10 @@ The package includes several utility functions in `utils/prompt-utils.nu`:
 - `get-where-shells`: Get current shell index information
 - `color2ansi`: Convert RGB values to ANSI color codes
 - `is-windows`: Check if running on Windows
-- `get-user-name`: Get current username
+- `is-android`: Check if running on Android
+- `get-user-name`: Get current username (with full name support)
+- `get-system-icon`: Get system-specific icons (Nerd Font) ⚠️ *Not fully tested*
+- `get-config`: Get user configuration values
 
 ### Contributing
 
@@ -119,11 +136,14 @@ Contributions are welcome! Feel free to:
 
 ### 特性
 
-- 🎨 **多种主题**: 从 7 个精美的预制主题中选择
+- 🎨 **多种主题**: 从 8 个精美的预制主题中选择
 - 🔧 **简易管理**: 使用简单命令启用、禁用和切换主题
 - ⚡ **快速切换**: 即时主题切换，自动重启 shell
 - 📝 **主题描述**: 查看每个主题的详细信息
 - 🛠️ **实用函数**: 内置的提示符自定义辅助函数
+- 🎯 **VI 模式支持**: 完全支持 Nushell 的 VI 编辑模式
+- 🖥️ **系统图标**: 显示系统特定图标（需要 Nerd Font）
+- 👤 **全名显示**: 可选择显示完整用户名而非用户名
 
 ### 安装
 
@@ -150,6 +170,7 @@ source ~/.config/nuprm/nuprm.nu
 | `retro-console` | Sennoma-Nn | 复古 |
 | `simple-minimal` | Sennoma-Nn | 极简主义 |
 | `galaxy-dream` | Sennoma-Nn | 表情符号, 多行 |
+| `sunset-ocean` | Sennoma-Nn | Power Line, 多行 |
 
 ### 使用方法
 
@@ -157,7 +178,7 @@ source ~/.config/nuprm/nuprm.nu
 
 ```nushell
 # 显示帮助信息
-nuprm
+nuprm --help
 
 # 列出所有可用主题
 nuprm list
@@ -166,10 +187,16 @@ nuprm list
 nuprm set <主题名称>
 
 # 启用提示符主题
-nuprm on
+nuprm true
 
 # 禁用提示符主题
-nuprm off
+nuprm false
+
+# 启用全名显示
+nuprm fullname true
+
+# 禁用全名显示
+nuprm fullname false
 ```
 
 #### 示例
@@ -179,13 +206,16 @@ nuprm off
 nuprm set neon-night
 
 # 启用提示符主题
-nuprm on
+nuprm true
 
 # 查看所有可用主题
 nuprm list
 
 # 禁用提示符主题（使用默认）
-nuprm off
+nuprm false
+
+# 启用全名显示
+nuprm fullname true
 ```
 
 ### 配置
@@ -195,6 +225,7 @@ nuprm off
 ```yaml
 enable: "off"  # "on" 或 "off"
 theme: "simple-minimal"  # 默认主题
+use_full_name: "no"  # "yes" 或 "no"
 ```
 
 ### 实用函数
@@ -206,7 +237,10 @@ theme: "simple-minimal"  # 默认主题
 - `get-where-shells`: 获取当前 shell 索引信息
 - `color2ansi`: 将 RGB 值转换为 ANSI 颜色代码
 - `is-windows`: 检查是否在 Windows 上运行
-- `get-user-name`: 获取当前用户名
+- `is-android`: 检查是否在 Android 上运行
+- `get-user-name`: 获取当前用户名（支持全名显示）
+- `get-system-icon`: 获取系统特定图标（Nerd Font）⚠️ *未完全测试*
+- `get-config`: 获取用户配置值
 
 ### 贡献
 
