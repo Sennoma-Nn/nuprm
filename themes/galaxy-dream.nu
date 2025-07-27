@@ -8,7 +8,7 @@ let colors = {
 
 def create-left-prompt [] {
     let user = $"✨ ($colors.purple)🚀 ($colors.pink)(get-user-name) ✨"
-    let path_seg = $"($colors.blue)🪐 ($colors.purple)(home-to-tilde $env.PWD)"
+    let path_seg = $"($colors.blue)🪐 " + (format-path $env.PWD (if (is-windows) { "\\" } else { "/" }) -l $"($colors.purple)" -r "\e[0m" -hu)
     let git_info = (get-git-info -l " (" -r ")")
     let git_status = if ($git_info | str length) > 0 {
         $" ($colors.star)🌟($git_info)"

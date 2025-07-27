@@ -10,39 +10,8 @@ let reset = "\e[0m"
 
 let user = (get-user-name)
 
-def format-path [path: string] {
-    if $path == "/" {
-        "/"
-    } else {
-        let home = if (is-windows) { $env.HOMEPATH } else { $env.HOME }
-        let relative_path = (home-to-tilde $path)
-        let path_parts = ($relative_path | split row (if (is-windows) { "\\" } else { "/" }))
-        let path_parts_count = ($path_parts | length)
-
-        if $path_parts_count < 2 {
-            $relative_path
-        } else {
-            let abbreviated_parts = ($path_parts | each {|part| 
-                if $part in ($path_parts | skip ($path_parts_count - 2)) {
-                    $part
-                } else {
-                    ($part | str substring 0..0)
-                }
-            })
-
-            let formatted_path = ($abbreviated_parts | str join ($" ($black_fg)" + "" + $"($blue_fg) "))
-
-            if ($relative_path | str starts-with "/") {
-                "/" + $formatted_path
-            } else {
-                $formatted_path
-            }
-        }
-    }
-}
-
 def create-prompt [] {
-    let path = (format-path (pwd))
+    let path = format-path $env.pwd "  " -d $blue_fg -s $black_fg -khu
     let git_info = (get-git-info)
     let shells_info = (get-where-shells -dl $" ($dark_blue_bg + $blue_fg) №")
 
@@ -72,7 +41,7 @@ def create-prompt [] {
 }
 
 def transient-create-left-prompt [] {
-    let path = (format-path (pwd))
+    let path = format-path $env.pwd "  " -d $blue_fg -s $black_fg -khu
 
     mut prompt = ""
     $prompt += $"($dark_blue_bg + $blue_fg) ($path) ($reset)"

@@ -12,7 +12,7 @@ let colors = {
 # --- Left Prompt (Top Line) ---
 def create-left-prompt [] {
     let user_info = $"($colors.cyan)(get-user-name)(ansi reset)"
-    let path_info = $"($colors.white)(home-to-tilde $env.PWD)(ansi reset)"
+    let path_info = format-path $env.PWD (if (is-windows) { "\\" } else { "/" }) -l (ansi reset) -r $colors.white -hu
 
     let git_branch = (get-git-info)
     let git_info = if not ($git_branch | is-empty) {

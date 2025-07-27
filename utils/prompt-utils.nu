@@ -123,6 +123,55 @@ export def get-user-name [] {
     return $username
 }
 
+# Formats path
+export def format-path [
+    path: string                    # Input path
+    new_separators: string          # Custom separator
+    --keep_root (-k)                # Keep root directory ( on: / > aaa > bbb | off: > aaa > bbb)
+    --left_char: string (-l) = ""   # Left decorator for path
+    --right_char: string (-r) = ""  # Right decorator for path
+    --home_to_tilde (-h)            # Replace home directory with '~'
+    --dir_style: string (-d) = ""   # Directory styling (ANSI codes)
+    --sep_style: string (-s) = ""   # Separator styling (ANSI codes)
+    --file_url (-u)                 # Format as clickable terminal hyperlink
+] {
+    let input_path = if $home_to_tilde { home-to-tilde $path } else { $path }
+    let input_separators = ($sep_style + $new_separators)
+
+    mut path_list = ($input_path | path split)
+    mut unix_root_start = false
+
+    if not $keep_root {
+        if not (is-windows) {
+            if $path_list.0 == "/" {
+                $unix_root_start = true
+                $path_list = $path_list | skip 1
+            }
+        } else {
+            if "\\" in $path_list.0 {
+                $path_list.0 = ($path_list.0 | split row "\\" | first)
+            }
+        }
+    }
+
+    mut new_path = $path_list | each { |it| $dir_style + $it } | str join $input_separators
+    if $unix_root_start {
+        $new_path = $input_separators + $new_path
+    }
+
+    let new_path_str = ([$left_char, $new_path, $right_char] | str join "")
+    
+    if $file_url {
+        return (
+            [
+                "\e]8;;file://", $path, "\a", $new_path_str, "\e]8;;\a"
+            ] | str join ""
+        )
+    } else {
+        return $new_path_str
+    }
+}
+
 # Get system icon (Nerd Font)
 export def get-system-icon [
     --left_char: string (-l) = ""   # Left decorator for system icon

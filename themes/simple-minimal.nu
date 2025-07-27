@@ -7,7 +7,7 @@ let colors = {
 
 def create-left-prompt [] {
     let user_info = $"($colors.green)(get-user-name)($colors.reset)"
-    let path_info = $"($colors.white)(home-to-tilde $env.PWD)($colors.reset)"
+    let path_info = format-path $env.PWD (if (is-windows) { "\\" } else { "/" }) -l $colors.white -r $colors.reset -hu
 
     let git_info = (get-git-info -l " (" -r ")") | if $in != "" {
         $"($colors.green)($in)"

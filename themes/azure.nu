@@ -10,15 +10,12 @@ def create-left-prompt [
 ] {
     let user = ((get-user-name) + " ")
     let shells_index = (get-where-shells -dl "№" -r " ")
-    let path_segment = if (is-windows) {
-        ("\e[1m" + (home-to-tilde $env.PWD) | str replace --all "\\" $"\e[2m\\\e[0;1m($colors.1)")
-    } else {
-        ("\e[1m" + (home-to-tilde $env.PWD) | str replace --all "/" $"\e[2m/\e[0;1m($colors.1)")
-    }
+
+    let path_segment = format-path $env.PWD (if (is-windows) { "\\" } else { "/" }) -d $"\e[0;1m($colors.1)" -s "\e[0;2m" -r "\e[0m" -hu
     let git_info = (get-git-info -l $"($colors.1) in ($colors.0)" -r " ")
     let exit_code = if $env.LAST_EXIT_CODE != 0 { $"($env.LAST_EXIT_CODE)($colors.1) | " } else { "" }
 
-    return $"($colors.0)($exit_code)($colors.0)($user)\e[1m[ ($shells_index)\e[0;1m($colors.1)($path_segment)($colors.0) ]($git_info)(ansi reset)"
+    return $"($colors.0)($exit_code)($colors.0)($user)\e[1m[ ($shells_index)\e[0;1m($colors.1)($path_segment)($colors.0) \e[1m]($git_info)(ansi reset)"
 }
 
 $env.PROMPT_COMMAND = {|| create-left-prompt -c $using_colors }

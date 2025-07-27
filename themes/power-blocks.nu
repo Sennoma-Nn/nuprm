@@ -30,13 +30,7 @@ def create-left-prompt [] {
     let status = {
         icon: (get-system-icon -r " ")
         user: (get-user-name)
-        path: (
-            if (is-windows) {
-                ("\e[1;37m" + (home-to-tilde $env.PWD) | str replace --all "\\" $"\e[2m\\\e[0;1;37m($prompt_chars.path_bg)")
-            } else {
-                ("\e[1;37m" + (home-to-tilde $env.PWD) | str replace --all "/" $"\e[2m/\e[0;1;37m($prompt_chars.path_bg)")
-            }
-        )
+        path: (format-path $env.PWD (if (is-windows) { "\\" } else { "/" }) -d $"\e[0;1;37m($prompt_chars.path_bg)" -s $"\e[0;2m($prompt_chars.path_bg)" -hu)
         git: (get-git-info)
         exit: $env.LAST_EXIT_CODE
         admin: (is-admin)
@@ -74,11 +68,7 @@ def create-left-prompt [] {
 }
 
 def transient-create-left-prompt [] {
-    let path = if (is-windows) {
-        ("\e[1;37m" + (home-to-tilde $env.PWD) | str replace --all "\\" $"\e[2m\\\e[0;1;37m($prompt_chars.path_bg)")
-    } else {
-        ("\e[1;37m" + (home-to-tilde $env.PWD) | str replace --all "/" $"\e[2m/\e[0;1;37m($prompt_chars.path_bg)")
-    }
+    let path = (format-path $env.PWD (if (is-windows) { "\\" } else { "/" }) -d $"\e[0;1;37m($prompt_chars.path_bg)" -s $"\e[0;2m($prompt_chars.path_bg)" -hu)
     
     return (
         prompt-block "" " " $prompt_chars.path_fg $prompt_chars.path_bg $path $prompt_chars.white_fg " "

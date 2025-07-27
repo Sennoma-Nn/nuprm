@@ -22,7 +22,7 @@ let colors = {
 
 
 def create-prompt-left [] {
-    let path = (home-to-tilde $env.PWD)
+    let path = (format-path $env.PWD (if (is-windows) { "\\" } else { "/" }) -hu)
     let user = (get-user-name)
 
     let prompt_list = [
