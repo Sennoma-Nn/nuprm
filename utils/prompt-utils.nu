@@ -7,7 +7,7 @@ export const nu_prompt_const = {
 # Get user config
 def get-config [
     item: string
-    default: string
+    default: any
 ] {
     let user_config = open $nu_prompt_const.config_path
     if $item in $user_config {
@@ -21,8 +21,11 @@ def get-config [
 export def home-to-tilde [
     path: string  # The input path to process
 ] {
-    if ($path | str starts-with $nu.home-path) {
-        return ($path | str replace $nu.home-path "~")
+    if ($path == $nu.home-path) {
+        return "~"
+    } else if ($path | str starts-with $nu.home-path) {
+        let split_slash = if (is-windows) { "\\" } else { "/" }
+        return ($path | str replace $"($nu.home-path)($split_slash)" $"~($split_slash)")
     } else {
         return $path
     }
@@ -151,6 +154,22 @@ export def format-path [
             if "\\" in $path_list.0 {
                 $path_list.0 = ($path_list.0 | split row "\\" | first)
             }
+        }
+    }
+
+    let abbreviation_config = (get-config "directory_abbreviation" {})
+    if ($abbreviation_config | get "enable"? | default "no") == "yes" {
+        let start_from_end = $abbreviation_config | get "start_from_end"? | default "3"
+        let display_chars = $abbreviation_config | get "display_chars"? | default "1"
+        let path_len = $path_list | length
+        mut counter = $path_list | length
+
+        $path_list = $path_list | enumerate | each { | item |
+            if ($path_len - $item.index >= $start_from_end) {
+                $item.item | str substring 0..([0, ($display_chars - 1 + (
+                    if ($item.item | str starts-with ".") { 1 } else { 0 }
+                ))] | math max)
+            } else { $item.item }
         }
     }
 

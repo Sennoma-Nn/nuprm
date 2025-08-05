@@ -10,6 +10,11 @@ do --env {
             theme: "simple-minimal"
             use_full_name: "no"
             disable_system_icon: "no"
+            directory_abbreviation: {
+                enable: yes
+                start_from_end: 3
+                display_chars: 1
+            }
         }
         $config | to yaml | save $nu_prompt_const.config_path -f
     }

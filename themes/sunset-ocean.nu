@@ -15,9 +15,9 @@ let colors = {
     color5_fg:      (color2ansi  35  70  94 "fg"),
     color5_bg:      (color2ansi  35  70  94 "bg"),
     reset_bg:       "\e[49m",
-    bold:           "\e[1m"
+    bold:           "\e[1m",
     italic:         "\e[3m",
-    reset:          "\e[0m",
+    reset:          "\e[0m"
 }
 
 
