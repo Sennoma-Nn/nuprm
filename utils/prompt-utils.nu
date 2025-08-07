@@ -47,7 +47,7 @@ export def get-git-info [
         } else {
             return ""
         }
-    } catch { "" }
+    } catch { return "" }
 }
 
 # Gets current shell index from directory stack with display options
@@ -138,7 +138,13 @@ export def format-path [
     --sep_style: string (-s) = ""   # Separator styling (ANSI codes)
     --file_url (-u)                 # Format as clickable terminal hyperlink
 ] {
-    let input_path = if $home_to_tilde { home-to-tilde $path } else { $path }
+    let abbreviation_config = (get-config "directory_abbreviation" {})
+    let abbreviation_enable = (($abbreviation_config | get "enable"? | default "no") == "yes")
+
+    let input_path = if $home_to_tilde and $abbreviation_enable and (($abbreviation_config | get "home"? | default "no") == "yes") {
+        home-to-tilde $path
+    } else { $path }
+
     let input_separators = ($sep_style + $new_separators)
 
     mut path_list = ($input_path | path split)
@@ -157,10 +163,9 @@ export def format-path [
         }
     }
 
-    let abbreviation_config = (get-config "directory_abbreviation" {})
-    if ($abbreviation_config | get "enable"? | default "no") == "yes" {
-        let start_from_end = $abbreviation_config | get "start_from_end"? | default "3"
-        let display_chars = $abbreviation_config | get "display_chars"? | default "1"
+    if $abbreviation_enable {
+        let start_from_end = $abbreviation_config | get "start_from_end"? | default 3 | into int
+        let display_chars = $abbreviation_config | get "display_chars"? | default 1 | into int
         let path_len = $path_list | length
         mut counter = $path_list | length
 

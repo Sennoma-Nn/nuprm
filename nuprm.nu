@@ -11,7 +11,8 @@ do --env {
             use_full_name: "no"
             disable_system_icon: "no"
             directory_abbreviation: {
-                enable: yes
+                enable: "yes"
+                home: "yes"
                 start_from_end: 3
                 display_chars: 1
             }
@@ -30,9 +31,9 @@ do --env {
     }
 }
 
-# Set prompt theme
+# Set the prompt theme to specified theme name
 def "nuprm set theme" [
-    theme_name: string # Theme name
+    theme_name: string # Name of theme to set (e.g. "simple-minimal", "retro-console")
 ] {
     mut config = (open $nu_prompt_const.config_path)
     $config.theme = $theme_name
@@ -47,37 +48,69 @@ def "nuprm set theme" [
     }
 }
 
-# List prompt
+# List all available prompt themes
 def "nuprm list" [] {
     let description_path = ([$nu_prompt_const.exe_path "themes" ".description.yml"] | path join)
-    open $description_path
+    open $description_path | each { |item| $item | reject "by" } | sort-by "name"
 }
 
-# Enable / Disable use full name
+# Toggle showing full directory path in prompt
 def "nuprm set full-name" [
-    enable: bool # Use `true` or `false` to enable or disable full name
+    enable: bool # `true` to show full path, `false` for abbreviated path
 ] {
     mut config = (open $nu_prompt_const.config_path)
     $config.use_full_name = if $enable { "yes" } else { "no" }
     $config | to yaml | save $nu_prompt_const.config_path -f
-
-    exec $nu.current-exe
 }
 
-# Enable / Disable use system icon
+# Toggle display of system icons in prompt
 def "nuprm set system-icon" [
-    enable: bool # Use `true` or `false` to enable or disable full name
+    enable: bool # `true` to show system icons, `false` to hide them
 ] {
     mut config = (open $nu_prompt_const.config_path)
     $config.disable_system_icon = if not $enable { "yes" } else { "no" }
     $config | to yaml | save $nu_prompt_const.config_path -f
-
-    exec $nu.current-exe
 }
 
-# Enable / Disable prompt
+# Toggle directory path abbreviation in prompt
+def "nuprm set abbr" [
+    enable: bool # `true` to enable path abbreviation, `false` to disable
+] {
+    mut config = (open $nu_prompt_const.config_path)
+    $config.directory_abbreviation.enable = if $enable { "yes" } else { "no" }
+    $config | to yaml | save $nu_prompt_const.config_path -f
+}
+
+# Toggle home directory (~) abbreviation in prompt
+def "nuprm set abbr home" [
+    enable: bool # `true` to abbreviate home as ~, `false` to show full path
+] {
+    mut config = (open $nu_prompt_const.config_path)
+    $config.directory_abbreviation.home = if $enable { "yes" } else { "no" }
+    $config | to yaml | save $nu_prompt_const.config_path -f
+}
+
+# Set number of directory segments to show from path end
+def "nuprm set abbr end" [
+    num: int # Number of path segments to show from end (e.g. 3 shows last 3 parts)
+] {
+    mut config = (open $nu_prompt_const.config_path)
+    $config.directory_abbreviation.start_from_end = $num
+    $config | to yaml | save $nu_prompt_const.config_path -f
+}
+
+# Set number of characters to show for each directory name
+def "nuprm set abbr chars" [
+    num: int # Number of chars to show per directory (e.g. 1 shows first letter)
+] {
+    mut config = (open $nu_prompt_const.config_path)
+    $config.directory_abbreviation.display_chars = $num
+    $config | to yaml | save $nu_prompt_const.config_path -f
+}
+
+# Enable/disable the nuprm prompt system
 def nuprm [
-    enable: bool # Use `true` or `false` to enable or disable nuprm
+    enable: bool # `true` to enable nuprm prompt, `false` to disable
 ] {
     mut config = (open $nu_prompt_const.config_path)
     $config.enable = if $enable { "on" } else { "off" }

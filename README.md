@@ -101,6 +101,18 @@ nuprm set full-name true
 
 # Enable system icon display
 nuprm set system-icon true
+
+# Enable directory abbreviation
+nuprm set abbr true
+
+# Set home directory abbreviation (~)
+nuprm set abbr home true
+
+# Show last 3 path segments
+nuprm set abbr end 3
+
+# Show first character of each path segment
+nuprm set abbr chars 1
 ```
 
 ### Configuration
@@ -112,6 +124,11 @@ enable: "off"  # "on" or "off"
 theme: "simple-minimal"  # default theme
 use_full_name: "no"  # "yes" or "no"
 disable_system_icon: "no"  # "yes" or "no"
+directory_abbreviation:  # directory path shortening settings
+  enable: "yes"  # "yes" or "no"
+  home: "yes"  # abbreviate home directory as ~
+  start_from_end: 3  # show last N path segments
+  display_chars: 1  # show first N characters per segment
 ```
 
 ### Utility Functions
@@ -127,6 +144,7 @@ The package includes several utility functions in `utils/prompt-utils.nu`:
 - `get-user-name`: Get current username (with full name support)
 - `get-system-icon`: Get system-specific icons (Nerd Font) ⚠️ *Not fully tested*
 - `get-config`: Get user configuration values
+- `format-path`: path formatting
 
 ### Contributing
 
@@ -235,6 +253,18 @@ nuprm set full-name true
 
 # 启用系统图标显示
 nuprm set system-icon true
+
+# 启用目录路径缩写
+nuprm set abbr true
+
+# 设置家目录缩写 (~)
+nuprm set abbr home true
+
+# 显示最后3个路径段
+nuprm set abbr end 3
+
+# 每个路径段显示第一个字符
+nuprm set abbr chars 1
 ```
 
 ### 配置
@@ -246,6 +276,11 @@ enable: "off"  # "on" 或 "off"
 theme: "simple-minimal"  # 默认主题
 use_full_name: "no"  # "yes" 或 "no"
 disable_system_icon: "no"  # "yes" 或 "no"
+directory_abbreviation:  # 目录路径缩写设置
+  enable: "yes"  # "yes" 或 "no"
+  home: "yes"  # 将家目录缩写为 ~
+  start_from_end: 3  # 显示最后N个路径段
+  display_chars: 1  # 每个路径段显示前N个字符
 ```
 
 ### 实用函数
@@ -261,6 +296,7 @@ disable_system_icon: "no"  # "yes" 或 "no"
 - `get-user-name`: 获取当前用户名（支持全名显示）
 - `get-system-icon`: 获取系统特定图标（Nerd Font）⚠️ *未完全测试*
 - `get-config`: 获取用户配置值
+- `format-path`: 路径格式化
 
 ### 贡献
 
