@@ -8,7 +8,7 @@ let colors = {
 
 # --- Main Prompt Command ---
 def create-prompt [] {
-    let path_str = format-path $env.PWD (if (is-windows) { "\\" } else { "/" }) -hu
+    let path_str = $env.PWD | format-path (if (is-windows) { "\\" } else { "/" }) -u
 
     let git_branch = (get-git-info)
     let git_str = if not ($git_branch | is-empty) {

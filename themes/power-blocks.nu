@@ -6,35 +6,38 @@ let prompt_chars = {
     right_char: ""
     wrong_char: ""
     root_icon: ""
-    icon_fg: (color2ansi 255 146 72 fg)
-    icon_bg: (color2ansi 255 146 72 bg)
-    name_fg: (color2ansi 255 146 72 fg)
-    name_bg: (color2ansi 255 146 72 bg)
-    path_fg: (color2ansi 52 100 164 fg)
-    path_bg: (color2ansi 52 100 164 bg)
-    git_fg: (color2ansi 196 110 170 fg)
-    git_bg: (color2ansi 196 110 170 bg)
-    status_fg: (color2ansi 46 149 153 fg)
-    status_bg: (color2ansi 46 149 153 bg)
-    status_err_fg: (color2ansi 240 83 80 fg)
-    status_err_bg: (color2ansi 240 83 80 bg)
-    shells_fg: (color2ansi 122 64 152 fg)
-    shells_bg: (color2ansi 122 64 152 bg)
-    root_fg: (color2ansi 248 102 122 fg)
-    root_bg: (color2ansi 248 102 122 bg)
-    vi_fg: (color2ansi 78 144 61 fg)
-    vi_bg: (color2ansi 78 144 61 bg)
+    icon_fg: (color2ansi 255 146 72 "fg")
+    icon_bg: (color2ansi 255 146 72 "bg")
+    name_fg: (color2ansi 255 146 72 "fg")
+    name_bg: (color2ansi 255 146 72 "bg")
+    path_fg: (color2ansi 52 100 164 "fg")
+    path_bg: (color2ansi 52 100 164 "bg")
+    git_fg: (color2ansi 196 110 170 "fg")
+    git_bg: (color2ansi 196 110 170 "bg")
+    status_fg: (color2ansi 46 149 153 "fg")
+    status_bg: (color2ansi 46 149 153 "bg")
+    status_err_fg: (color2ansi 240 83 80 "fg")
+    status_err_bg: (color2ansi 240 83 80 "bg")
+    shells_fg: (color2ansi 122 64 152 "fg")
+    shells_bg: (color2ansi 122 64 152 "bg")
+    time_fg: (color2ansi 137 52 143 "fg")
+    time_bg: (color2ansi 137 52 143 "bg")
+    root_fg: (color2ansi 248 102 122 "fg")
+    root_bg: (color2ansi 248 102 122 "bg")
+    vi_fg: (color2ansi 78 144 61 "fg")
+    vi_bg: (color2ansi 78 144 61 "bg")
 }
 
 def create-left-prompt [] {
     let status = {
         icon: (get-system-icon -r " ")
         user: (get-user-name)
-        path: (format-path $env.PWD (if (is-windows) { "\\" } else { "/" }) -d $"\e[0;1;37m($prompt_chars.path_bg)" -s $"\e[0;2m($prompt_chars.path_bg)" -hu)
+        path: ($env.PWD | format-path (if (is-windows) { "\\" } else { "/" }) -d $"\e[0;1;37m($prompt_chars.path_bg)" -s $"\e[0;2m($prompt_chars.path_bg)" -u)
         git: (get-git-info)
         exit: $env.LAST_EXIT_CODE
         admin: (is-admin)
         shells: (get-where-shells -dl "#")
+        time: (get-execution-time-s)
     }
     return (
         [
@@ -58,6 +61,11 @@ def create-left-prompt [] {
                 } else { "" }
             )
             (
+                if $status.time > 0.5 {
+                    prompt-block "" "" $prompt_chars.time_fg $prompt_chars.time_bg $"($status.time)s" $prompt_chars.white_fg " "
+                } else { "" }
+            )
+            (
                 if $status.admin {
                     prompt-block "" "" $prompt_chars.root_fg $prompt_chars.root_bg $prompt_chars.root_icon $prompt_chars.white_fg ""
                 } else { "" }
@@ -68,7 +76,7 @@ def create-left-prompt [] {
 }
 
 def transient-create-left-prompt [] {
-    let path = (format-path $env.PWD (if (is-windows) { "\\" } else { "/" }) -d $"\e[0;1;37m($prompt_chars.path_bg)" -s $"\e[0;2m($prompt_chars.path_bg)" -hu)
+    let path = ($env.PWD | get-path-last -u)
     
     return (
         prompt-block "" " " $prompt_chars.path_fg $prompt_chars.path_bg $path $prompt_chars.white_fg " "
