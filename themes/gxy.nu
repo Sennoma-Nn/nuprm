@@ -11,7 +11,7 @@ let reset = "\e[0m"
 let user = (get-user-name)
 
 def create-prompt [] {
-    let path = $env.PWD | format-path "  " -d $blue_fg -s $black_fg -khu
+    let path = $env.PWD | format-path "  " -d $blue_fg -s $black_fg -ku
     let git_info = (get-git-info)
     let shells_info = (get-where-shells -dl $" ($dark_blue_bg + $blue_fg) №")
 
@@ -41,7 +41,7 @@ def create-prompt [] {
 }
 
 def transient-create-left-prompt [] {
-    let path = $env.PWD | format-path "  " -d $blue_fg -s $black_fg -khu
+    let path = $env.PWD | format-path "  " -d $blue_fg -s $black_fg -ku
 
     mut prompt = ""
     $prompt += $"($dark_blue_bg + $blue_fg) ($path) ($reset)"
