@@ -1,317 +1,173 @@
+> [!WARNING] 
+> This English version of `README.md` is machine-translated. If there are any translation issues, ambiguities, or discrepancies, the [original Chinese version (README-CN.md)](./README-CN.md) shall prevail.
+
 # Nushell Prompt Manager (nuprm)
 
-[English](#english) | [中文](#中文)
-
----
-
-## English
-
 ### Overview
-
-**nuprm** (Nushell Prompt Manager) is a powerful and flexible prompt theme manager for Nushell. It allows you to easily switch between different prompt themes, customize your terminal appearance, and manage prompt configurations with simple commands.
-
-### Features
-
-- 🎨 **Multiple Themes**: Choose from 8 beautiful pre-built themes
-- 🔧 **Easy Management**: Simple commands to enable, disable, and switch themes
-- ⚡ **Fast Switching**: Instant theme switching with automatic shell restart
-- 📝 **Theme Descriptions**: View detailed information about each theme
-- 🛠️ **Utility Functions**: Built-in helper functions for prompt customization
-- 🎯 **VI Mode Support**: Full support for Nushell's VI editing mode
-- 🖥️ **System Icons**: Display system-specific icons (Nerd Font required)
-- 👤 **Full Name Display**: Option to show full user name instead of username
+**nuprm** is a Nushell prompt theme manager. It allows you to easily switch between different prompt themes, customize the appearance of your Nushell prompt, and manage prompt configurations through simple commands.
 
 ### Installation
-
-1. Clone this repository to your Nushell configuration directory:
-```bash
-git clone https://github.com/Sennoma-Nn/nuprm.git ~/.config/nuprm
-```
+1. Clone this repository to your .config directory:
+    ```nu
+    git clone https://github.com/Sennoma-Nn/nuprm.git ~/.config/nuprm
+    ```
 
 2. Add the following line to your Nushell configuration file (`~/.config/nushell/config.nu`):
-```nushell
-source ~/.config/nuprm/nuprm.nu
-```
-
-3. Restart your Nushell session.
-
-### Available Themes
-
-| Theme Name | Author | Style |
-|------------|--------|-------|
-| `azure` | Sennoma-Nn | Minimalist |
-| `power-blocks` | Sennoma-Nn | Power Line |
-| `gxy` | Sennoma-Nn | Power Line, Multiple Lines |
-| `neon-night` | Sennoma-Nn | Multiple Lines |
-| `retro-console` | Sennoma-Nn | Retro |
-| `simple-minimal` | Sennoma-Nn | Minimalist |
-| `galaxy-dream` | Sennoma-Nn | Emoji, Multiple Lines |
-| `sunset-ocean` | Sennoma-Nn | Power Line, Multiple Lines |
-
-### Usage
-
-#### Basic Commands
-
-```nushell
-# Show help information
-nuprm --help
-
-# List all available themes
-nuprm list
-
-# Set a specific theme
-nuprm set theme <theme_name>
-
-# Enable prompt themes
-nuprm true
-
-# Disable prompt themes
-nuprm false
-
-# Enable full name display
-nuprm set full-name true
-
-# Disable full name display
-nuprm set full-name false
-
-# Enable system icon display
-nuprm set system-icon true
-
-# Disable system icon display
-nuprm set system-icon false
-```
-
-#### Examples
-
-```nushell
-# Switch to the neon-night theme
-nuprm set theme neon-night
-
-# Enable prompt theming
-nuprm true
-
-# View all available themes
-nuprm list
-
-# Disable prompt theming (use default)
-nuprm false
-
-# Enable full name display
-nuprm set full-name true
-
-# Enable system icon display
-nuprm set system-icon true
-
-# Enable directory abbreviation
-nuprm set abbr true
-
-# Set home directory abbreviation (~)
-nuprm set abbr home true
-
-# Show last 3 path segments
-nuprm set abbr end 3
-
-# Show first character of each path segment
-nuprm set abbr chars 1
-```
-
-### Configuration
-
-The configuration file is automatically created at `~/.config/nuprm/config.yml` with the following structure:
-
-```yaml
-enable: "off"  # "on" or "off"
-theme: "simple-minimal"  # default theme
-use_full_name: "no"  # "yes" or "no"
-disable_system_icon: "no"  # "yes" or "no"
-directory_abbreviation:  # directory path shortening settings
-  enable: "yes"  # "yes" or "no"
-  home: "yes"  # abbreviate home directory as ~
-  start_from_end: 3  # show last N path segments
-  display_chars: 1  # show first N characters per segment
-```
-
-### Utility Functions
-
-The package includes several utility functions in `utils/prompt-utils.nu`:
-
-- `home-to-tilde`: Convert home directory paths to tilde notation
-- `get-git-info`: Retrieve current git branch information
-- `get-where-shells`: Get current shell index information
-- `color2ansi`: Convert RGB values to ANSI color codes
-- `is-windows`: Check if running on Windows
-- `is-android`: Check if running on Android
-- `get-user-name`: Get current username (with full name support)
-- `get-system-icon`: Get system-specific icons (Nerd Font) ⚠️ *Not fully tested*
-- `get-config`: Get user configuration values
-- `format-path`: path formatting
-
-### Contributing
-
-Contributions are welcome! Feel free to:
-- Submit bug reports
-- Request new themes
-- Contribute new theme designs
-- Improve documentation
-
----
-
-## 中文
-
-### 概述
-
-**nuprm**（Nushell 提示符管理器）是一个强大而灵活的 Nushell 提示符主题管理器。它让您可以轻松地在不同的提示符主题之间切换，自定义终端外观，并通过简单的命令管理提示符配置。
-
-### 特性
-
-- 🎨 **多种主题**: 从 8 个精美的预制主题中选择
-- 🔧 **简易管理**: 使用简单命令启用、禁用和切换主题
-- ⚡ **快速切换**: 即时主题切换，自动重启 shell
-- 📝 **主题描述**: 查看每个主题的详细信息
-- 🛠️ **实用函数**: 内置的提示符自定义辅助函数
-- 🎯 **VI 模式支持**: 完全支持 Nushell 的 VI 编辑模式
-- 🖥️ **系统图标**: 显示系统特定图标（需要 Nerd Font）
-- 👤 **全名显示**: 可选择显示完整用户名而非用户名
-
-### 安装
-
-1. 将此仓库克隆到您的 Nushell 配置目录：
-```bash
-git clone https://github.com/Sennoma-Nn/nuprm.git ~/.config/nuprm
-```
-
-2. 在您的 Nushell 配置文件（`~/.config/nushell/config.nu`）中添加以下行：
-```nushell
-source ~/.config/nuprm/nuprm.nu
-```
-
-3. 重启您的 Nushell 会话。
-
-### 可用主题
-
-| 主题名称 | 作者 | 风格 |
-|----------|------|------|
-| `azure` | Sennoma-Nn | 极简主义 |
-| `power-blocks` | Sennoma-Nn | Power Line |
-| `gxy` | Sennoma-Nn | Power Line, 多行 |
-| `neon-night` | Sennoma-Nn | 多行 |
-| `retro-console` | Sennoma-Nn | 复古 |
-| `simple-minimal` | Sennoma-Nn | 极简主义 |
-| `galaxy-dream` | Sennoma-Nn | 表情符号, 多行 |
-| `sunset-ocean` | Sennoma-Nn | Power Line, 多行 |
-
-### 使用方法
-
-#### 基本命令
-
-```nushell
-# 显示帮助信息
-nuprm --help
-
-# 列出所有可用主题
-nuprm list
-
-# 设置特定主题
-nuprm set theme <主题名称>
-
-# 启用提示符主题
-nuprm true
-
-# 禁用提示符主题
-nuprm false
-
-# 启用全名显示
-nuprm set full-name true
-
-# 禁用全名显示
-nuprm set full-name false
-
-# 启用系统图标显示
-nuprm set system-icon true
-
-# 禁用系统图标显示
-nuprm set system-icon false
-```
-
-#### 示例
-
-```nushell
-# 切换到 neon-night 主题
-nuprm set theme neon-night
-
-# 启用提示符主题
-nuprm true
-
-# 查看所有可用主题
-nuprm list
-
-# 禁用提示符主题（使用默认）
-nuprm false
-
-# 启用全名显示
-nuprm set full-name true
-
-# 启用系统图标显示
-nuprm set system-icon true
-
-# 启用目录路径缩写
-nuprm set abbr true
-
-# 设置家目录缩写 (~)
-nuprm set abbr home true
-
-# 显示最后3个路径段
-nuprm set abbr end 3
-
-# 每个路径段显示第一个字符
-nuprm set abbr chars 1
-```
-
-### 配置
-
-配置文件会自动创建在 `~/.config/nuprm/config.yml`，结构如下：
-
-```yaml
-enable: "off"  # "on" 或 "off"
-theme: "simple-minimal"  # 默认主题
-use_full_name: "no"  # "yes" 或 "no"
-disable_system_icon: "no"  # "yes" 或 "no"
-directory_abbreviation:  # 目录路径缩写设置
-  enable: "yes"  # "yes" 或 "no"
-  home: "yes"  # 将家目录缩写为 ~
-  start_from_end: 3  # 显示最后N个路径段
-  display_chars: 1  # 每个路径段显示前N个字符
-```
-
-### 实用函数
-
-该包在 `utils/prompt-utils.nu` 中包含了几个实用函数：
-
-- `home-to-tilde`: 将家目录路径转换为波浪号表示法
-- `get-git-info`: 获取当前 git 分支信息
-- `get-where-shells`: 获取当前 shell 索引信息
-- `color2ansi`: 将 RGB 值转换为 ANSI 颜色代码
-- `is-windows`: 检查是否在 Windows 上运行
-- `is-android`: 检查是否在 Android 上运行
-- `get-user-name`: 获取当前用户名（支持全名显示）
-- `get-system-icon`: 获取系统特定图标（Nerd Font）⚠️ *未完全测试*
-- `get-config`: 获取用户配置值
-- `format-path`: 路径格式化
-
-### 贡献
-
-欢迎贡献！您可以：
-- 提交错误报告
-- 请求新主题
-- 贡献新的主题设计
-- 改进文档
-
----
-
-## Repository
-
-🔗 **GitHub**: [https://github.com/Sennoma-Nn/nuprm](https://github.com/Sennoma-Nn/nuprm)
-
----
-
-*Made with ❤️ for the Nushell community*
+    ```nu
+    source ~/.config/nuprm/nuprm.nu
+    ```
+
+3. Restart your Nushell session:
+    ```nu
+    exec $nu.current-exe
+    ```
+
+### Configuring nuprm
+1. Enable nuprm
+    ```nu
+    nuprm true
+    ```
+    Your prompt will change:
+    ```nu
+    ~> nuprm true
+    laism ~ ❯ 
+    ```
+    To disable nuprm, set it to `false`
+
+2. Select and set themes
+    ```nu
+    nuprm theme list
+    ```
+    Lists available themes:
+    ```nu
+    ❯ nuprm theme list
+     #        name                   tag
+    ─────────────────────────────────────────────────
+     0   azure            Minimalist
+     1   circuit          Multiple Lines
+     2   galaxy-dream     Emoji, Multiple Lines
+     3   gxy              Power Line, Multiple Lines
+     4   neon-night       Multiple Lines
+     5   power-blocks     Power Line
+     6   retro-console    Retro
+     7   simple-minimal   Minimalist
+     8   sunset-ocean     Power Line, Multiple Lines
+    laism ~ ❯ 
+    ```
+    Default theme is simple-minimal. Set a theme with `nuprm theme set`:
+    ```nu
+    ❯ nuprm theme set azure
+    laism [ ~ ]$ 
+    ```
+
+3. Personalized prompt display configurations
+
+    #### Enable full name display
+    ```nu
+    $ nuprm full-name set true
+    La-Ysm [ ~ ]$ 
+    ```
+    Disable with `false`:
+    ```nu
+    $ nuprm full-name set false
+    laism [ ~ ]$ 
+    ```
+    > Note: Only works on non-Android Unix/Unix-Like systems
+
+    #### Directory abbreviation
+    Default behavior: `~/.test/aaa/bbb/ccc/ddd/eee/fff/ggg` becomes `~/.t/a/b/c/d/e/fff/ggg`
+    
+    Toggle abbreviation:
+    ```nu
+    $ pwd
+    /home/laism/.test/aaa/bbb/ccc/ddd/eee/fff/ggg
+    $ nuprm abbr set false
+    laism [ /home/laism/.test/aaa/bbb/ccc/ddd/eee/fff/ggg ]$ 
+    ```
+    Set where abbreviation starts (from end). Default=3:
+    ```nu
+    $ nuprm abbr end set 5
+    laism [ ~/.t/a/b/c/ddd/eee/fff/ggg ]$ 
+    ```
+    Disable by setting to 0:
+    ```nu
+    $ nuprm abbr end set 0
+    laism [ ~/.test/aaa/bbb/ccc/ddd/eee/fff/ggg ]$ 
+    ```
+    Effect preview:
+    |Value|Display|
+    |-|-|
+    |0|`~/.test/aaa/bbb/ccc/ddd/eee/fff/ggg`|
+    |1|`~/.t/a/b/c/d/e/f/g`|
+    |2|`~/.t/a/b/c/d/e/f/ggg`|
+    |3|`~/.t/a/b/c/d/e/fff/ggg`|
+    |4|`~/.t/a/b/c/d/eee/fff/ggg`|
+    |5|`~/.t/a/b/c/ddd/eee/fff/ggg`|
+
+    Set displayed character count (default=1):
+    ```nu
+    $ pwd
+    /home/laism/.test/123456/demo/path
+    $ nuprm abbr chars set 3
+    laism [ ~/.tes/123/demo/path ]$ 
+    ```
+
+    Toggle home directory abbreviation (default=`true`):
+    ```nu
+    $ cd ~
+    $ nuprm abbr home set false
+    laism [ /home/laism ]$ 
+    ```
+
+    Add custom directory abbreviations:
+    ```nu
+    $ nuprm abbr specific add ~/Documents 📄
+     ~/Documents   📄
+    $ cd Documents
+    laism [ 📄 ]$ 
+    ```
+    Customize home directory symbol:
+    ```nu
+    $ cd ~
+    $ nuprm abbr home set false
+    $ nuprm abbr specific add ~ 🏠
+     ~/Documents   📄
+     ~             🏠
+    laism [ 🏠 ]$ 
+    ```
+    > Note: Must disable home abbreviation before customizing home symbol
+
+    Remove custom abbreviation:
+    ```nu
+    $ nuprm abbr specific remove ~/Documents
+     ~   🏠
+    $ cd Documents
+    laism [ 🏠/Documents ]$ 
+    ```
+
+    List current abbreviations:
+    ```nu
+    $ nuprm abbr specific list
+     ~   🏠
+    laism [ 🏠/Documents ]$ 
+    ```
+
+    > Example for Android path:
+    > ```nu
+    > $ nuprm abbr specific add /storage/emulated/0/ EM0
+    >  /storage/emulated/0/   EM0
+    > $ cd /storage/emulated/0/
+    > u0_a220 [ EM0 ]$ 
+    > ```
+
+    #### System icon display
+    Some themes display system icons (typically those with the Power Line tag). Toggle this with `nuprm system-icon set` (default=`true`). Set to `false` to disable.
+
+    > **Important about icon support**: 
+    > This feature hasn't been fully tested as we can't test all operating systems and Linux distributions. 
+    > - If you're on Linux and see a penguin icon (generic Linux icon) instead of your distro's specific icon
+    > - If you're on other OS and see no icon at all
+    > ...this means we don't yet support your distro/OS. 
+    > 
+    > Please submit an issue with the output of the `sys host` command. 
+    > We'll add support for your system and greatly appreciate your contribution!

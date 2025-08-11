@@ -2,37 +2,59 @@ const prompt_utils_path = (["~" ".config" "nuprm" "utils" "prompt-utils.nu"] | p
 use $prompt_utils_path nu_prompt_const
 
 do --env {
-    use $prompt_utils_path *
-    if not ($nu_prompt_const.config_path | path exists) {
-        touch $nu_prompt_const.config_path
-        let config = {
-            enable: "off"
-            theme: "simple-minimal"
-            use_full_name: "no"
-            disable_system_icon: "no"
-            directory_abbreviation: {
-                enable: "yes"
-                home: "yes"
-                start_from_end: 3
-                display_chars: 1
+    try {
+        use $prompt_utils_path *
+        if not ($nu_prompt_const.config_path | path exists) {
+            touch $nu_prompt_const.config_path
+            let config = {
+                enable: "off"
+                theme: "simple-minimal"
+                use_full_name: "no"
+                disable_system_icon: "no"
+                directory_abbreviation: {
+                    enable: "yes"
+                    start_from_end: 3
+                    display_chars: 1
+                    home: "yes"
+                    specific: {
+                    }
+                }
             }
+            $config | to yaml | save $nu_prompt_const.config_path -f
         }
-        $config | to yaml | save $nu_prompt_const.config_path -f
-    }
 
-    let config_table = (open $nu_prompt_const.config_path)
-    let is_enable = ($config_table | get "enable")
-    let theme_name = ($config_table | get "theme")
+        let config_table = (open $nu_prompt_const.config_path)
+        let is_enable = ($config_table | get "enable")
+        let theme_name = ($config_table | get "theme")
 
-    let theme_path = ([$nu_prompt_const.exe_path "themes" $"($theme_name).nu"] | path join)
-    $"source ($theme_path)" | save $nu_prompt_const.load_path -f
-    if $is_enable == "on" {
-        source $nu_prompt_const.load_path
+        let theme_path = ([$nu_prompt_const.exe_path "themes" $"($theme_name).nu"] | path join)
+        $"source ($theme_path)" | save $nu_prompt_const.load_path -f
+        if $is_enable == "on" {
+            source $nu_prompt_const.load_path
+        }
+    } catch { |e|
+        print "\e[31mERROR! CAN'T LOAD PROMPT!"
+        print "\e[0m"
+        print $e
+
+        $env.PROMPT_COMMAND = {|| $env.pwd}
+        $env.PROMPT_COMMAND_RIGHT = ""
+        $env.PROMPT_INDICATOR = "> "
+        $env.PROMPT_MULTILINE_INDICATOR = "::: "
+        $env.PROMPT_INDICATOR_VI_INSERT = ": "
+        $env.PROMPT_INDICATOR_VI_NORMAL = "> "
+
+        $env.TRANSIENT_PROMPT_COMMAND = $env.PROMPT_COMMAND
+        $env.TRANSIENT_PROMPT_COMMAND_RIGHT = $env.PROMPT_COMMAND_RIGHT
+        $env.TRANSIENT_PROMPT_INDICATOR = $env.PROMPT_INDICATOR
+        $env.TRANSIENT_PROMPT_MULTILINE_INDICATOR = $env.PROMPT_MULTILINE_INDICATOR
+        $env.TRANSIENT_PROMPT_INDICATOR_VI_INSERT = $env.PROMPT_INDICATOR_VI_INSERT
+        $env.TRANSIENT_PROMPT_INDICATOR_VI_NORMAL = $env.PROMPT_INDICATOR_VI_NORMAL
     }
 }
 
 # Set the prompt theme to specified theme name
-def "nuprm set theme" [
+def "nuprm theme set" [
     theme_name: string # Name of theme to set (e.g. "simple-minimal", "retro-console")
 ] {
     mut config = (open $nu_prompt_const.config_path)
@@ -49,13 +71,13 @@ def "nuprm set theme" [
 }
 
 # List all available prompt themes
-def "nuprm list" [] {
+def "nuprm theme list" [] {
     let description_path = ([$nu_prompt_const.exe_path "themes" ".description.yml"] | path join)
     open $description_path | each { |item| $item | reject "by" } | sort-by "name"
 }
 
 # Toggle showing full directory path in prompt
-def "nuprm set full-name" [
+def "nuprm full-name set" [
     enable: bool # `true` to show full path, `false` for abbreviated path
 ] {
     mut config = (open $nu_prompt_const.config_path)
@@ -64,7 +86,7 @@ def "nuprm set full-name" [
 }
 
 # Toggle display of system icons in prompt
-def "nuprm set system-icon" [
+def "nuprm system-icon set" [
     enable: bool # `true` to show system icons, `false` to hide them
 ] {
     mut config = (open $nu_prompt_const.config_path)
@@ -73,7 +95,7 @@ def "nuprm set system-icon" [
 }
 
 # Toggle directory path abbreviation in prompt
-def "nuprm set abbr" [
+def "nuprm abbr set" [
     enable: bool # `true` to enable path abbreviation, `false` to disable
 ] {
     mut config = (open $nu_prompt_const.config_path)
@@ -82,7 +104,7 @@ def "nuprm set abbr" [
 }
 
 # Toggle home directory (~) abbreviation in prompt
-def "nuprm set abbr home" [
+def "nuprm abbr home set" [
     enable: bool # `true` to abbreviate home as ~, `false` to show full path
 ] {
     mut config = (open $nu_prompt_const.config_path)
@@ -90,22 +112,61 @@ def "nuprm set abbr home" [
     $config | to yaml | save $nu_prompt_const.config_path -f
 }
 
-# Set number of directory segments to show from path end
-def "nuprm set abbr end" [
-    num: int # Number of path segments to show from end (e.g. 3 shows last 3 parts)
+# Set how many directories from the end should start being abbreviated
+def "nuprm abbr end set" [
+    num: int # Number of directories from the end to start abbreviating (e.g., 3 = abbreviate starting from the 3rd last, full display for last 2)
 ] {
-    mut config = (open $nu_prompt_const.config_path)
-    $config.directory_abbreviation.start_from_end = $num
-    $config | to yaml | save $nu_prompt_const.config_path -f
+    if $num >= 0 {
+        mut config = (open $nu_prompt_const.config_path)
+        $config.directory_abbreviation.start_from_end = $num
+        $config | to yaml | save $nu_prompt_const.config_path -f
+    } else {
+        print "\e[31mThe value must be >= 0."
+    }
 }
 
 # Set number of characters to show for each directory name
-def "nuprm set abbr chars" [
+def "nuprm abbr chars set" [
     num: int # Number of chars to show per directory (e.g. 1 shows first letter)
 ] {
+    if $num >= 1 {
+        mut config = (open $nu_prompt_const.config_path)
+        $config.directory_abbreviation.display_chars = $num
+        $config | to yaml | save $nu_prompt_const.config_path -f
+    } else {
+        print "\e[31mThe value must be >= 1."
+    }
+}
+
+# Add custom path abbreviation to prompt configuration
+def "nuprm abbr specific add" [
+    path: string    # Absolute path to abbreviate (e.g. '/home/user/.config')
+    display: string # Display text to show instead (e.g. '🛠️')
+] {
     mut config = (open $nu_prompt_const.config_path)
-    $config.directory_abbreviation.display_chars = $num
-    $config | to yaml | save $nu_prompt_const.config_path -f
+    if not ($path in $config.directory_abbreviation.specific) {
+        $config.directory_abbreviation.specific = $config.directory_abbreviation.specific | merge {($path): $display}
+        $config | to yaml | save $nu_prompt_const.config_path -f
+    }
+    nuprm abbr specific list
+}
+
+# Removes a custom path abbreviation from prompt configuration
+def "nuprm abbr specific remove" [
+    path: string # Absolute path to remove from abbreviations
+] {
+    mut config = (open $nu_prompt_const.config_path)
+    if $path in $config.directory_abbreviation.specific {
+        $config.directory_abbreviation.specific = $config.directory_abbreviation.specific | reject $path
+        $config | to yaml | save $nu_prompt_const.config_path -f
+    }
+    nuprm abbr specific list
+}
+
+# Lists all custom path abbreviations in prompt configuration
+def "nuprm abbr specific list" [] {
+    let config = (open $nu_prompt_const.config_path)
+    print $config.directory_abbreviation.specific
 }
 
 # Enable/disable the nuprm prompt system
