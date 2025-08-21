@@ -15,35 +15,14 @@ def get-config [
     return ($user_config | get $item -i | default $default)
 }
 
-# Replaces the home directory path in a given string with a tilde (~)
-export def home-to-tilde []: string -> string {
-    let path = $in
-    let abbreviation_config = (get-config "directory_abbreviation" {})
-    let abbreviation_enable = (($abbreviation_config | get "enable"? | default "no") == "yes")
-    let abbreviation_home = (($abbreviation_config | get "home"? | default "no") == "yes")
-
-    if $abbreviation_enable and $abbreviation_home {
-        if ($path == $nu.home-path) {
-            return "~"
-        } else if ($path | str starts-with $nu.home-path) {
-            let split_slash = if (is-windows) { "\\" } else { "/" }
-            return ($path | str replace $"($nu.home-path)($split_slash)" $"~($split_slash)")
-        } else {
-            return $path
-        }
-    } else {
-        return $path
-    }
-}
-
 export def specific-abbreviations []: string -> string {
     let path = $in
     let path_list = $path | path split
-    let abbr_config = (get-config "directory_abbreviation" {})
-    let abbr_enable = (($abbr_config | get "enable"? | default "no") == "yes")
-    let abbr_home = (($abbr_config | get "home"? | default "no") == "yes")
-    let specific_abbr = ($abbr_config | get "specific"? | default {})
-    let specific_abbr_record = ($specific_abbr | transpose key value | update key { |r| $r.key | path expand } | transpose -rd)
+    let abbr_config = get-config "directory_abbreviation" {}
+    let abbr_enable = ($abbr_config | get "enable"? | default "no") == "yes"
+    let abbr_home = ($abbr_config | get "home"? | default "no") == "yes"
+    let specific_abbr = $abbr_config | get "specific"? | default {}
+    let specific_abbr_record = $specific_abbr | transpose key value | update key { |r| $r.key | path expand } | transpose -rd
     let specific_abbr_key = $specific_abbr_record | columns
     
     if not $abbr_enable {
@@ -106,11 +85,11 @@ export def get-where-shells [
             if $dont_display_shells_if_not_used_shells and ($shells_data | length) == 1 {
                 return ""
             } else {
-                let shells_index = (
-                    (
-                        $shells_data | enumerate | where $it.item.active == true
-                    ).0.index
-                )
+                let shells_index = $shells_data
+                | enumerate
+                | where $it.item.active == true
+                | get 0.index
+                #------------------------------
                 let show_string = ([$left_char, $shells_index, $right_char] | str join "")
                 return $show_string
             }
@@ -147,27 +126,65 @@ export def is-android []: nothing -> bool {
     return $is_android
 }
 
-# Retrieves current username from environment variables
+# Checks if the current operating system is MacOS
+export def is-osx []: nothing -> bool {
+    let is_android = if $nu.os-info.name == "macos" { true } else { false }
+    return $is_android
+}
+
+# Get user name
 export def get-user-name []: nothing -> string {
-    let username = ($env.USERNAME? | default $env.USER? | default (whoami))
-    try {
-        if ((get-config "use_full_name" "no") == "yes") {
-            if not (is-windows) {
-                if not (is-android) {
-                    let full_name = open /etc/passwd
-                        | lines
-                        | split column ":"
-                        | where column1 == $username
-                        | get column5
-                        | first
-                        | str replace "," " " --all
-                        | str trim
-                    return $full_name
-                }
-            }
-        }
-    } catch { }
+    if ((get-config "use_full_name" "no") == "yes") {
+        return ($env | get "FULLNAME" -i | default "")
+    } else {
+        let username = get-username
+        return $username
+    }
+}
+
+# Retrieves current username from environment variables
+export def get-username []: nothing -> string {
+    let username = $env.USERNAME?
+    | default $env.USER?
+    | default (whoami)
+    #----------------------------
     return $username
+}
+
+# Get full name
+export def get-full-name []: nothing -> string {
+    let username = get-username
+
+    mut full_name = ""
+
+    try {
+        if (is-android) {
+            # Not supported
+            $full_name = $username
+        } else if (is-osx) {
+            $full_name = (^id -F)
+        } else if (is-windows) {
+            $full_name = ^powershell -c "(Get-LocalUser -Name $env:USERNAME).FullName"
+        } else {
+            $full_name = open "/etc/passwd"
+            | lines
+            | split column ":"
+            | where "column1" == $username
+            | get "column5"
+            | first
+            | str replace "," " " --all
+            | str trim
+            #------------------------------
+        }
+    } catch {
+        return $username
+    }
+
+    if not ($full_name | is-empty) {
+        return $full_name
+    } else {
+        return $username
+    }
 }
 
 # Formats path
@@ -263,15 +280,16 @@ export def make-file-url [
 # Get execution time (ms)
 export def get-execution-time-ms []: nothing -> number {
     if $env.CMD_DURATION_MS != "0823" {
-        return $env.CMD_DURATION_MS | into int
+        return ($env.CMD_DURATION_MS | into int)
     } else { return 0 }
 }
 
 # Get execution time (s)
 export def get-execution-time-s []: nothing -> number {
-    let time_ms = (get-execution-time-ms) | into int
-    let time_s = $time_ms / 1000 | math round --precision 2
-
+    let time_s = get-execution-time-ms
+    | $in / 1000
+    | math round --precision 2
+    #---------------------------------
     return $time_s
 }
 

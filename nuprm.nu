@@ -1,9 +1,12 @@
 const prompt_utils_path = (["~" ".config" "nuprm" "utils" "prompt-utils.nu"] | path join | path expand)
 use $prompt_utils_path nu_prompt_const
 
+$env.nuprm = {}
+
 do --env {
     try {
         use $prompt_utils_path *
+
         if not ($nu_prompt_const.config_path | path exists) {
             touch $nu_prompt_const.config_path
             let config = {
@@ -26,6 +29,12 @@ do --env {
         let config_table = (open $nu_prompt_const.config_path)
         let is_enable = ($config_table | get "enable")
         let theme_name = ($config_table | get "theme")
+
+        if ($config_table | get -i "use_full_name" | default "no") == "yes" {
+            if ($env.FULLNAME? == null) {
+                $env.FULLNAME = get-full-name
+            }
+        }
 
         let theme_path = ([$nu_prompt_const.exe_path "themes" $"($theme_name).nu"] | path join)
         $"source ($theme_path)" | save $nu_prompt_const.load_path -f
@@ -77,12 +86,16 @@ def "nuprm theme list" [] {
 }
 
 # Toggle showing full directory path in prompt
-def "nuprm full-name set" [
+def --env "nuprm full-name set" [
     enable: bool # `true` to show full path, `false` for abbreviated path
 ] {
     mut config = (open $nu_prompt_const.config_path)
     $config.use_full_name = if $enable { "yes" } else { "no" }
     $config | to yaml | save $nu_prompt_const.config_path -f
+    if $enable and ($env.FULLNAME? == null) {
+        use $prompt_utils_path "get-full-name"
+        $env.FULLNAME = get-full-name
+    }
 }
 
 # Toggle display of system icons in prompt

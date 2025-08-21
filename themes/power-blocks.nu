@@ -20,8 +20,8 @@ let prompt_chars = {
     status_err_bg: (color2ansi 240 83 80 "bg")
     shells_fg: (color2ansi 122 64 152 "fg")
     shells_bg: (color2ansi 122 64 152 "bg")
-    time_fg: (color2ansi 137 52 143 "fg")
-    time_bg: (color2ansi 137 52 143 "bg")
+    time_fg: (color2ansi 78 144 61 "fg")
+    time_bg: (color2ansi 78 144 61 "bg")
     root_fg: (color2ansi 248 102 122 "fg")
     root_bg: (color2ansi 248 102 122 "bg")
     vi_fg: (color2ansi 78 144 61 "fg")
@@ -49,6 +49,11 @@ def create-left-prompt [] {
                 } else { "" }
             )
             (
+                if $status.time > 0.5 {
+                    prompt-block "" "" $prompt_chars.time_fg $prompt_chars.time_bg $"($status.time)s" $prompt_chars.white_fg " "
+                } else { "" }
+            )
+            (
                 if $status.exit == 0 {
                     prompt-block "" "" $prompt_chars.status_fg $prompt_chars.status_bg $prompt_chars.right_char $prompt_chars.white_fg ""
                 } else {
@@ -58,11 +63,6 @@ def create-left-prompt [] {
             (
                 if $status.shells != "" {
                     prompt-block "" "" $prompt_chars.shells_fg $prompt_chars.shells_bg $status.shells $prompt_chars.white_fg " "
-                } else { "" }
-            )
-            (
-                if $status.time > 0.5 {
-                    prompt-block "" "" $prompt_chars.time_fg $prompt_chars.time_bg $"($status.time)s" $prompt_chars.white_fg " "
                 } else { "" }
             )
             (
