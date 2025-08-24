@@ -13,7 +13,7 @@ do --env {
                 enable: "off"
                 theme: "simple-minimal"
                 use_full_name: "no"
-                disable_system_icon: "no"
+                disable_system_icon: "yes"
                 directory_abbreviation: {
                     enable: "yes"
                     start_from_end: 3

@@ -1,1 +1,0 @@
-source /home/laism/.config/nuprm/themes/power-blocks.nu
