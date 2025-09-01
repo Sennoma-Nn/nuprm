@@ -30,7 +30,7 @@ do --env {
         let is_enable = ($config_table | get "enable")
         let theme_name = ($config_table | get "theme")
 
-        if ($config_table | get -i "use_full_name" | default "no") == "yes" {
+        if ($config_table | get -o "use_full_name" | default "no") == "yes" {
             if ($env.FULLNAME? == null) {
                 $env.FULLNAME = get-full-name
             }

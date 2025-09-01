@@ -12,7 +12,7 @@ def get-config [
     default: any
 ]: nothing -> any {
     let user_config = open $nu_prompt_const.config_path
-    return ($user_config | get $item -i | default $default)
+    return ($user_config | get $item -o | default $default)
 }
 
 export def specific-abbreviations []: string -> string {
@@ -43,11 +43,11 @@ export def specific-abbreviations []: string -> string {
             }
         }
         if $test_path in $specific_abbr_key {
-            let abbr = $specific_abbr_record | get -i $test_path | default $poss_err_alrt
+            let abbr = $specific_abbr_record | get -o $test_path | default $poss_err_alrt
             $new_path_list ++= [$abbr]
             break
         } else {
-            $new_path_list ++= [($path_list | get -i ($i - 1) | default $poss_err_alrt)]
+            $new_path_list ++= [($path_list | get -o ($i - 1) | default $poss_err_alrt)]
         }
     }
     let new_path = $new_path_list | reverse | path join
@@ -135,7 +135,7 @@ export def is-osx []: nothing -> bool {
 # Get user name
 export def get-user-name []: nothing -> string {
     if ((get-config "use_full_name" "no") == "yes") {
-        return ($env | get "FULLNAME" -i | default "")
+        return ($env | get "FULLNAME" -o | default "")
     } else {
         let username = get-username
         return $username
