@@ -85,9 +85,9 @@ def "nuprm theme list" [] {
     open $description_path | each { |item| $item | reject "by" } | sort-by "name"
 }
 
-# Toggle showing full directory path in prompt
+# Toggle showing full name in prompt
 def --env "nuprm full-name set" [
-    enable: bool # `true` to show full path, `false` for abbreviated path
+    enable: bool # `true` to show full name
 ] {
     mut config = (open $nu_prompt_const.config_path)
     $config.use_full_name = if $enable { "yes" } else { "no" }
@@ -98,12 +98,21 @@ def --env "nuprm full-name set" [
     }
 }
 
+# Toggle showing true color for prompt
+def --env "nuprm true-color set" [
+    enable: bool # `true` to show true color, `false` to show 16 color
+] {
+    mut config = (open $nu_prompt_const.config_path)
+    $config.true_color = if $enable { "yes" } else { "no" }
+    $config | to yaml | save $nu_prompt_const.config_path -f
+}
+
 # Toggle display of system icons in prompt
 def "nuprm system-icon set" [
     enable: bool # `true` to show system icons, `false` to hide them
 ] {
     mut config = (open $nu_prompt_const.config_path)
-    $config.disable_system_icon = if not $enable { "yes" } else { "no" }
+    $config.system_icon = if $enable { "yes" } else { "no" }
     $config | to yaml | save $nu_prompt_const.config_path -f
 }
 

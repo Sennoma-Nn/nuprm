@@ -1,19 +1,17 @@
 let colors = {
-    black_fg:       "\e[30m",
-    black_bg:       "\e[40m",
-    light_black_fg: "\e[90m",
-    white_fg:       "\e[37m",
-    red_fg:         "\e[31m",
-    color1_fg:      (color2ansi 253 172  65 "fg"),
-    color1_bg:      (color2ansi 253 172  65 "bg"),
-    color2_fg:      (color2ansi 245 114  46 "fg"),
-    color2_bg:      (color2ansi 245 114  46 "bg"),
-    color3_fg:      (color2ansi 135 188 215 "fg"),
-    color3_bg:      (color2ansi 135 188 215 "bg"),
-    color4_fg:      (color2ansi  51 102 137 "fg"),
-    color4_bg:      (color2ansi  51 102 137 "bg"),
-    color5_fg:      (color2ansi  35  70  94 "fg"),
-    color5_bg:      (color2ansi  35  70  94 "bg"),
+    black_fg:       (color2ansi   0   0   0 "fg"  30),
+    white_fg:       (color2ansi 255 255 255 "fg"  37),
+    color1_fg:      (color2ansi 253 172  65 "fg"  33),
+    color1_bg:      (color2ansi 253 172  65 "bg"  43),
+    color2_fg:      (color2ansi 245 114  46 "fg"  31),
+    color2_bg:      (color2ansi 245 114  46 "bg"  41),
+    color3_fg:      (color2ansi 135 188 215 "fg"  94),
+    color3_bg:      (color2ansi 135 188 215 "bg" 104),
+    color4_fg:      (color2ansi  51 102 137 "fg"  34),
+    color4_bg:      (color2ansi  51 102 137 "bg"  44),
+    color5_fg:      (color2ansi  35  70  94 "fg"  36),
+    color5_bg:      (color2ansi  35  70  94 "bg"  46),
+    grey_fg:        (color2ansi  64  64  64 "fg"  90),
     reset_bg:       "\e[49m",
     bold:           "\e[1m",
     italic:         "\e[3m",
@@ -22,14 +20,17 @@ let colors = {
 
 
 def create-prompt-left [] {
-    let path = ($env.PWD | format-path (if (is-windows) { "\\" } else { "/" }) -u)
-    let user = (get-user-name)
+    let shells_index = get-where-shells -dl $"($colors.black_fg)#" -r $" : "
+    let path = ($env.PWD | format-path (if (is-windows) { "\\" } else { "/" }) -u -d $colors.black_fg -s $colors.grey_fg)
+    let host_name = get-host -l $" @ "
+    let user_name = $"(get-user-name)"
+    let user_host = $"($user_name)($host_name)"
 
     let prompt_list = [
         $colors.color1_fg, "", $colors.reset,
-        $colors.color1_bg, $colors.black_fg, " ", $colors.italic, $user, " ", $colors.reset,
+        $colors.color1_bg, $colors.black_fg, " ", $colors.italic, $user_host, " ", $colors.reset,
         $colors.color2_bg, $colors.color1_fg, "",
-        $colors.color2_bg, $colors.black_fg, " ", $path, " ", $colors.reset,
+        $colors.color2_bg, " ", $shells_index, $path, " ", $colors.reset,
         $colors.color2_fg, "",
         $colors.reset, "\n"
     ]

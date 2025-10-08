@@ -1,13 +1,17 @@
 # Simple Minimal Theme
 let colors = {
-    green: (color2ansi 100 200 100 fg),
-    white: (color2ansi 240 240 240 fg),
+    green: (color2ansi 100 200 100 fg 32),
+    white: (color2ansi 240 240 240 fg 37),
+    grey: (color2ansi 128 128 128 fg 97),
     reset: (ansi reset)
 }
 
 def create-left-prompt [] {
-    let user_info = $"($colors.green)(get-user-name)($colors.reset)"
-    let path_info = $env.PWD | format-path (if (is-windows) { "\\" } else { "/" }) -l $colors.white -r $colors.reset -u
+    let user_name = get-user-name
+    let host_name = get-host -l $"($colors.white) @ ($colors.green)"
+    let user_info = $"($colors.green)($user_name)($host_name)($colors.reset)"
+    let path_info = $env.PWD | format-path (if (is-windows) { "\\" } else { "/" }) -d $colors.white -s $colors.grey -r $colors.reset -u
+    let shells_index = get-where-shells -dl $"($colors.white)#" -r $"($colors.green) : "
 
     let git_info = (get-git-info -l " (" -r ")") | if $in != "" {
         $"($colors.green)($in)"
@@ -17,7 +21,7 @@ def create-left-prompt [] {
         $" ($colors.green)[($env.LAST_EXIT_CODE)]"
     } else { "" }
 
-    return $"($user_info) ($path_info)($git_info)($exit_code) "
+    return $"($user_info) ($shells_index)($path_info)($git_info)($exit_code) "
 }
 
 $env.PROMPT_COMMAND = {|| create-left-prompt }

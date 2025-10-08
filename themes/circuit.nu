@@ -1,7 +1,7 @@
 let colors = {
-    white: (ansi -e '0;37m'),
-    green: (ansi -e '0;32m'),
-    red: (ansi -e '0;31m'),
+    white: (color2ansi 255 255 255 "fg" 37),
+    green: (color2ansi 80 161 79 "fg" 32),
+    red: (color2ansi 228 86 73 "fg" 31),
     reset: (ansi reset)
 }
 
@@ -9,11 +9,14 @@ def create-left-prompt [] {
     let status_color = if $env.LAST_EXIT_CODE == 0 { $colors.green } else { $colors.red }
     let status_mark = if $env.LAST_EXIT_CODE != 0 { $" ($status_color)×($colors.reset) ($env.LAST_EXIT_CODE)" } else { "" }
     
-    let user_host = $"($colors.white)(get-user-name) ($status_color)@ ($colors.white)(hostname)"
-    let path_info = $"[ ($status_color)($env.PWD | format-path -u (if (is-windows) { "\\" } else { "/" })) ($colors.white)]"
+    let host_name = get-host -l $"($status_color) @ ($colors.white)"
+    let user_name = $"($colors.white)(get-user-name)"
+    let user_host = $"($user_name)($host_name)"
+    let path_info = $env.PWD | format-path -u (if (is-windows) { "\\" } else { "/" }) -d $"($status_color)" -s $"($colors.white)" -r "\e[0m" -u
+    let path_show = $"[ ($path_info) ($colors.white)]"
     let git_info = (get-git-info -l $" in ($status_color)" -r $colors.reset)
 
-    return $"($colors.white)╭── ($user_host) ($path_info)($status_mark)($git_info)\n($colors.white)╰─($colors.reset)"
+    return $"($colors.white)╭── ($user_host) ($path_show)($status_mark)($git_info)\n($colors.white)╰─($colors.reset)"
 }
 
 $env.PROMPT_COMMAND = {|| create-left-prompt }

@@ -59,6 +59,10 @@ export def get-git-info [
     --left_char: string (-l) = ""   # Left decorator for branch name
     --right_char: string (-r) = ""  # Right decorator for branch name
 ]: nothing -> string {
+    let is_show_git = (get-config "show_info" {}) | get -o "git" | $in == "yes"
+
+    if not $is_show_git { return "" }
+
     try {
         let branch = (
             do -i {  # Safely attempt git command
@@ -79,6 +83,10 @@ export def get-where-shells [
     --left_char: string (-l) = ""                  # Left decorator for shell index
     --right_char: string (-r) = ""                 # Right decorator for shell index
 ]: nothing -> string {
+    let is_show_shells = (get-config "show_info" {}) | get -o "shells" | $in == "yes"
+
+    if not $is_show_shells { return "" }
+
     try {
         if (((which "dirs") ++ (which "shells")) | length) > 0 {
             let shells_data = if (which "dirs" | length) > 0 { dirs } else { shells }
@@ -105,13 +113,20 @@ export def color2ansi [
     g: int              # Green component (0-255)
     b: int              # Blue component (0-255)
     color_type: string  # Color type: "fg" (foreground) or "bg" (background)
+    ansi_color: string  # If not enable true_color use this (ansi m's arg (\e[?m))
 ]: nothing -> string {
-    let ansi_str = match $color_type {
-        "fg" => { $"\e[38;2;($r);($g);($b)m" }
-        "bg" => { $"\e[48;2;($r);($g);($b)m" }
-        _    => { "" }
+    let is_true_color = (get-config "true_color" "yes") == "yes"
+    if $is_true_color {
+        let ansi_str = match $color_type {
+            "fg" => { $"\e[38;2;($r);($g);($b)m" }
+            "bg" => { $"\e[48;2;($r);($g);($b)m" }
+            _    => { "" }
+        }
+        return $"($ansi_str)"
+    } else {
+        let ansi_str = (ansi -e $"($ansi_color)m")
+        return $ansi_str
     }
-    return $"($ansi_str)"
 }
 
 # Checks if the current operating system is Windows
@@ -129,6 +144,12 @@ export def is-android []: nothing -> bool {
 # Checks if the current operating system is MacOS
 export def is-osx []: nothing -> bool {
     let is_android = if $nu.os-info.name == "macos" { true } else { false }
+    return $is_android
+}
+
+# Checks if the current operating system is FreeBSD
+export def is-freebsd []: nothing -> bool {
+    let is_android = if $nu.os-info.name == "freebsd" { true } else { false }
     return $is_android
 }
 
@@ -165,6 +186,13 @@ export def get-full-name []: nothing -> string {
             $full_name = (^id -F)
         } else if (is-windows) {
             $full_name = ^powershell -c "(Get-LocalUser -Name $env:USERNAME).FullName"
+        } else if (is-freebsd) {
+            $full_name = ^id -P
+            | split column ":"
+            | get "column8"
+            | first
+            | str replace "," " " --all
+            | str trim
         } else {
             $full_name = open "/etc/passwd"
             | lines
@@ -185,6 +213,24 @@ export def get-full-name []: nothing -> string {
     } else {
         return $username
     }
+}
+
+# Get host name
+export def get-host [
+    --left_char: string (-l) = ""   # Left decorator for host name
+    --right_char: string (-r) = ""  # Right decorator for host name
+]: nothing -> string {
+    let is_show_host = (get-config "show_info" {}) | get -o "host" | $in == "yes"
+    if $is_show_host {
+        let host_name = sys host | get hostname
+        return (
+            [
+                $left_char
+                $host_name
+                $right_char
+            ] | str join
+        )
+    } else { return "" }
 }
 
 # Formats path
@@ -270,6 +316,12 @@ export def make-file-url [
     file_path: string # Actual path for the link
 ]: string -> string {
     let display_path = $in
+    let enable_path_url = (get-config "enable_path_url" "yes") == "yes"
+
+    if not $enable_path_url {
+        return $display_path
+    }
+
     return (
         [
             "\e]8;;file://", $file_path, "\a", $display_path, "\e]8;;\a"
@@ -298,9 +350,9 @@ export def get-system-icon [
     --left_char: string (-l) = ""   # Left decorator for system icon
     --right_char: string (-r) = ""  # Right decorator for system icon
 ]: nothing -> string {
-    let disable_system_icon = (get-config "disable_system_icon" "yes")
+    let disable_system_icon = (get-config "system_icon" "yes")
 
-    if $disable_system_icon == no {
+    if $disable_system_icon == "yes" {
         let system_type = $nu.os-info.name
         let system_name = (sys host | get name | str downcase)
 
@@ -340,6 +392,7 @@ export def get-system-icon [
             }
             "android"   => { "" }
             "macos"     => { "" }
+            "freebsd"   => { "" }
             _           => { "" }
         }
 

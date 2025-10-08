@@ -1,14 +1,15 @@
 # --- Color Palette ---
 let colors = {
-    terminal_green: (color2ansi 57 255 20 fg),
-    error_red: (color2ansi 255 0 0 fg),
-    dim_green: (color2ansi 40 180 20 fg),
+    terminal_green: (color2ansi 57 255 20 fg 92),
+    error_red: (color2ansi 255 0 0 fg 31),
+    dim_green: (color2ansi 40 180 20 fg 32),
     reset: (ansi reset)
 }
 
 # --- Main Prompt Command ---
 def create-prompt [] {
-    let path_str = $env.PWD | format-path (if (is-windows) { "\\" } else { "/" }) -u
+    let shells_index = get-where-shells -dl $"($colors.terminal_green)#" -r $"($colors.dim_green) : "
+    let path_str = $env.PWD | format-path (if (is-windows) { "\\" } else { "/" }) -u -d $colors.terminal_green -s $colors.dim_green
 
     let git_branch = (get-git-info)
     let git_str = if not ($git_branch | is-empty) {
@@ -17,7 +18,7 @@ def create-prompt [] {
         ""
     }
 
-    return $"($colors.terminal_green)($path_str)($git_str)($colors.reset) "
+    return $"($shells_index)($colors.terminal_green)($path_str)($git_str)($colors.reset) "
 }
 
 # --- Prompt Indicator ---

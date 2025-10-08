@@ -1,23 +1,25 @@
-let black_fg = "\e[30m"
-let black_bg = "\e[40m"
-let blue_fg = "\e[38;2;129;169;254m"
-let blue_bg = "\e[48;2;129;169;254m"
-let dark_blue_fg = "\e[38;2;59;66;97m"
-let dark_blue_bg = "\e[48;2;59;66;97m"
-let pink_fg = "\e[38;2;197;134;192m"
+let black_fg = (color2ansi 0 0 0 fg 30)
+let black_bg = (color2ansi 0 0 0 bg 40)
+let blue_fg = (color2ansi 129 169 254 fg 94)
+let blue_bg = (color2ansi 129 169 254 bg 104)
+let dark_blue_fg = (color2ansi 59 66 97 fg 34)
+let dark_blue_bg = (color2ansi 59 66 97 bg 44)
+let pink_fg = (color2ansi 197 134 192 fg 95)
 let bold = "\e[1m"
 let reset = "\e[0m"
 
-let user = (get-user-name)
+let user_name = get-user-name
+let host_name = get-host -l $" @ "
+let user_host = $"($user_name)($host_name)"
 
 def create-prompt [] {
     let path = $env.PWD | format-path "  " -d $blue_fg -s $black_fg -ku
-    let git_info = (get-git-info)
-    let shells_info = (get-where-shells -dl $" ($dark_blue_bg + $blue_fg) №")
+    let git_info = get-git-info
+    let shells_info = get-where-shells -dl $" ($dark_blue_bg + $blue_fg) №"
 
     mut prompt = $"($reset)┌ "
     $prompt += $"($blue_fg)($reset)"
-    $prompt += $"($blue_bg)($black_fg) (get-system-icon -r ' ▕ ')($user)($shells_info) ($reset)"
+    $prompt += $"($blue_bg)($black_fg) (get-system-icon -r ' ▕ ')($user_host)($shells_info) ($reset)"
     $prompt += $"(if $shells_info != "" { $dark_blue_fg } else { $blue_fg })($reset)"
     $prompt += $"($dark_blue_fg)"
     $prompt += $"($dark_blue_bg)($blue_fg) ($path) ($reset)"

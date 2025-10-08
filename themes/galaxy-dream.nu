@@ -1,14 +1,16 @@
 let colors = {
-    purple: (color2ansi 180 100 255 fg),
-    blue: (color2ansi 100 150 255 fg),
-    pink: (color2ansi 255 100 200 fg),
-    star: (color2ansi 255 255 150 fg),
+    purple: (color2ansi 180 100 255 fg 35),
+    blue: (color2ansi 100 150 255 fg 34),
+    pink: (color2ansi 255 100 200 fg 95),
+    star: (color2ansi 255 255 150 fg 33),
     reset: (ansi reset)
 }
 
 def create-left-prompt [] {
-    let user = $"✨ ($colors.purple)🚀 ($colors.pink)(get-user-name) ✨"
-    let path_seg = $"($colors.blue)🪐 " + ($env.PWD | format-path (if (is-windows) { "\\" } else { "/" }) -l $"($colors.purple)" -r "\e[0m" -u)
+    let user_name = $"✨ ($colors.purple)🚀 ($colors.pink)(get-user-name)"
+    let host_name = get-host -l $"($colors.purple) at ($colors.pink)"
+    let user_host = $"($user_name)($host_name) ✨"
+    let path_seg = $"($colors.blue)🪐 " + ($env.PWD | format-path (if (is-windows) { "\\" } else { "/" }) -d $"($colors.purple)" -s $"($colors.pink)" -r "\e[0m" -u)
     let git_info = (get-git-info -l " (" -r ")")
     let git_status = if ($git_info | str length) > 0 {
         $" ($colors.star)🌟($git_info)"
@@ -16,11 +18,12 @@ def create-left-prompt [] {
     let exit_status = if $env.LAST_EXIT_CODE != 0 {
         $" ($colors.pink)💥 [($env.LAST_EXIT_CODE)]"
     } else { "" }
-    return $"($user)\n($path_seg)($git_status)($exit_status)\n"
+    return $"($user_host)\n($path_seg)($git_status)($exit_status)\n"
 }
 
 def create-right-prompt [] {
-    return $"($colors.blue)⌛ (date now | format date '%H:%M')"
+    let shells_index = get-where-shells -dl $"№" -r $" "
+    return $"($colors.blue)($shells_index)⌛ (date now | format date '%H:%M')"
 }
 
 $env.PROMPT_COMMAND = {|| create-left-prompt }
