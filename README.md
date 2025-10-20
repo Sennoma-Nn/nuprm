@@ -4,7 +4,7 @@
 # Nushell Prompt Manager (nuprm)
 
 ### Overview
-**nuprm** is a Nushell prompt theme manager. It allows you to easily switch between different prompt themes, customize the appearance of your Nushell prompt, and manage prompt configurations through simple commands.
+**nuprm** is a Nushell prompt theme manager. It allows you to easily switch between different prompt themes, customize the appearance of your Nushell prompt, and manage prompt configurations through environment variables.
 
 ### Installation
 1. Clone this repository to your .config directory:
@@ -23,151 +23,108 @@
     ```
 
 ### Configuring nuprm
-1. Enable nuprm
-    ```nu
-    nuprm true
-    ```
-    Your prompt will change:
-    ```nu
-    ~> nuprm true
-    laism ~ ❯ 
-    ```
-    To disable nuprm, set it to `false`
+nuprm is now configured through environment variables. You need to add configuration to your Nushell environment file (`~/.config/nushell/env.nu`).
 
-2. Select and set themes
-    ```nu
-    nuprm theme list
-    ```
-    Lists available themes:
-    ```nu
-    ❯ nuprm theme list
-     #        name                   tag
-    ─────────────────────────────────────────────────
-     0   azure            Minimalist
-     1   circuit          Multiple Lines
-     2   galaxy-dream     Emoji, Multiple Lines
-     3   gxy              Power Line, Multiple Lines
-     4   neon-night       Multiple Lines
-     5   power-blocks     Power Line
-     6   retro-console    Retro
-     7   simple-minimal   Minimalist
-     8   sunset-ocean     Power Line, Multiple Lines
-    laism ~ ❯ 
-    ```
-    Default theme is simple-minimal. Set a theme with `nuprm theme set`:
-    ```nu
-    ❯ nuprm theme set azure
-    laism [ ~ ]$ 
-    ```
+#### Basic Configuration Structure
+```nu
+# You can use this Nuprm configuration as a template
+$env.NUPRMCONFIG = {
+    "enable": "on",
+    "use_full_name": "no",
+    "disable_system_icon": "yes",
+    "true_color": "yes",
+    "directory_abbreviation": {
+        "enable": "yes",
+        "start_from_end": 3,
+        "display_chars": 1,
+        "home": "yes",
+        "specific": {}
+    },
+    "show_info": {
+        "host": "yes",
+        "git": "yes",
+        "shells": "yes"
+    }
+}
 
-3. Personalized prompt display configurations
+const nuprm_theme = "~/.config/nuprm/themes/simple-minimal.nu"
+```
 
-    #### Enable full name display
-    ```nu
-    $ nuprm full-name set true
-    La-Ysm [ ~ ]$ 
-    ```
-    Disable with `false`:
-    ```nu
-    $ nuprm full-name set false
-    laism [ ~ ]$ 
-    ```
-    > Note: Only works on non-Android Unix/Unix-Like systems
+#### Configuration Options Explanation
 
-    #### Directory abbreviation
-    Default behavior: `~/.test/aaa/bbb/ccc/ddd/eee/fff/ggg` becomes `~/.t/a/b/c/d/e/fff/ggg`
-    
-    Toggle abbreviation:
-    ```nu
-    $ pwd
-    /home/laism/.test/aaa/bbb/ccc/ddd/eee/fff/ggg
-    $ nuprm abbr set false
-    laism [ /home/laism/.test/aaa/bbb/ccc/ddd/eee/fff/ggg ]$ 
-    ```
-    Set where abbreviation starts (from end). Default=3:
-    ```nu
-    $ nuprm abbr end set 5
-    laism [ ~/.t/a/b/c/ddd/eee/fff/ggg ]$ 
-    ```
-    Disable by setting to 0:
-    ```nu
-    $ nuprm abbr end set 0
-    laism [ ~/.test/aaa/bbb/ccc/ddd/eee/fff/ggg ]$ 
-    ```
-    Effect preview:
-    |Value|Display|
-    |-|-|
-    |0|`~/.test/aaa/bbb/ccc/ddd/eee/fff/ggg`|
-    |1|`~/.t/a/b/c/d/e/f/g`|
-    |2|`~/.t/a/b/c/d/e/f/ggg`|
-    |3|`~/.t/a/b/c/d/e/fff/ggg`|
-    |4|`~/.t/a/b/c/d/eee/fff/ggg`|
-    |5|`~/.t/a/b/c/ddd/eee/fff/ggg`|
+**Enable nuprm**
+- `"enable": "on"` - Enable nuprm
+- `"enable": "off"` - Disable nuprm
 
-    Set displayed character count (default=1):
-    ```nu
-    $ pwd
-    /home/laism/.test/123456/demo/path
-    $ nuprm abbr chars set 3
-    laism [ ~/.tes/123/demo/path ]$ 
-    ```
+**Display full name**
+- `"use_full_name": "yes"` - Display user's full name
+- `"use_full_name": "no"` - Display username
 
-    Toggle home directory abbreviation (default=`true`):
-    ```nu
-    $ cd ~
-    $ nuprm abbr home set false
-    laism [ /home/laism ]$ 
-    ```
+**Directory abbreviation configuration**
+nuprm supports intelligent directory abbreviation to make long paths more readable.
 
-    Add custom directory abbreviations:
-    ```nu
-    $ nuprm abbr specific add ~/Documents 📄
-     ~/Documents   📄
-    $ cd Documents
-    laism [ 📄 ]$ 
-    ```
-    Customize home directory symbol:
-    ```nu
-    $ cd ~
-    $ nuprm abbr home set false
-    $ nuprm abbr specific add ~ 🏠
-     ~/Documents   📄
-     ~             🏠
-    laism [ 🏠 ]$ 
-    ```
-    > Note: Must disable home abbreviation before customizing home symbol
+- `"directory_abbreviation.enable": "yes"` - Enable directory abbreviation
+- `"directory_abbreviation.enable": "no"` - Disable directory abbreviation
 
-    Remove custom abbreviation:
-    ```nu
-    $ nuprm abbr specific remove ~/Documents
-     ~   🏠
-    $ cd Documents
-    laism [ 🏠/Documents ]$ 
-    ```
+- `"directory_abbreviation.start_from_end": 3` - Start abbreviation from the Nth directory from the end
+  - Set to `0` to disable abbreviation from the end, showing full path
+  - Example: `~/.test/aaa/bbb/ccc/ddd/eee/fff/ggg` display effects with different settings:
+    - 0: `~/.test/aaa/bbb/ccc/ddd/eee/fff/ggg`
+    - 1: `~/.t/a/b/c/d/e/f/g`
+    - 2: `~/.t/a/b/c/d/e/f/ggg`
+    - 3: `~/.t/a/b/c/d/e/fff/ggg`
+    - 4: `~/.t/a/b/c/d/eee/fff/ggg`
+    - 5: `~/.t/a/b/c/ddd/eee/fff/ggg`
 
-    List current abbreviations:
-    ```nu
-    $ nuprm abbr specific list
-     ~   🏠
-    laism [ 🏠/Documents ]$ 
-    ```
+- `"directory_abbreviation.display_chars": 1` - Number of characters to display after abbreviation
+  - For example, set to 3: `/home/laism/.test/123456/demo/path` will display as `~/.tes/123/demo/path`
 
-    > Example for Android path:
-    > ```nu
-    > $ nuprm abbr specific add /storage/emulated/0/ EM0
-    >  /storage/emulated/0/   EM0
-    > $ cd /storage/emulated/0/
-    > u0_a220 [ EM0 ]$ 
-    > ```
+- `"directory_abbreviation.home": "yes"` - Enable home directory abbreviation to `~`
+- `"directory_abbreviation.home": "no"` - Disable home directory abbreviation
 
-    #### System icon display
-    Some themes display system icons (typically those with the Power Line tag). Toggle this with `nuprm system-icon set` (default=`true`). Set to `false` to disable.
+- `"directory_abbreviation.specific": {}` - Custom special directory abbreviations
+  - You can add custom directory abbreviations, for example set `~/Documents` to `📄`, set home directory to `🏠`
+  > If you want to customize the home directory abbreviation display, you must disable `directory_abbreviation.home`
 
-    > **Important about icon support**: 
-    > This feature hasn't been fully tested as we can't test all operating systems and Linux distributions. 
-    > - If you're on Linux and see a penguin icon (generic Linux icon) instead of your distro's specific icon
-    > - If you're on other OS and see no icon at all
-    > ...this means we don't yet support your distro/OS. 
-    > 
-    > Please submit an issue with the output of the `sys host` command. 
-    > We'll add support for your system and greatly appreciate your contribution!
+**System icon display**
+- `"disable_system_icon": "yes"` - Disable system icon display
+- `"disable_system_icon": "no"` - Enable system icon display
+
+**True color support**
+- `"true_color": "yes"` - Enable true color support
+- `"true_color": "no"` - Disable true color support
+
+**Information display configuration**
+- `"show_info.host": "yes"` - Display hostname
+- `"show_info.git": "yes"` - Display Git repository information
+- `"show_info.shells": "yes"` - Display Shells information
+
+#### Theme Management
+You can use the `nuprm theme list` command to view available themes:
+
+```nu
+❯ nuprm theme list
+ #        name                   tag
+─────────────────────────────────────────────────
+ 0   azure            Minimalist
+ 1   circuit          Multiple Lines
+ 2   galaxy-dream     Emoji, Multiple Lines
+ 3   gxy              Power Line, Multiple Lines
+ 4   neon-night       Multiple Lines
+ 5   power-blocks     Power Line
+ 6   retro-console    Retro
+ 7   simple-minimal   Minimalist
+ 8   sunset-ocean     Power Line, Multiple Lines
+```
+
+To set a theme, configure the `nuprm_theme` constant in your environment file:
+
+```nu
+# Set theme
+const nuprm_theme = "~/.config/nuprm/themes/theme-name.nu"
+```
+
+After modifying the configuration, restart your Nushell session or re-enter to apply changes:
+
+```nu
+exec $nu.current-exe

@@ -1,6 +1,5 @@
 export const nu_prompt_const = {
     exe_path: (["~" ".config" "nuprm"] | path join | path expand)
-    config_path: (["~" ".config" "nuprm" "config.yml"] | path join | path expand)
     load_path: (["~" ".config" "nuprm" "load.nu"] | path join | path expand)
 }
 
@@ -11,7 +10,7 @@ def get-config [
     item: string
     default: any
 ]: nothing -> any {
-    let user_config = open $nu_prompt_const.config_path
+    let user_config = $env.NUPRMCONFIG
     return ($user_config | get $item -o | default $default)
 }
 
