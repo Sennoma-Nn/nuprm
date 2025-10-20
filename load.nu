@@ -1,0 +1,1 @@
+source /home/laism/.config/nuprm/themes/azure.nu

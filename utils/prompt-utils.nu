@@ -94,10 +94,9 @@ export def get-where-shells [
                 return ""
             } else {
                 let shells_index = $shells_data
-                | enumerate
-                | where $it.item.active == true
-                | get 0.index
-                #------------------------------
+                    | enumerate
+                    | where $it.item.active == true
+                    | get 0.index
                 let show_string = ([$left_char, $shells_index, $right_char] | str join "")
                 return $show_string
             }
@@ -166,9 +165,8 @@ export def get-user-name []: nothing -> string {
 # Retrieves current username from environment variables
 export def get-username []: nothing -> string {
     let username = $env.USERNAME?
-    | default $env.USER?
-    | default (whoami)
-    #----------------------------
+        | default $env.USER?
+        | default (whoami)
     return $username
 }
 
@@ -188,21 +186,20 @@ export def get-full-name []: nothing -> string {
             $full_name = ^powershell -c "(Get-LocalUser -Name $env:USERNAME).FullName"
         } else if (is-freebsd) {
             $full_name = ^id -P
-            | split column ":"
-            | get "column8"
-            | first
-            | str replace "," " " --all
-            | str trim
+                | split column ":"
+                | get "column8"
+                | first
+                | str replace "," " " --all
+                | str trim
         } else {
             $full_name = open "/etc/passwd"
-            | lines
-            | split column ":"
-            | where "column1" == $username
-            | get "column5"
-            | first
-            | str replace "," " " --all
-            | str trim
-            #------------------------------
+                | lines
+                | split column ":"
+                | where "column1" == $username
+                | get "column5"
+                | first
+                | str replace "," " " --all
+                | str trim
         }
     } catch {
         return $username
@@ -339,9 +336,8 @@ export def get-execution-time-ms []: nothing -> number {
 # Get execution time (s)
 export def get-execution-time-s []: nothing -> number {
     let time_s = get-execution-time-ms
-    | $in / 1000
-    | math round --precision 2
-    #---------------------------------
+        | $in / 1000
+        | math round --precision 2
     return $time_s
 }
 
