@@ -12,12 +12,17 @@
     git clone https://github.com/Sennoma-Nn/nuprm.git ~/.config/nuprm
     ```
 
-2. Add the following line to your Nushell configuration file (`~/.config/nushell/config.nu`):
+2. Add the following line to your Nushell configuration file (`config nu`):
     ```nu
     source ~/.config/nuprm/nuprm.nu
     ```
 
-3. Restart your Nushell session:
+3. Add the following line to your Nushell environment file (`config env`):
+    ```nu
+    const nuprm_theme = "~/.config/nuprm/themes/simple-minimal.nu"
+    ```
+
+4. Restart your Nushell session:
     ```nu
     exec $nu.current-exe
     ```
@@ -28,45 +33,54 @@ nuprm is now configured through environment variables. You need to add configura
 #### Basic Configuration Structure
 ```nu
 # You can use this Nuprm configuration as a template
+const nuprm_theme = "~/.config/nuprm/themes/simple-minimal.nu"
+
 $env.NUPRMCONFIG = {
-    "enable": "on",
-    "use_full_name": "no",
-    "disable_system_icon": "yes",
-    "true_color": "yes",
-    "directory_abbreviation": {
-        "enable": "yes",
-        "start_from_end": 3,
-        "display_chars": 1,
-        "home": "yes",
-        "specific": {}
+    enabled: "yes",
+    use_full_name: "yes",
+    true_color: "yes",
+    enable_path_url: "yes",
+    directory_abbreviation: {
+        enabled: "yes",
+        start_from_end: 3,
+        display_chars: 2,
+        abbreviate_home: "yes",
+        specific_mappings: {}
     },
-    "show_info": {
-        "host": "yes",
-        "git": "yes",
-        "shells": "yes"
+    display_elements: {
+        system_icon: "no",
+        hostname: "yes",
+        git: "yes",
+        shells: "yes"
     }
 }
-
-const nuprm_theme = "~/.config/nuprm/themes/simple-minimal.nu"
 ```
 
 #### Configuration Options Explanation
 
 **Enable nuprm**
-- `"enable": "on"` - Enable nuprm
-- `"enable": "off"` - Disable nuprm
+- `enabled: "yes"` - Enable nuprm
+- `enabled: "no"` - Disable nuprm
 
 **Display full name**
-- `"use_full_name": "yes"` - Display user's full name
-- `"use_full_name": "no"` - Display username
+- `use_full_name: "yes"` - Display user's full name
+- `use_full_name: "no"` - Display username
+
+**True color support**
+- `true_color: "yes"` - Enable true color support
+- `true_color: "no"` - Disable true color support
+
+**Path URL support**
+- `enable_path_url: "yes"` - Enable path URL support
+- `enable_path_url: "no"` - Disable path URL support
 
 **Directory abbreviation configuration**
 nuprm supports intelligent directory abbreviation to make long paths more readable.
 
-- `"directory_abbreviation.enable": "yes"` - Enable directory abbreviation
-- `"directory_abbreviation.enable": "no"` - Disable directory abbreviation
+- `directory_abbreviation.enabled: "yes"` - Enable directory abbreviation
+- `directory_abbreviation.enabled: "no"` - Disable directory abbreviation
 
-- `"directory_abbreviation.start_from_end": 3` - Start abbreviation from the Nth directory from the end
+- `directory_abbreviation.start_from_end: 3` - Start abbreviation from the Nth directory from the end
   - Set to `0` to disable abbreviation from the end, showing full path
   - Example: `~/.test/aaa/bbb/ccc/ddd/eee/fff/ggg` display effects with different settings:
     - 0: `~/.test/aaa/bbb/ccc/ddd/eee/fff/ggg`
@@ -76,28 +90,28 @@ nuprm supports intelligent directory abbreviation to make long paths more readab
     - 4: `~/.t/a/b/c/d/eee/fff/ggg`
     - 5: `~/.t/a/b/c/ddd/eee/fff/ggg`
 
-- `"directory_abbreviation.display_chars": 1` - Number of characters to display after abbreviation
+- `directory_abbreviation.display_chars: 2` - Number of characters to display after abbreviation
   - For example, set to 3: `/home/laism/.test/123456/demo/path` will display as `~/.tes/123/demo/path`
 
-- `"directory_abbreviation.home": "yes"` - Enable home directory abbreviation to `~`
-- `"directory_abbreviation.home": "no"` - Disable home directory abbreviation
+- `directory_abbreviation.abbreviate_home: "yes"` - Enable home directory abbreviation to `~`
+- `directory_abbreviation.abbreviate_home: "no"` - Disable home directory abbreviation
 
-- `"directory_abbreviation.specific": {}` - Custom special directory abbreviations
+- `directory_abbreviation.specific_mappings: {}` - Custom special directory abbreviations
   - You can add custom directory abbreviations, for example set `~/Documents` to `📄`, set home directory to `🏠`
-  > If you want to customize the home directory abbreviation display, you must disable `directory_abbreviation.home`
+  > If you want to customize the home directory abbreviation display, you must disable `directory_abbreviation.abbreviate_home`
 
-**System icon display**
-- `"disable_system_icon": "yes"` - Disable system icon display
-- `"disable_system_icon": "no"` - Enable system icon display
+**Display elements configuration**
+- `display_elements.system_icon: "yes"` - Display system icon
+- `display_elements.system_icon: "no"` - Do not display system icon
 
-**True color support**
-- `"true_color": "yes"` - Enable true color support
-- `"true_color": "no"` - Disable true color support
+- `display_elements.hostname: "yes"` - Display hostname
+- `display_elements.hostname: "no"` - Do not display hostname
 
-**Information display configuration**
-- `"show_info.host": "yes"` - Display hostname
-- `"show_info.git": "yes"` - Display Git repository information
-- `"show_info.shells": "yes"` - Display Shells information
+- `display_elements.git: "yes"` - Display Git repository information
+- `display_elements.git: "no"` - Do not display Git repository information
+
+- `display_elements.shells: "yes"` - Display Shells information
+- `display_elements.shells: "no"` - Do not display Shells information
 
 #### Theme Management
 You can use the `nuprm theme list` command to view available themes:

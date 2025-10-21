@@ -18,9 +18,9 @@ export def specific-abbreviations []: string -> string {
     let path = $in
     let path_list = $path | path split
     let abbr_config = get-config "directory_abbreviation" {}
-    let abbr_enable = ($abbr_config | get "enable"? | default "no") == "yes"
-    let abbr_home = ($abbr_config | get "home"? | default "no") == "yes"
-    let specific_abbr = $abbr_config | get "specific"? | default {}
+    let abbr_enable = ($abbr_config | get "enabled"? | default "no") == "yes"
+    let abbr_home = ($abbr_config | get "abbreviate_home"? | default "no") == "yes"
+    let specific_abbr = $abbr_config | get "specific_mappings"? | default {}
     let specific_abbr_record = $specific_abbr | transpose key value | update key { |r| $r.key | path expand } | transpose -rd
     let specific_abbr_key = $specific_abbr_record | columns
     
@@ -58,7 +58,7 @@ export def get-git-info [
     --left_char: string (-l) = ""   # Left decorator for branch name
     --right_char: string (-r) = ""  # Right decorator for branch name
 ]: nothing -> string {
-    let is_show_git = (get-config "show_info" {}) | get -o "git" | $in == "yes"
+    let is_show_git = (get-config "display_elements" {}) | get -o "git" | $in == "yes"
 
     if not $is_show_git { return "" }
 
@@ -82,7 +82,7 @@ export def get-where-shells [
     --left_char: string (-l) = ""                  # Left decorator for shell index
     --right_char: string (-r) = ""                 # Right decorator for shell index
 ]: nothing -> string {
-    let is_show_shells = (get-config "show_info" {}) | get -o "shells" | $in == "yes"
+    let is_show_shells = (get-config "display_elements" {}) | get -o "shells" | $in == "yes"
 
     if not $is_show_shells { return "" }
 
@@ -111,7 +111,7 @@ export def color2ansi [
     g: int              # Green component (0-255)
     b: int              # Blue component (0-255)
     color_type: string  # Color type: "fg" (foreground) or "bg" (background)
-    ansi_color: string  # If not enable true_color use this (ansi m's arg (\e[?m))
+    ansi_color: string  # If not enabled true_color use this (ansi m's arg (\e[?m))
 ]: nothing -> string {
     let is_true_color = (get-config "true_color" "yes") == "yes"
     if $is_true_color {
@@ -216,7 +216,7 @@ export def get-host [
     --left_char: string (-l) = ""   # Left decorator for host name
     --right_char: string (-r) = ""  # Right decorator for host name
 ]: nothing -> string {
-    let is_show_host = (get-config "show_info" {}) | get -o "host" | $in == "yes"
+    let is_show_host = (get-config "display_elements" {}) | get -o "hostname" | $in == "yes"
     if $is_show_host {
         let host_name = sys host | get hostname
         return (
@@ -241,7 +241,7 @@ export def format-path [
 ]: string -> string {
     let path = $in
     let abbreviation_config = (get-config "directory_abbreviation" {})
-    let abbreviation_enable = (($abbreviation_config | get "enable"? | default "no") == "yes")
+    let abbreviation_enable = (($abbreviation_config | get "enabled"? | default "no") == "yes")
     let input_path = ($path | specific-abbreviations)
     let input_separators = ($sep_style + $new_separators)
 
@@ -345,9 +345,9 @@ export def get-system-icon [
     --left_char: string (-l) = ""   # Left decorator for system icon
     --right_char: string (-r) = ""  # Right decorator for system icon
 ]: nothing -> string {
-    let disable_system_icon = (get-config "system_icon" "yes")
+    let system_icon = (get-config "display_elements" {}) | get -o "system_icon" | $in == "yes"
 
-    if $disable_system_icon == "yes" {
+    if $system_icon {
         let system_type = $nu.os-info.name
         let system_name = (sys host | get name | str downcase)
 

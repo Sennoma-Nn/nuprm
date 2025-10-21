@@ -13,7 +13,7 @@ let host_name = get-host -l $" @ "
 let user_host = $"($user_name)($host_name)"
 
 def create-prompt [] {
-    let path = $env.PWD | format-path "  " -d $blue_fg -s $black_fg -ku
+    let path = $env.PWD | format-path "  " -d $blue_fg -s $black_fg -l $"($dark_blue_bg)($blue_fg) " -r $" ($reset)($dark_blue_fg)" -ku
     let git_info = get-git-info
     let shells_info = get-where-shells -dl $" ($dark_blue_bg + $blue_fg) №"
 
@@ -21,9 +21,7 @@ def create-prompt [] {
     $prompt += $"($blue_fg)($reset)"
     $prompt += $"($blue_bg)($black_fg) (get-system-icon -r ' ▕ ')($user_host)($shells_info) ($reset)"
     $prompt += $"(if $shells_info != "" { $dark_blue_fg } else { $blue_fg })($reset)"
-    $prompt += $"($dark_blue_fg)"
-    $prompt += $"($dark_blue_bg)($blue_fg) ($path) ($reset)"
-    $prompt += $"($dark_blue_fg)($reset)"
+    $prompt += $"($dark_blue_fg)($path)($reset)"
 
     if $git_info != "" {
         $prompt += $" ($pink_fg) ($git_info)($reset)"
@@ -43,11 +41,10 @@ def create-prompt [] {
 }
 
 def transient-create-left-prompt [] {
-    let path = $env.PWD | format-path "  " -d $blue_fg -s $black_fg -ku
+    let path = $env.PWD | format-path "  " -d $blue_fg -s $black_fg -l $"($reset)($dark_blue_bg + $blue_fg) " -r $" ($reset)($dark_blue_fg)" -ku
 
     mut prompt = ""
-    $prompt += $"($dark_blue_bg + $blue_fg) ($path) ($reset)"
-    $prompt += $"($dark_blue_fg)($reset)"
+    $prompt += $"($dark_blue_fg)($path)($reset)"
 
     $prompt += $"($blue_fg)($reset)"
     return $prompt

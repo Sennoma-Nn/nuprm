@@ -1,14 +1,12 @@
 const prompt_utils_path = (["~" ".config" "nuprm" "utils" "prompt-utils.nu"] | path join | path expand)
 use $prompt_utils_path nu_prompt_const
 
-$env.nuprm = {}
-
 do --env {
     try {
         use $prompt_utils_path *
 
-        let config_table = $env.NUPRMCONFIG
-        let is_enable = ($config_table | get "enable")
+        let config_table = $env.NUPRMCONFIG? | default {}
+        let is_enable = ($config_table | get -o "enabled" | default "no")
 
         if ($config_table | get -o "use_full_name" | default "no") == "yes" {
             if ($env.FULLNAME? == null) {
@@ -16,7 +14,7 @@ do --env {
             }
         }
 
-        if $is_enable == "on" {
+        if $is_enable == "yes" {
             source $nuprm_theme
         }
     } catch { |e|
