@@ -1,62 +1,58 @@
-> [!WARNING] 
-> This English version of `README.md` is machine-translated. If there are any translation issues, ambiguities, or discrepancies, the [original Chinese version (README-CN.md)](./README-CN.md) shall prevail.
+<h1 style="background: linear-gradient(to right, #ff9999, #ffcc99, #ffff99, #99ff99, #99ccff, #cc99ff, #ff99ff); -webkit-background-clip: text; background-clip: text; color: transparent;">NuPrm and You</h1>
 
-# Nushell Prompt Manager (nuprm)
+## Nushell Prompt Theme Manager
 
-### Overview
-**nuprm** is a Nushell prompt theme manager. It allows you to easily switch between different prompt themes, customize the appearance of your Nushell prompt, and manage prompt configurations through environment variables.
+---
 
-### Installation
-1. Clone this repository to your .config directory:
+## Can't The NuShell Prompt Be Beautified?
+
+  - Fact: Prompt beautification is difficult
+  - Wow. It's complicated!
+  - Also, you cannot write prompts yourself.
+  - And <span style="color: pink">Oh My Posh</span> doesn't have integrated Nushell functionality
+  - (It's the worst)
+
+<div style="float: right;">
+  <h2 style="transform: rotate(-45deg); display: inline-block; transform-origin: left;">IMPOSSIBLE???</h2>
+</div>
+
+---
+
+## Introducing...NuPrm!!
+
+**NuPrm** is a Nushell prompt theme manager. It allows you to easily switch between different prompt themes, customize the appearance of your Nushell prompt, and manage prompt configurations through simple commands. It's written using Nushell scripts and integrates with Nushell functionality!
+
+<h2 style="background: linear-gradient(to right, #ff9999, #ffcc99, #ffff99, #99ff99, #99ccff, #cc99ff, #ff99ff); -webkit-background-clip: text; background-clip: text; color: transparent;">It's easy!</h2>
+
+---
+
+## How It's Done
+
+- Clone this repository to your .config directory:
     ```nu
     git clone https://github.com/Sennoma-Nn/nuprm.git ~/.config/nuprm
     ```
 
-2. Add the following line to your Nushell configuration file (`config nu`):
+- Add the following line to your Nushell configuration file (`config nu`):
     ```nu
+    const nuprm_theme = "~/.config/nuprm/themes/simple-minimal.nu"
     source ~/.config/nuprm/nuprm.nu
     ```
 
-3. Add the following line to your Nushell environment file (`config env`):
-    ```nu
-    const nuprm_theme = "~/.config/nuprm/themes/simple-minimal.nu"
-    ```
-
-4. Restart your Nushell session:
+- Restart your Nushell session:
     ```nu
     exec $nu.current-exe
     ```
 
-### Configuring nuprm
-nuprm is now configured through environment variables. You need to add configuration to your Nushell environment file (`~/.config/nushell/env.nu`).
+- You did it!
+- (go you)
 
-#### Basic Configuration Structure
-```nu
-# You can use this Nuprm configuration as a template
-const nuprm_theme = "~/.config/nuprm/themes/simple-minimal.nu"
+---
 
-$env.NUPRMCONFIG = {
-    enabled: "yes",
-    use_full_name: "yes",
-    true_color: "yes",
-    enable_path_url: "yes",
-    directory_abbreviation: {
-        enabled: "yes",
-        start_from_end: 3,
-        display_chars: 2,
-        abbreviate_home: "yes",
-        specific_mappings: {}
-    },
-    display_elements: {
-        system_icon: "no",
-        hostname: "yes",
-        git: "yes",
-        shells: "yes"
-    }
-}
-```
+## Configuring NuPrm?
 
-#### Configuration Options Explanation
+<details>
+  <summary>(Click here for detailed configuration)</summary>
 
 **Enable nuprm**
 - `enabled: "yes"` - Enable nuprm
@@ -142,3 +138,101 @@ After modifying the configuration, restart your Nushell session or re-enter to a
 
 ```nu
 exec $nu.current-exe
+```
+
+</details>
+
+---
+
+## Troubles in Paradise?
+
+<details>
+  <summary>(Click here if you encounter environment errors)</summary>
+
+```nu
+Error: nu::parser::unknown_flag
+
+  × The `get` command doesn't have flag `-o`.
+    ╭─[/home/username/.config/nuprm/utils/prompt-utils.nu:14:39]
+ 13 │     let user_config = $env.NUPRMCONFIG
+ 14 │     return ($user_config | get $item -o | default $default)
+    ·                                       ┬
+    ·                                       ╰── unknown flag
+ 15 │ }
+    ╰────
+  help: Available flags: --help(-h), --ignore-errors(-i), --sensitive(-s). Use
+        `--help` for more information.
+```
+
+If you get the error ``The `get` command doesn't have flag `-o`.``<br>then your Nushell version is below 0.105.0.
+
+---
+
+```nu
+Error: nu::parser::variable_not_found
+
+  × Variable not found.
+    ╭─[/home/username/.config/nuprm/nuprm.nu:18:20]
+ 17 │         if $is_enable == "yes" {
+ 18 │             source $nuprm_theme
+    ·                    ──────┬─────
+    ·                          ╰── variable not found. 
+ 19 │         }
+    ╰────
+```
+
+If you get the error ``Variable not found.``<br>then you haven't set the `nuprm_theme` constant.
+
+---
+
+```
+Error: nu::parser::error
+
+  × Error: nu::shell::not_a_constant
+  │ 
+  │   × Not a constant.
+  │     ╭─[/home/username/.config/nuprm/nuprm.nu:18:20]
+  │  17 │         if $is_enable == "yes" {
+  │  18 │             source $nuprm_theme
+  │     ·                    ──────┬─────
+  │     ·                          ╰── Value is not a parse-time constant
+  │  19 │         }
+  │     ╰────
+  │   help: Only a subset of expressions are allowed constants during parsing.
+  │ Try
+  │         using the 'const' command or typing the value literally.
+  │ 
+    ╭─[/home/username/.config/nuprm/nuprm.nu:18:20]
+ 17 │         if $is_enable == "yes" {
+ 18 │             source $nuprm_theme
+    ·                    ──────┬─────
+    ·                          ╰── Encountered error during parse-time evaluation
+ 19 │         }
+    ╰────
+```
+
+If you get the error ``Encountered error during parse-time evaluation``<br>then you set the `nuprm_theme` constant as a variable.
+
+---
+
+```
+Error: nu::parser::sourced_file_not_found
+
+  × File not found
+    ╭─[/home/username/.config/nuprm/nuprm.nu:18:20]
+ 17 │         if $is_enable == "yes" {
+ 18 │             source $nuprm_theme
+    ·                    ──────┬─────
+    ·                          ╰── File not found: ~/.config/nuprm/themes/never-gonna-give-you-up.nu
+ 19 │         }
+    ╰────
+  help: sourced files need to be available before your script is run
+```
+
+If you get the error ``File not found: ...``<br>, then the file pointed to by your `nuprm_theme` constant doesn't exist.
+
+</details>
+
+---
+
+<h1 style="background: linear-gradient(to right, #ff9999, #ffcc99, #ffff99, #99ff99, #99ccff, #cc99ff, #ff99ff); -webkit-background-clip: text; background-clip: text; color: transparent;">Happy Nushell Theme Manager!</h1>
