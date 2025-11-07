@@ -16,6 +16,8 @@ def create-prompt [] {
     let path = $env.PWD | format-path "  " -d $blue_fg -s $black_fg -l $"($dark_blue_bg)($blue_fg) " -r $" ($reset)($dark_blue_fg)" -ku
     let git_info = get-git-info
     let shells_info = get-where-shells -dl $" ($dark_blue_bg + $blue_fg) №"
+    let exit_code = get-exit-code
+    let execution_time = $"(get-execution-time-s)sec"
 
     mut prompt = $"($reset)┌ "
     $prompt += $"($blue_fg)($reset)"
@@ -23,19 +25,15 @@ def create-prompt [] {
     $prompt += $"(if $shells_info != "" { $dark_blue_fg } else { $blue_fg })($reset)"
     $prompt += $"($dark_blue_fg)($path)($reset)"
 
-    if $git_info != "" {
-        $prompt += $" ($pink_fg) ($git_info)($reset)"
-        if $env.LAST_EXIT_CODE == 0 {
-            $prompt += " "
-        }
-    }
+    mut extra_info = []
+    if $git_info != "" { $extra_info ++= [$" ($pink_fg) ($git_info)($reset)"] }
+    if (get-execution-time-s) > 0.5 { $extra_info ++= [$"($bold + $dark_blue_fg)($execution_time)($reset)"] }
+    if $exit_code != 0 { $extra_info ++= [$"($bold + $dark_blue_fg)($exit_code)($reset)"] }
 
-    if $env.LAST_EXIT_CODE != 0 {
-        $prompt += $"($bold + $dark_blue_fg) ($env.LAST_EXIT_CODE) ($reset)"
-    }
+    $prompt += ($extra_info | str join $" ($reset) ")
+    if not ($extra_info | is-empty) { $prompt += " " }
 
     $prompt += $"($blue_fg)($reset)"
-
     $prompt += "\n└ "
     return $prompt
 }

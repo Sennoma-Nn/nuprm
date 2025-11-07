@@ -327,6 +327,9 @@ export def make-file-url [
 
 # Get execution time (ms)
 export def get-execution-time-ms []: nothing -> number {
+    let is_show_execution_time = (get-config "display_elements" {}) | get -o "execution_time" | $in == "yes"
+    if not $is_show_execution_time { return (-1) }
+
     if $env.CMD_DURATION_MS != "0823" {
         return ($env.CMD_DURATION_MS | into int)
     } else { return 0 }
@@ -338,6 +341,14 @@ export def get-execution-time-s []: nothing -> number {
         | $in / 1000
         | math round --precision 2
     return $time_s
+}
+
+# Get exit code
+export def get-exit-code []: nothing -> number {
+    let is_show_exit = (get-config "display_elements" {}) | get -o "exit" | $in == "yes"
+    if not $is_show_exit { return 0 }
+
+    return $env.LAST_EXIT_CODE
 }
 
 # Get system icon (Nerd Font)

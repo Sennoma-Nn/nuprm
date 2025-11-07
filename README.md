@@ -109,6 +109,12 @@ nuprm supports intelligent directory abbreviation to make long paths more readab
 - `display_elements.shells: "yes"` - Display Shells information
 - `display_elements.shells: "no"` - Do not display Shells information
 
+- `display_elements.execution_time: "yes"` - Display execution time information
+- `display_elements.execution_time: "no"` - Do not display execution time information
+
+- `display_elements.exit: "yes"` - Display exit code information
+- `display_elements.exit: "no"` - Do not display exit code information
+
 #### Theme Management
 You can use the `nuprm theme list` command to view available themes:
 

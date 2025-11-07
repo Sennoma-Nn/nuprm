@@ -33,7 +33,7 @@ def create-left-prompt [] {
         host: (get-host -l $" @ ")
         path: ($env.PWD | format-path (if (is-windows) { "\\" } else { "/" }) -d $"\e[0;1m($prompt_chars.white_fg)($prompt_chars.path_bg)" -s $"\e[0;2m($prompt_chars.path_bg)" -u)
         git: (get-git-info)
-        exit: $env.LAST_EXIT_CODE
+        exit: (get-exit-code)
         admin: (is-admin)
         shells: (get-where-shells -dl "#")
         time: (get-execution-time-s)

@@ -10,20 +10,16 @@ let colors = {
 def create-prompt [] {
     let shells_index = get-where-shells -dl $"($colors.terminal_green)#" -r $"($colors.dim_green) : "
     let path_str = $env.PWD | format-path (if (is-windows) { "\\" } else { "/" }) -u -d $colors.terminal_green -s $colors.dim_green
-
     let git_branch = (get-git-info)
-    let git_str = if not ($git_branch | is-empty) {
-        $" ($colors.dim_green)(($git_branch))($colors.reset)"
-    } else {
-        ""
-    }
+    let execution_time = if (get-execution-time-s) > 0.5 { $" ($colors.dim_green)(get-execution-time-s)sec($colors.reset)" } else { "" }
+    let git_str = if not ($git_branch | is-empty) { $" ($colors.dim_green)($git_branch)($colors.reset)" } else { "" }
 
-    return $"($shells_index)($colors.terminal_green)($path_str)($git_str)($colors.reset) "
+    return $"($shells_index)($colors.terminal_green)($path_str)($git_str)($execution_time)($colors.reset) "
 }
 
 # --- Prompt Indicator ---
 def create-indicator [] {
-    if $env.LAST_EXIT_CODE == 0 {
+    if (get-exit-code) == 0 {
         return $"($colors.terminal_green)> ($colors.reset)"
     } else {
         return $"($colors.error_red)! ($colors.reset)"
@@ -31,7 +27,7 @@ def create-indicator [] {
 }
 
 def vi-ins-prompt [] {
-    if $env.LAST_EXIT_CODE == 0 {
+    if (get-exit-code) == 0 {
         return $"($colors.terminal_green): ($colors.reset)"
     } else {
         return $"($colors.error_red): ($colors.reset)"
@@ -39,7 +35,7 @@ def vi-ins-prompt [] {
 }
 
 def vi-nor-prompt [] {
-    if $env.LAST_EXIT_CODE == 0 {
+    if (get-exit-code) == 0 {
         return $"($colors.terminal_green)> ($colors.reset)"
     } else {
         return $"($colors.error_red)> ($colors.reset)"

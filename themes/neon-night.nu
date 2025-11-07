@@ -16,22 +16,19 @@ def create-left-prompt [] {
     let user_host = $"($user_name)($host_name)"
     let user_info = $"($user_host)(ansi reset)"
     let path_info = $env.PWD | format-path (if (is-windows) { "\\" } else { "/" }) -d (ansi reset) -s $colors.grey -r $colors.white -u
-    let shells_index = get-where-shells -dl $"($colors.grey) | ($colors.magenta)№"
-
     let git_branch = (get-git-info)
-    let git_info = if not ($git_branch | is-empty) {
-        $"($colors.grey) | ($colors.magenta)($git_branch)(ansi reset)"
-    } else {
-        ""
-    }
+    let shells_index = get-where-shells -dl $"($colors.grey) | ($colors.cyan)dirs: ($colors.magenta)№"
+    let git_info = if not ($git_branch | is-empty) { $"($colors.grey) | ($colors.cyan)git: ($colors.magenta)($git_branch)(ansi reset)" } else { "" }
+    let execution_time = if (get-execution-time-s) > 0.5 { $"($colors.grey) | ($colors.cyan)exec time: ($colors.magenta)(get-execution-time-s)sec(ansi reset)" } else { "" }
 
-    return $"($user_info) ($colors.grey)in ($path_info)($git_info)($shells_index)\n"
+    return $"($user_info) ($colors.grey)in ($path_info)($git_info)($shells_index)($execution_time)\n"
 }
 
 # --- Right Prompt (Top Line) ---
 def create-right-prompt [] {
-    if $env.LAST_EXIT_CODE != 0 {
-        return $"($colors.red)[status: ($env.LAST_EXIT_CODE)]($colors.reset)"
+    let exit_code = get-exit-code
+    if $exit_code != 0 {
+        return $"($colors.red)status: ($exit_code)($colors.reset)"
     } else {
         return ""
     }

@@ -1,21 +1,21 @@
 let colors = {
-    black_fg:       (color2ansi   0   0   0 "fg"  30),
-    white_fg:       (color2ansi 255 255 255 "fg"  37),
-    color1_fg:      (color2ansi 253 172  65 "fg"  33),
-    color1_bg:      (color2ansi 253 172  65 "bg"  43),
-    color2_fg:      (color2ansi 245 114  46 "fg"  31),
-    color2_bg:      (color2ansi 245 114  46 "bg"  41),
-    color3_fg:      (color2ansi 135 188 215 "fg"  94),
-    color3_bg:      (color2ansi 135 188 215 "bg" 104),
-    color4_fg:      (color2ansi  51 102 137 "fg"  34),
-    color4_bg:      (color2ansi  51 102 137 "bg"  44),
-    color5_fg:      (color2ansi  35  70  94 "fg"  36),
-    color5_bg:      (color2ansi  35  70  94 "bg"  46),
-    grey_fg:        (color2ansi  64  64  64 "fg"  90),
-    reset_bg:       "\e[49m",
-    bold:           "\e[1m",
-    italic:         "\e[3m",
-    reset:          "\e[0m"
+    black_fg: (color2ansi 0 0 0 "fg" 30),
+    white_fg: (color2ansi 255 255 255 "fg" 37),
+    color1_fg: (color2ansi 253 172 65 "fg" 33),
+    color1_bg: (color2ansi 253 172 65 "bg" 43),
+    color2_fg: (color2ansi 245 114 46 "fg" 31),
+    color2_bg: (color2ansi 245 114 46 "bg" 41),
+    color3_fg: (color2ansi 135 188 215 "fg" 94),
+    color3_bg: (color2ansi 135 188 215 "bg" 104),
+    color4_fg: (color2ansi 51 102 137 "fg" 34),
+    color4_bg: (color2ansi 51 102 137 "bg" 44),
+    color5_fg: (color2ansi 35 70 94 "fg" 36),
+    color5_bg: (color2ansi 35 70 94 "bg" 46),
+    grey_fg: (color2ansi  64 64 64 "fg" 90),
+    reset_bg: "\e[49m",
+    bold: "\e[1m",
+    italic: "\e[3m",
+    reset: "\e[0m"
 }
 
 
@@ -40,10 +40,10 @@ def create-prompt-left [] {
 
 def create-prompt-right [] {
     let git_info = (get-git-info -l "  " -r " ") | if $in != "" { $"($in)" }
-    let root_symbol = if (is-admin) { "  " } else { "" }
+    let execution_time = if (get-execution-time-s) > 0.5 { $" (get-execution-time-s)sec " } else { "" }
     let status_symbol = (
-        if $env.LAST_EXIT_CODE != 0 {
-            [$colors.color5_fg, " ", $env.LAST_EXIT_CODE] | str join ""
+        if (get-exit-code) != 0 {
+            [$colors.color5_fg, " ", (get-exit-code)] | str join ""
         } else {
             [$colors.color5_fg, ""] | str join ""
         }
@@ -52,7 +52,7 @@ def create-prompt-right [] {
     let prompt_list = [
         $colors.color3_fg, "", $colors.reset, $colors.color3_bg, " ", $status_symbol, " ", $colors.reset, $colors.color3_fg, $colors.color3_bg,
         $colors.color4_fg, "", $colors.reset, $colors.color4_bg, $colors.white_fg, $git_info, $colors.reset, $colors.color4_fg, $colors.color4_bg,
-        $colors.color5_fg, "", $colors.color5_bg, $colors.white_fg, $root_symbol, $colors.reset, $colors.color5_fg, $colors.color5_bg,
+        $colors.color5_fg, "", $colors.color5_bg, $colors.white_fg, $execution_time, $colors.reset, $colors.color5_fg, $colors.color5_bg,
         $colors.reset_bg, "", $colors.reset
     ]
 
@@ -62,7 +62,7 @@ def create-prompt-right [] {
 
 $env.PROMPT_COMMAND = {|| create-prompt-left }
 $env.PROMPT_COMMAND_RIGHT = {|| create-prompt-right}
-$env.PROMPT_INDICATOR = $"($colors.color2_fg)❯ ($colors.reset)"
+$env.PROMPT_INDICATOR = $"($colors.color2_fg)(if not (is-admin) { "❯" } else { $"($colors.bold)#" }) ($colors.reset)"
 $env.PROMPT_MULTILINE_INDICATOR = $env.PROMPT_INDICATOR
 $env.PROMPT_INDICATOR_VI_INSERT = $"($colors.color2_fg)($colors.bold): ($colors.reset)"
 $env.PROMPT_INDICATOR_VI_NORMAL = $env.PROMPT_INDICATOR

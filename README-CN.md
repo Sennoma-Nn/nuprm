@@ -109,6 +109,12 @@ nuprm 支持智能目录缩写功能，让长路径显示更加短。
 - `display_elements.shells: "yes"` - 显示 Shells 信息
 - `display_elements.shells: "no"` - 不显示 Shells 信息
 
+- `display_elements.execution_time: "yes"` - 显示运行时间信息
+- `display_elements.execution_time: "no"` - 不显示运行时间信息
+
+- `display_elements.exit: "yes"` - 显示退出码信息
+- `display_elements.exit: "no"` - 不显示退出码信息
+
 #### 主题管理
 您可以使用 `nuprm theme list` 命令来查看可用的主题：
 
@@ -235,4 +241,4 @@ Error: nu::parser::sourced_file_not_found
 
 ---
 
-<h1 class="rainbow">NuPrm，快乐的 Nushell 主题管理器！</h1>
+<h1 style="background: linear-gradient(to right, #ff9999, #ffcc99, #ffff99, #99ff99, #99ccff, #cc99ff, #ff99ff); -webkit-background-clip: text; background-clip: text; color: transparent;">NuPrm，快乐的 Nushell 主题管理器！</h1>
