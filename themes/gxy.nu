@@ -25,13 +25,12 @@ def create-prompt [] {
     $prompt += $"(if $shells_info != "" { $dark_blue_fg } else { $blue_fg })($reset)"
     $prompt += $"($dark_blue_fg)($path)($reset)"
 
-    mut extra_info = []
-    if $git_info != "" { $extra_info ++= [$" ($pink_fg) ($git_info)($reset)"] }
-    if (get-execution-time-s) > 0.5 { $extra_info ++= [$"($bold + $dark_blue_fg)($execution_time)($reset)"] }
-    if $exit_code != 0 { $extra_info ++= [$"($bold + $dark_blue_fg)($exit_code)($reset)"] }
-
-    $prompt += ($extra_info | str join $" ($reset) ")
-    if not ($extra_info | is-empty) { $prompt += " " }
+    mut extra_info_list = []
+    if $git_info != "" { $extra_info_list ++= [$"($pink_fg) ($git_info)($reset)"] }
+    if (get-execution-time-s) > 0.5 { $extra_info_list ++= [$"($bold + $dark_blue_fg)($execution_time)($reset)"] }
+    if $exit_code != 0 { $extra_info_list ++= [$"($bold + $dark_blue_fg)($exit_code)($reset)"] }
+    let extra_info = ($extra_info_list | str join $" ($reset) ")
+    if not ($extra_info_list | is-empty) { $prompt += $" ($extra_info) " }
 
     $prompt += $"($blue_fg)($reset)"
     $prompt += "\n└ "
