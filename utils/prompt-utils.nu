@@ -386,7 +386,7 @@ export def get-system-icon [
                     "mint"                  => ""
                     "nixos"                 => "" # Tested
                     "opensuse"              => ""
-                    "opensuse-tumbleweed"   => ""
+                    "opensuse tumbleweed"   => "" # Tested
                     "raspbian"              => ""
                     "redhat"                => ""
                     "rocky"                 => ""
