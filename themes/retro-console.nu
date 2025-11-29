@@ -1,17 +1,17 @@
 # --- Color Palette ---
 let colors = {
-    terminal_green: (color2ansi 57 255 20 fg 92),
-    error_red: (color2ansi 255 0 0 fg 31),
-    dim_green: (color2ansi 40 180 20 fg 32),
+    terminal_green: (prompt-make-utils color-to-ansi 57 255 20 "fg" "92"),
+    error_red: (prompt-make-utils color-to-ansi 255 0 0 "fg" "31"),
+    dim_green: (prompt-make-utils color-to-ansi 40 180 20 "fg" "32"),
     reset: (ansi reset)
 }
 
 # --- Main Prompt Command ---
 def create-prompt [] {
-    let shells_index = get-where-shells -dl $"($colors.terminal_green)#" -r $"($colors.dim_green) : "
-    let path_str = $env.PWD | format-path (if (is-windows) { "\\" } else { "/" }) -u -d $colors.terminal_green -s $colors.dim_green
-    let git_branch = (get-git-info)
-    let execution_time = if (get-execution-time-s) > 0.5 { $" ($colors.dim_green)(get-execution-time-s)sec($colors.reset)" } else { "" }
+    let shells_index = get-prompt-info shells -Dl $"($colors.terminal_green)#" -r $"($colors.dim_green) : "
+    let path_str = get-prompt-info path (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -u -d $colors.terminal_green -s $colors.dim_green
+    let git_branch = (get-prompt-info git)
+    let execution_time = if (get-prompt-info exec-time | into float) > 0.5 { $" ($colors.dim_green)(get-prompt-info exec-time)sec($colors.reset)" } else { "" }
     let git_str = if not ($git_branch | is-empty) { $" ($colors.dim_green)($git_branch)($colors.reset)" } else { "" }
 
     return $"($shells_index)($colors.terminal_green)($path_str)($git_str)($execution_time)($colors.reset) "
@@ -19,7 +19,7 @@ def create-prompt [] {
 
 # --- Prompt Indicator ---
 def create-indicator [] {
-    if (get-exit-code) == 0 {
+    if (get-prompt-info exit-code) == "0" {
         return $"($colors.terminal_green)> ($colors.reset)"
     } else {
         return $"($colors.error_red)! ($colors.reset)"
@@ -27,7 +27,7 @@ def create-indicator [] {
 }
 
 def vi-ins-prompt [] {
-    if (get-exit-code) == 0 {
+    if (get-prompt-info exit-code) == "0" {
         return $"($colors.terminal_green): ($colors.reset)"
     } else {
         return $"($colors.error_red): ($colors.reset)"
@@ -35,7 +35,7 @@ def vi-ins-prompt [] {
 }
 
 def vi-nor-prompt [] {
-    if (get-exit-code) == 0 {
+    if (get-prompt-info exit-code) == "0" {
         return $"($colors.terminal_green)> ($colors.reset)"
     } else {
         return $"($colors.error_red)> ($colors.reset)"

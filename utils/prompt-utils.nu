@@ -1,8 +1,3 @@
-export const nu_prompt_const = {
-    exe_path: (["~" ".config" "nuprm"] | path join | path expand)
-    load_path: (["~" ".config" "nuprm" "load.nu"] | path join | path expand)
-}
-
 const poss_err_alrt = "ERROR (If you see it, please file an issue)"
 
 # Get user config
@@ -14,7 +9,7 @@ def get-config [
     return ($user_config | get $item -o | default $default)
 }
 
-export def specific-abbreviations []: string -> string {
+def specific-abbreviations []: string -> string {
     let path = $in
     let path_list = $path | path split
     let abbr_config = get-config "directory_abbreviation" {}
@@ -54,7 +49,7 @@ export def specific-abbreviations []: string -> string {
 }
 
 # Retrieves current git branch information with optional formatting
-export def get-git-info [
+def get-git-info [
     --left_char: string (-l) = ""   # Left decorator for branch name
     --right_char: string (-r) = ""  # Right decorator for branch name
 ]: nothing -> string {
@@ -77,7 +72,7 @@ export def get-git-info [
 }
 
 # Gets current shell index from directory stack with display options
-export def get-where-shells [
+def get-where-shells [
     --dont_display_shells_if_not_used_shells (-d)  # Suppress output when only 1 shell exists
     --left_char: string (-l) = ""                  # Left decorator for shell index
     --right_char: string (-r) = ""                 # Right decorator for shell index
@@ -106,7 +101,7 @@ export def get-where-shells [
 }
 
 # Converts RGB values to ANSI escape sequences for terminal colors
-export def color2ansi [
+def color2ansi [
     r: int              # Red component (0-255)
     g: int              # Green component (0-255)
     b: int              # Blue component (0-255)
@@ -128,31 +123,31 @@ export def color2ansi [
 }
 
 # Checks if the current operating system is Windows
-export def is-windows []: nothing -> bool {
+def is-windows []: nothing -> bool {
     let is_windows = if $nu.os-info.name == "windows" { true } else { false }
     return $is_windows
 }
 
 # Checks if the current operating system is android
-export def is-android []: nothing -> bool {
+def is-android []: nothing -> bool {
     let is_android = if $nu.os-info.name == "android" { true } else { false }
     return $is_android
 }
 
 # Checks if the current operating system is MacOS
-export def is-osx []: nothing -> bool {
+def is-osx []: nothing -> bool {
     let is_android = if $nu.os-info.name == "macos" { true } else { false }
     return $is_android
 }
 
 # Checks if the current operating system is FreeBSD
-export def is-freebsd []: nothing -> bool {
+def is-freebsd []: nothing -> bool {
     let is_android = if $nu.os-info.name == "freebsd" { true } else { false }
     return $is_android
 }
 
 # Get user name
-export def get-user-name []: nothing -> string {
+def get-user-name []: nothing -> string {
     if ((get-config "use_full_name" "no") == "yes") {
         return ($env | get "FULLNAME" -o | default "")
     } else {
@@ -162,7 +157,7 @@ export def get-user-name []: nothing -> string {
 }
 
 # Retrieves current username from environment variables
-export def get-username []: nothing -> string {
+def get-username []: nothing -> string {
     let username = $env.USERNAME?
         | default $env.USER?
         | default (whoami)
@@ -170,7 +165,7 @@ export def get-username []: nothing -> string {
 }
 
 # Get full name
-export def get-full-name []: nothing -> string {
+def get-full-name []: nothing -> string {
     let username = get-username
 
     mut full_name = ""
@@ -212,7 +207,7 @@ export def get-full-name []: nothing -> string {
 }
 
 # Get host name
-export def get-host [
+def get-host [
     --left_char: string (-l) = ""   # Left decorator for host name
     --right_char: string (-r) = ""  # Right decorator for host name
 ]: nothing -> string {
@@ -230,7 +225,7 @@ export def get-host [
 }
 
 # Formats path
-export def format-path [
+def format-path [
     new_separators: string          # Custom separator
     --keep_root (-k)                # Keep root directory ( on: / > aaa > bbb | off: > aaa > bbb)
     --left_char: string (-l) = ""   # Left decorator for path
@@ -291,7 +286,7 @@ export def format-path [
 }
 
 # Get last directory of path
-export def get-path-last [
+def get-path-last [
     --file_url (-u)                # Format as clickable terminal hyperlink
     --left_char: string (-l) = ""  # Left decorator for path
     --right_char: string (-r) = "" # Right decorator for path
@@ -308,7 +303,7 @@ export def get-path-last [
 }
 
 # Make hyperlink for path
-export def make-file-url [
+def make-file-url [
     file_path: string # Actual path for the link
 ]: string -> string {
     let display_path = $in
@@ -326,7 +321,7 @@ export def make-file-url [
 }
 
 # Get execution time (ms)
-export def get-execution-time-ms []: nothing -> number {
+def get-execution-time-ms []: nothing -> number {
     let is_show_execution_time = (get-config "display_elements" {}) | get -o "execution_time" | $in == "yes"
     if not $is_show_execution_time { return (-1) }
 
@@ -336,7 +331,7 @@ export def get-execution-time-ms []: nothing -> number {
 }
 
 # Get execution time (s)
-export def get-execution-time-s []: nothing -> number {
+def get-execution-time-s []: nothing -> number {
     let time_s = get-execution-time-ms
         | $in / 1000
         | math round --precision 2
@@ -344,7 +339,7 @@ export def get-execution-time-s []: nothing -> number {
 }
 
 # Get exit code
-export def get-exit-code []: nothing -> number {
+def get-exit-code []: nothing -> number {
     let is_show_exit = (get-config "display_elements" {}) | get -o "exit" | $in == "yes"
     if not $is_show_exit { return 0 }
 
@@ -352,7 +347,7 @@ export def get-exit-code []: nothing -> number {
 }
 
 # Get system icon (Nerd Font)
-export def get-system-icon [
+def get-system-icon [
     --left_char: string (-l) = ""   # Left decorator for system icon
     --right_char: string (-r) = ""  # Right decorator for system icon
 ]: nothing -> string {
@@ -410,4 +405,63 @@ export def get-system-icon [
             } else { "" }
         )
     } else { "" }
+}
+
+def get-path-mode []: nothing -> string {
+    if (is-windows) {
+        return "DOS"
+    } else {
+        return "UNIX"
+    }
+}
+
+export def get-prompt-info [
+    type: string                                   # Get what info
+    ...args: any                                   # Command args
+    --dont_display_shells_if_not_used_shells (-D)  # Suppress output when only 1 shell exists in `shells` info
+    --keep_root (-k)                               # Keep root directory ( on: / > aaa > bbb | off: > aaa > bbb) in `path` info
+    --dir_style: string (-d) = ""                  # Directory styling (ANSI codes) in `path` info
+    --sep_style: string (-s) = ""                  # Separator styling (ANSI codes) in `path` info
+    --file_url (-u)                                # Format as clickable terminal hyperlink in `path` or `last-path` info
+    --left_char: string (-l) = ""                  # Left decorator for info
+    --right_char: string (-r) = ""                 # Right decorator for info
+]: nothing -> string {
+    let info = match $type {
+        "git"         => { get-git-info }
+        "shells"      => { get-where-shells --dont_display_shells_if_not_used_shells=$dont_display_shells_if_not_used_shells }
+        "user-name"   => { get-user-name }
+        "host-name"   => { get-host }
+        "full-name"   => { get-full-name }
+        "path"        => { $env.PWD | format-path $args.0 --keep_root=$keep_root --dir_style=$dir_style --sep_style=$sep_style --file_url=$file_url }
+        "last-path"   => { $env.PWD | get-path-last --file_url=$file_url }
+        "exec-time"   => { get-execution-time-s }
+        "exit-code"   => { get-exit-code }
+        "system-icon" => { get-system-icon }
+        "path-mode"   => { get-path-mode }
+        _             => { "" }
+    }
+
+    if $info == "" {
+        return ""
+    }
+
+    let out = [
+        $left_char
+        $info
+        $right_char
+    ] | str join ""
+
+    return $out
+}
+
+export def prompt-make-utils [
+    type: string # Get what info
+    ...args: any # Command args
+] {
+    let info = match $type {
+        "color-to-ansi" => { color2ansi $args.0 $args.1 $args.2 $args.3 $args.4 }
+        _               => { "" }
+    }
+
+    return $info
 }

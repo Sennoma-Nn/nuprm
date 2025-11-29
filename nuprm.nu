@@ -1,16 +1,19 @@
-const prompt_utils_path = (["~" ".config" "nuprm" "utils" "prompt-utils.nu"] | path join | path expand)
-use $prompt_utils_path nu_prompt_const
+const nu_prompt_const = {
+    prompt_utils_path: (["~" ".config" "nuprm" "utils" "prompt-utils.nu"] | path join | path expand)
+    exe_path: (["~" ".config" "nuprm"] | path join | path expand)
+    load_path: (["~" ".config" "nuprm" "load.nu"] | path join | path expand)
+}
+
+use $nu_prompt_const.prompt_utils_path *
 
 do --env {
     try {
-        use $prompt_utils_path *
-
         let config_table = $env.NUPRMCONFIG? | default {}
         let is_enable = ($config_table | get -o "enabled" | default "no")
 
         if ($config_table | get -o "use_full_name" | default "no") == "yes" {
             if ($env.FULLNAME? == null) {
-                $env.FULLNAME = get-full-name
+                $env.FULLNAME = get-prompt-info full-name
             }
         }
 

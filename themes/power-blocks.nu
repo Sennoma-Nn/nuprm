@@ -1,42 +1,42 @@
 let prompt_chars = {
-    white_fg: (color2ansi 255 255 255 "fg" 37)
-    black_fg: (color2ansi 0 0 0 "fg" 30)
+    white_fg: (prompt-make-utils color-to-ansi 255 255 255 "fg" "37")
+    black_fg: (prompt-make-utils color-to-ansi 0 0 0 "fg" "30")
     italic: "\e[3m"
     reset: "\e[0m"
     right_char: ""
     wrong_char: ""
     root_icon: ""
-    name_fg: (color2ansi 255 146 72 "fg" 33)
-    name_bg: (color2ansi 255 146 72 "bg" 43)
-    path_fg: (color2ansi 52 100 164 "fg" 34)
-    path_bg: (color2ansi 52 100 164 "bg" 44)
-    git_fg: (color2ansi 196 110 170 "fg" 95)
-    git_bg: (color2ansi 196 110 170 "bg" 105)
-    status_fg: (color2ansi 46 149 153 "fg" 36)
-    status_bg: (color2ansi 46 149 153 "bg" 46)
-    status_err_fg: (color2ansi 240 83 80 "fg" 31)
-    status_err_bg: (color2ansi 240 83 80 "bg" 41)
-    shells_fg: (color2ansi 122 64 152 "fg" 35)
-    shells_bg: (color2ansi 122 64 152 "bg" 45)
-    time_fg: (color2ansi 78 144 61 "fg" 32)
-    time_bg: (color2ansi 78 144 61 "bg" 42)
-    root_fg: (color2ansi 248 102 122 "fg" 91)
-    root_bg: (color2ansi 248 102 122 "bg" 101)
-    vi_fg: (color2ansi 78 144 61 "fg" 32)
-    vi_bg: (color2ansi 78 144 61 "bg" 92)
+    name_fg: (prompt-make-utils color-to-ansi 255 146 72 "fg" "33")
+    name_bg: (prompt-make-utils color-to-ansi 255 146 72 "bg" "43")
+    path_fg: (prompt-make-utils color-to-ansi 52 100 164 "fg" "34")
+    path_bg: (prompt-make-utils color-to-ansi 52 100 164 "bg" "44")
+    git_fg: (prompt-make-utils color-to-ansi 196 110 170 "fg" "95")
+    git_bg: (prompt-make-utils color-to-ansi 196 110 170 "bg" "105")
+    status_fg: (prompt-make-utils color-to-ansi 46 149 153 "fg" "36")
+    status_bg: (prompt-make-utils color-to-ansi 46 149 153 "bg" "46")
+    status_err_fg: (prompt-make-utils color-to-ansi 240 83 80 "fg" "31")
+    status_err_bg: (prompt-make-utils color-to-ansi 240 83 80 "bg" "41")
+    shells_fg: (prompt-make-utils color-to-ansi 122 64 152 "fg" "35")
+    shells_bg: (prompt-make-utils color-to-ansi 122 64 152 "bg" "45")
+    time_fg: (prompt-make-utils color-to-ansi 78 144 61 "fg" "32")
+    time_bg: (prompt-make-utils color-to-ansi 78 144 61 "bg" "42")
+    root_fg: (prompt-make-utils color-to-ansi 248 102 122 "fg" "91")
+    root_bg: (prompt-make-utils color-to-ansi 248 102 122 "bg" "101")
+    vi_fg: (prompt-make-utils color-to-ansi 78 144 61 "fg" "32")
+    vi_bg: (prompt-make-utils color-to-ansi 78 144 61 "bg" "92")
 }
 
 def create-left-prompt [] {
     let status = {
-        icon: (get-system-icon -r " ")
-        user: (get-user-name)
-        host: (get-host -l $" @ ")
-        path: ($env.PWD | format-path (if (is-windows) { "\\" } else { "/" }) -d $"\e[0;1m($prompt_chars.white_fg)($prompt_chars.path_bg)" -s $"\e[0;2m($prompt_chars.path_bg)" -u)
-        git: (get-git-info)
-        exit: (get-exit-code)
+        icon: (get-prompt-info system-icon -r " ")
+        user: (get-prompt-info user-name)
+        host: (get-prompt-info host-name -l $" @ ")
+        path: (get-prompt-info path (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -d $"\e[0;1m($prompt_chars.white_fg)($prompt_chars.path_bg)" -s $"\e[0;2m($prompt_chars.path_bg)" -u)
+        git: (get-prompt-info git)
+        exit: (get-prompt-info exit-code)
         admin: (is-admin)
-        shells: (get-where-shells -dl "#")
-        time: (get-execution-time-s)
+        shells: (get-prompt-info shells -Dl "#")
+        time: (get-prompt-info exec-time | into float)
     }
     return (
         [
@@ -53,7 +53,7 @@ def create-left-prompt [] {
                 } else { "" }
             )
             (
-                if $status.exit == 0 {
+                if $status.exit == "0" {
                     prompt-block "" "" $prompt_chars.status_fg $prompt_chars.status_bg $prompt_chars.right_char $prompt_chars.white_fg ""
                 } else {
                     prompt-block "" "" $prompt_chars.status_err_fg $prompt_chars.status_err_bg $"($prompt_chars.wrong_char) ($status.exit)" $prompt_chars.white_fg ""
@@ -75,7 +75,7 @@ def create-left-prompt [] {
 }
 
 def transient-create-left-prompt [] {
-    let path = ($env.PWD | get-path-last -u)
+    let path = (get-prompt-info last-path -u)
     
     return (
         prompt-block "" " " $prompt_chars.path_fg $prompt_chars.path_bg $path $prompt_chars.white_fg " "
