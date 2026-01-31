@@ -18,7 +18,7 @@ def specific-abbreviations []: string -> string {
     let specific_abbr = $abbr_config | get "specific_mappings"? | default {}
     let specific_abbr_record = $specific_abbr | transpose key value | update key { |r| $r.key | path expand } | transpose -rd
     let specific_abbr_key = $specific_abbr_record | columns
-    let home_dir = $nu.home-path? | default $nu.home-dir
+    let home_dir = $nu.home-path? | default $nu.home-dir? | default ("~" | path expand)
     
     if not $abbr_enable {
         return $path
