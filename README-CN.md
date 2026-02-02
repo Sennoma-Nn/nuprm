@@ -9,7 +9,7 @@
   - 事实：提示符美化很难
   - 哇哦。它很复杂！
   - 自己不会写提示符
-  - 而 <span style="color: pink">Oh My Posh</span> 却没有集成 Nushell 的功能
+  - 而 <span style="color: pink">Oh My Posh</span> 却没有集成 Nushell 的一些功能
   - （它最坏了）
 
 <div style="float: right;">

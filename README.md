@@ -9,7 +9,7 @@
   - Fact: Prompt beautification is difficult
   - Wow. It's complicated!
   - Also, you cannot write prompts yourself.
-  - And <span style="color: pink">Oh My Posh</span> doesn't have integrated Nushell functionality
+  - And <span style="color: pink">Oh My Posh</span> doesn't have some integrated Nushell functionality
   - (It's the worst)
 
 <div style="float: right;">

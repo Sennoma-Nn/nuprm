@@ -13,10 +13,10 @@ def specific-abbreviations []: string -> string {
     let path = $in
     let path_list = $path | path split
     let abbr_config = get-config "directory_abbreviation" {}
-    let abbr_enable = ($abbr_config | get "enabled"? | default "no") == "yes"
-    let abbr_home = ($abbr_config | get "abbreviate_home"? | default "no") == "yes"
-    let specific_abbr = $abbr_config | get "specific_mappings"? | default {}
-    let specific_abbr_record = $specific_abbr | transpose key value | update key { |r| $r.key | path expand } | transpose -rd
+    let abbr_enable = $abbr_config | get -o "enabled" | default "no" | $in == "yes"
+    let abbr_home = $abbr_config | get -o "abbreviate_home" | default "no" | $in == "yes"
+    let specific_abbr = $abbr_config | get -o "specific_mappings" | default {}
+    let specific_abbr_record = $specific_abbr | transpose key value | update key {|r| $r.key | path expand } | transpose -rd
     let specific_abbr_key = $specific_abbr_record | columns
     let home_dir = $nu.home-path? | default $nu.home-dir? | default ("~" | path expand)
     
@@ -50,35 +50,26 @@ def specific-abbreviations []: string -> string {
 }
 
 # Retrieves current git branch information with optional formatting
-def get-git-info [
-    --left_char: string (-l) = ""   # Left decorator for branch name
-    --right_char: string (-r) = ""  # Right decorator for branch name
-]: nothing -> string {
-    let is_show_git = (get-config "display_elements" {}) | get -o "git" | $in == "yes"
+def get-git-info []: nothing -> string {
+    let is_show_git = get-config "display_elements" {} | get -o "git" | $in == "yes"
 
-    if not $is_show_git { return "" }
+    if not $is_show_git {
+        return ""
+    }
 
     try {
-        let branch = (
-            do -i {  # Safely attempt git command
-                ^git symbolic-ref --short HEAD
-            } | complete
-        ).stdout | str trim
-        if $branch != "" {
-            return $"($left_char)($branch)($right_char)"
-        } else {
-            return ""
-        }
-    } catch { return "" }
+        let branch = do -i { ^git symbolic-ref --short HEAD | complete | get -o "stdout" | str trim }
+        return $branch
+    } catch {
+        return ""
+    }
 }
 
 # Gets current shell index from directory stack with display options
 def get-where-shells [
     --dont_display_shells_if_not_used_shells (-d)  # Suppress output when only 1 shell exists
-    --left_char: string (-l) = ""                  # Left decorator for shell index
-    --right_char: string (-r) = ""                 # Right decorator for shell index
 ]: nothing -> string {
-    let is_show_shells = (get-config "display_elements" {}) | get -o "shells" | $in == "yes"
+    let is_show_shells = get-config "display_elements" {} | get -o "shells" | $in == "yes"
 
     if not $is_show_shells { return "" }
 
@@ -92,8 +83,8 @@ def get-where-shells [
                     | enumerate
                     | where $it.item.active == true
                     | get 0.index
-                let show_string = ([$left_char, $shells_index, $right_char] | str join "")
-                return $show_string
+
+                return $shells_index
             }
         } else {
             return ""
@@ -109,7 +100,7 @@ def color2ansi [
     color_type: string  # Color type: "fg" (foreground) or "bg" (background)
     ansi_color: string  # If not enabled true_color use this (ansi m's arg (\e[?m))
 ]: nothing -> string {
-    let is_true_color = (get-config "true_color" "yes") == "yes"
+    let is_true_color = get-config "compatibility" {} | get -o "true_color" | default "yes" | $in == "yes"
     if $is_true_color {
         let ansi_str = match $color_type {
             "fg" => { $"\e[38;2;($r);($g);($b)m" }
@@ -118,38 +109,22 @@ def color2ansi [
         }
         return $"($ansi_str)"
     } else {
-        let ansi_str = (ansi -e $"($ansi_color)m")
+        let ansi_str = ansi -e $"($ansi_color)m"
         return $ansi_str
     }
 }
 
-# Checks if the current operating system is Windows
-def is-windows []: nothing -> bool {
-    let is_windows = if $nu.os-info.name == "windows" { true } else { false }
-    return $is_windows
-}
-
-# Checks if the current operating system is android
-def is-android []: nothing -> bool {
-    let is_android = if $nu.os-info.name == "android" { true } else { false }
-    return $is_android
-}
-
-# Checks if the current operating system is MacOS
-def is-osx []: nothing -> bool {
-    let is_android = if $nu.os-info.name == "macos" { true } else { false }
-    return $is_android
-}
-
-# Checks if the current operating system is FreeBSD
-def is-freebsd []: nothing -> bool {
-    let is_android = if $nu.os-info.name == "freebsd" { true } else { false }
-    return $is_android
+# Checks system
+def is-os [
+    system: string
+]: nothing -> bool {
+    let test = $nu.os-info.name == $system
+    return $test
 }
 
 # Get user name
 def get-user-name []: nothing -> string {
-    if ((get-config "use_full_name" "no") == "yes") {
+    if (get-config "use_full_name" "no" | $in == "yes") {
         return ($env | get "FULLNAME" -o | default "")
     } else {
         let username = get-username
@@ -172,14 +147,14 @@ def get-full-name []: nothing -> string {
     mut full_name = ""
 
     try {
-        if (is-android) {
+        if (is-os "android") {
             # Not supported
             $full_name = $username
-        } else if (is-osx) {
-            $full_name = (^id -F)
-        } else if (is-windows) {
+        } else if (is-os "macos") {
+            $full_name = ^id -F
+        } else if (is-os "windows") {
             $full_name = ^powershell -c "(Get-LocalUser -Name $env:USERNAME).FullName"
-        } else if (is-freebsd) {
+        } else if (is-os "freebsd") {
             $full_name = ^id -P
                 | split column ":"
                 | get "column8"
@@ -208,20 +183,11 @@ def get-full-name []: nothing -> string {
 }
 
 # Get host name
-def get-host [
-    --left_char: string (-l) = ""   # Left decorator for host name
-    --right_char: string (-r) = ""  # Right decorator for host name
-]: nothing -> string {
-    let is_show_host = (get-config "display_elements" {}) | get -o "hostname" | $in == "yes"
+def get-host []: nothing -> string {
+    let is_show_host = get-config "display_elements" {} | get -o "hostname" | $in == "yes"
     if $is_show_host {
         let host_name = sys host | get hostname
-        return (
-            [
-                $left_char
-                $host_name
-                $right_char
-            ] | str join
-        )
+        return $host_name
     } else { return "" }
 }
 
@@ -229,55 +195,59 @@ def get-host [
 def format-path [
     new_separators: string          # Custom separator
     --keep_root (-k)                # Keep root directory ( on: / > aaa > bbb | off: > aaa > bbb)
-    --left_char: string (-l) = ""   # Left decorator for path
-    --right_char: string (-r) = ""  # Right decorator for path
     --dir_style: string (-d) = ""   # Directory styling (ANSI codes)
     --sep_style: string (-s) = ""   # Separator styling (ANSI codes)
     --file_url (-u)                 # Format as clickable terminal hyperlink
 ]: string -> string {
     let path = $in
-    let abbreviation_config = (get-config "directory_abbreviation" {})
-    let abbreviation_enable = (($abbreviation_config | get "enabled"? | default "no") == "yes")
-    let input_path = ($path | specific-abbreviations)
-    let input_separators = ($sep_style + $new_separators)
+    let abbreviation_config = get-config "directory_abbreviation" {}
+    let abbreviation_enable = $abbreviation_config | get -o "enabled" | default "no" | $in == "yes"
+    let input_path = $path | specific-abbreviations
+    let input_separators = $sep_style + $new_separators
 
-    mut path_list = ($input_path | path split)
+    mut path_list = $input_path | path split
     mut unix_root_start = false
 
     if not $keep_root {
-        if not (is-windows) {
-            if $path_list.0 == "/" {
-                $unix_root_start = true
-                $path_list = $path_list | skip 1
+        match (get-path-mode) {
+            "UNIX" => {
+                if $path_list.0 == "/" {
+                    $unix_root_start = true
+                    $path_list = $path_list | skip 1
+                }
             }
-        } else {
-            if "\\" in $path_list.0 {
-                $path_list.0 = ($path_list.0 | split row "\\" | first)
+            "DOS" => {
+                if "\\" in $path_list.0 {
+                    $path_list.0 = $path_list.0 | split row "\\" | first
+                }
             }
         }
     }
 
     if $abbreviation_enable {
-        let start_from_end = $abbreviation_config | get "start_from_end"? | default 3 | into int
-        let display_chars = $abbreviation_config | get "display_chars"? | default 1 | into int
+        let start_from_end = $abbreviation_config | get -o "start_from_end" | default 3 | into int
+        let display_chars = $abbreviation_config | get -o "display_chars" | default 1 | into int
         let path_len = $path_list | length
         mut counter = $path_list | length
 
-        $path_list = $path_list | enumerate | each { | item |
+        let get_each_of_abbr_display_chars = {|item|
+            let substring_offset = if ($item.item | str starts-with ".") { 1 } else { 0 }
+            let substring_range = 0..([0, ($display_chars + $substring_offset - 1)] | math max)
+
             if ($path_len - $item.index >= $start_from_end) and ($start_from_end > 0) {
-                $item.item | str substring --grapheme-clusters 0..([0, ($display_chars - 1 + (
-                    if ($item.item | str starts-with ".") { 1 } else { 0 }
-                ))] | math max)
+                $item.item | str substring --grapheme-clusters $substring_range
             } else { $item.item }
         }
+
+        $path_list = $path_list | enumerate | each $get_each_of_abbr_display_chars
     }
 
-    mut new_path = $path_list | each { |it| $dir_style + $it } | str join $input_separators
+    mut new_path = $path_list | each {|it| $dir_style + $it } | str join $input_separators
     if $unix_root_start {
         $new_path = $input_separators + $new_path
     }
 
-    let new_path_str = ([$left_char, $new_path, $right_char] | str join "")
+    let new_path_str = $new_path
     
     if $file_url {
         return ($new_path_str | make-file-url $path)
@@ -289,18 +259,15 @@ def format-path [
 # Get last directory of path
 def get-path-last [
     --file_url (-u)                # Format as clickable terminal hyperlink
-    --left_char: string (-l) = ""  # Left decorator for path
-    --right_char: string (-r) = "" # Right decorator for path
 ]: string -> string {
     let path = $in
-    let last_path = ($path | specific-abbreviations | path split | last)
-    let last_path_str = ([$left_char, $last_path, $right_char] | str join "")
+    let last_path = $path | specific-abbreviations | path split | last
 
     if $file_url {
-        return ($last_path_str | make-file-url $path)
+        return ($last_path | make-file-url $path)
     }
 
-    return $last_path_str
+    return $last_path
 }
 
 # Make hyperlink for path
@@ -308,7 +275,7 @@ def make-file-url [
     file_path: string # Actual path for the link
 ]: string -> string {
     let display_path = $in
-    let enable_path_url = (get-config "enable_path_url" "yes") == "yes"
+    let enable_path_url = get-config "compatibility" {} | get -o "enable_path_url" | default "yes" | $in == "yes"
 
     if not $enable_path_url {
         return $display_path
@@ -323,7 +290,7 @@ def make-file-url [
 
 # Get execution time (ms)
 def get-execution-time-ms []: nothing -> number {
-    let is_show_execution_time = (get-config "display_elements" {}) | get -o "execution_time" | $in == "yes"
+    let is_show_execution_time = get-config "display_elements" {} | get -o "execution_time" | $in == "yes"
     if not $is_show_execution_time { return (-1) }
 
     if $env.CMD_DURATION_MS != "0823" {
@@ -341,22 +308,19 @@ def get-execution-time-s []: nothing -> number {
 
 # Get exit code
 def get-exit-code []: nothing -> number {
-    let is_show_exit = (get-config "display_elements" {}) | get -o "exit" | $in == "yes"
+    let is_show_exit = get-config "display_elements" {} | get -o "exit" | $in == "yes"
     if not $is_show_exit { return 0 }
 
     return $env.LAST_EXIT_CODE
 }
 
 # Get system icon (Nerd Font)
-def get-system-icon [
-    --left_char: string (-l) = ""   # Left decorator for system icon
-    --right_char: string (-r) = ""  # Right decorator for system icon
-]: nothing -> string {
-    let system_icon = (get-config "display_elements" {}) | get -o "system_icon" | $in == "yes"
+def get-system-icon []: nothing -> string {
+    let system_icon = get-config "display_elements" {} | get -o "system_icon" | $in == "yes"
 
     if $system_icon {
         let system_type = $nu.os-info.name
-        let system_name = (sys host | get name | str downcase)
+        let system_name = sys host | get name | str downcase
 
         let icon = match $system_type {
             "windows"   => { "" }
@@ -398,22 +362,61 @@ def get-system-icon [
             _           => { "" }
         }
 
-        return (
-            if $icon != "" {
-                (
-                    [$left_char, $icon, $right_char] | str join ""
-                )
-            } else { "" }
-        )
+        return $icon
     } else { "" }
 }
 
+# Get path mode, DOS (?:\???\???\???), UNIX (/???/???/???)
 def get-path-mode []: nothing -> string {
-    if (is-windows) {
+    if (is-os "windows") {
         return "DOS"
     } else {
         return "UNIX"
     }
+}
+
+# Get characters from Power Line
+def get-power-line-char [
+    name: string # Char name
+]: nothing -> string {
+    let char = match $name {
+        "left_hard_divider"                 => { char -u "e0b0" } # 
+        "left_soft_divider"                 => { char -u "e0b1" } # 
+        "right_hard_divider"                => { char -u "e0b2" } # 
+        "right_soft_divider"                => { char -u "e0b3" } # 
+        "right_half_circle_thick"           => { char -u "e0b4" } # 
+        "right_half_circle_thin"            => { char -u "e0b5" } # 
+        "left_half_circle_thick"            => { char -u "e0b6" } # 
+        "left_half_circle_thin"             => { char -u "e0b7" } # 
+        "lower_left_triangle"               => { char -u "e0b8" } # 
+        "backslash_separator"               => { char -u "e0b9" } # 
+        "lower_right_triangle"              => { char -u "e0ba" } # 
+        "forwardslash_separator"            => { char -u "e0bb" } # 
+        "upper_left_triangle"               => { char -u "e0bc" } # 
+        "forwardslash_separator_redundant"  => { char -u "e0bd" } # 
+        "upper_right_triangle"              => { char -u "e0be" } # 
+        "backslash_separator_redundant"     => { char -u "e0bf" } # 
+        "flame_thick"                       => { char -u "e0c0" } # 
+        "flame_thin"                        => { char -u "e0c1" } # 
+        "flame_thick_mirrored"              => { char -u "e0c2" } # 
+        "flame_thin_mirrored"               => { char -u "e0c3" } # 
+        "pixelated_squares_small"           => { char -u "e0c4" } # 
+        "pixelated_squares_small_mirrored"  => { char -u "e0c5" } # 
+        "pixelated_squares_big"             => { char -u "e0c6" } # 
+        "pixelated_squares_big_mirrored"    => { char -u "e0c7" } # 
+        "ice_waveform"                      => { char -u "e0c8" } # 
+        "ice_waveform_mirrored"             => { char -u "e0ca" } # 
+        "honeycomb"                         => { char -u "e0cc" } # 
+        "honeycomb_outline"                 => { char -u "e0cd" } # 
+        "lego_block_sideways"               => { char -u "e0d1" } # 
+        "trapezoid_top_bottom"              => { char -u "e0d2" } # 
+        "trapezoid_top_bottom_mirrored"     => { char -u "e0d4" } # 
+        "right_hard_divider_inverse"        => { char -u "e0d6" } # 
+        "left_hard_divider_inverse"         => { char -u "e0d7" } # 
+        _                                   => { "" }
+    }
+
+    return $char
 }
 
 export def get-prompt-info [
@@ -447,8 +450,8 @@ export def get-prompt-info [
     }
 
     let out = [
-        $left_char
-        $info
+        $left_char,
+        $info,
         $right_char
     ] | str join ""
 
@@ -460,8 +463,9 @@ export def prompt-make-utils [
     ...args: any # Command args
 ] {
     let info = match $type {
-        "color-to-ansi" => { color2ansi $args.0 $args.1 $args.2 $args.3 $args.4 }
-        _               => { "" }
+        "color-to-ansi"   => { color2ansi $args.0 $args.1 $args.2 $args.3 $args.4 }
+        "power-line-char" => { get-power-line-char $args.0 }
+        _                 => { "" }
     }
 
     return $info

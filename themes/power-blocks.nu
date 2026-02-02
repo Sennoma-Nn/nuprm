@@ -6,6 +6,12 @@ let prompt_chars = {
     right_char: ""
     wrong_char: ""
     root_icon: ""
+
+    power_line1: (prompt-make-utils power-line-char "lower_right_triangle") # 
+    power_line2: (prompt-make-utils power-line-char "upper_left_triangle") # 
+    power_line3: (prompt-make-utils power-line-char "left_hard_divider") # 
+    power_line4: (prompt-make-utils power-line-char "left_hard_divider_inverse") # 
+
     name_fg: (prompt-make-utils color-to-ansi 255 146 72 "fg" "33")
     name_bg: (prompt-make-utils color-to-ansi 255 146 72 "bg" "43")
     path_fg: (prompt-make-utils color-to-ansi 52 100 164 "fg" "34")
@@ -40,33 +46,33 @@ def create-left-prompt [] {
     }
     return (
         [
-            (prompt-block "" "" $prompt_chars.name_fg $prompt_chars.name_bg $"($status.user)($status.host)" $prompt_chars.black_fg $status.icon)
-            (prompt-block "" "" $prompt_chars.path_fg $prompt_chars.path_bg $status.path $prompt_chars.white_fg " ")
+            (prompt-block "" $prompt_chars.power_line2 $prompt_chars.name_fg $prompt_chars.name_bg $"($status.user)($status.host)" $prompt_chars.black_fg $status.icon)
+            (prompt-block $prompt_chars.power_line1 $prompt_chars.power_line2 $prompt_chars.path_fg $prompt_chars.path_bg $status.path $prompt_chars.white_fg " ")
             (
                 if $status.git != "" {
-                    prompt-block "" "" $prompt_chars.git_fg $prompt_chars.git_bg $status.git $prompt_chars.white_fg " "
+                    prompt-block $prompt_chars.power_line1 $prompt_chars.power_line2 $prompt_chars.git_fg $prompt_chars.git_bg $status.git $prompt_chars.white_fg " "
                 } else { "" }
             )
             (
                 if $status.time > 0.5 {
-                    prompt-block "" "" $prompt_chars.time_fg $prompt_chars.time_bg $"($status.time)s" $prompt_chars.white_fg " "
+                    prompt-block $prompt_chars.power_line1 $prompt_chars.power_line2 $prompt_chars.time_fg $prompt_chars.time_bg $"($status.time)s" $prompt_chars.white_fg " "
                 } else { "" }
             )
             (
                 if $status.exit == "0" {
-                    prompt-block "" "" $prompt_chars.status_fg $prompt_chars.status_bg $prompt_chars.right_char $prompt_chars.white_fg ""
+                    prompt-block $prompt_chars.power_line1 $prompt_chars.power_line3 $prompt_chars.status_fg $prompt_chars.status_bg $prompt_chars.right_char $prompt_chars.white_fg ""
                 } else {
-                    prompt-block "" "" $prompt_chars.status_err_fg $prompt_chars.status_err_bg $"($prompt_chars.wrong_char) ($status.exit)" $prompt_chars.white_fg ""
+                    prompt-block $prompt_chars.power_line1 $prompt_chars.power_line3 $prompt_chars.status_err_fg $prompt_chars.status_err_bg $"($prompt_chars.wrong_char) ($status.exit)" $prompt_chars.white_fg ""
                 }
             )
             (
                 if $status.shells != "" {
-                    prompt-block "" "" $prompt_chars.shells_fg $prompt_chars.shells_bg $status.shells $prompt_chars.white_fg " "
+                    prompt-block $prompt_chars.power_line4 $prompt_chars.power_line3 $prompt_chars.shells_fg $prompt_chars.shells_bg $status.shells $prompt_chars.white_fg " "
                 } else { "" }
             )
             (
                 if $status.admin {
-                    prompt-block "" "" $prompt_chars.root_fg $prompt_chars.root_bg $prompt_chars.root_icon $prompt_chars.white_fg ""
+                    prompt-block $prompt_chars.power_line4 $prompt_chars.power_line3 $prompt_chars.root_fg $prompt_chars.root_bg $prompt_chars.root_icon $prompt_chars.white_fg ""
                 } else { "" }
             )
             " "
@@ -78,18 +84,18 @@ def transient-create-left-prompt [] {
     let path = (get-prompt-info last-path -u)
     
     return (
-        prompt-block "" " " $prompt_chars.path_fg $prompt_chars.path_bg $path $prompt_chars.white_fg " "
+        prompt-block "" $"($prompt_chars.power_line3) " $prompt_chars.path_fg $prompt_chars.path_bg $path $prompt_chars.white_fg " "
     )
 }
 
 def vi-ins-prompt [] {
-    let prompt = (prompt-block "\b" " " $prompt_chars.vi_fg $prompt_chars.vi_bg "I" $prompt_chars.white_fg " ")
+    let prompt = (prompt-block $"\b($prompt_chars.power_line4)" $"($prompt_chars.power_line3) " $prompt_chars.vi_fg $prompt_chars.vi_bg "I" $prompt_chars.white_fg " ")
 
     return $prompt
 }
 
 def vi-nor-prompt [] {
-    let prompt = (prompt-block "\b" " " $prompt_chars.vi_fg $prompt_chars.vi_bg "N" $prompt_chars.white_fg " ")
+    let prompt = (prompt-block $"\b($prompt_chars.power_line4)" $"($prompt_chars.power_line3) " $prompt_chars.vi_fg $prompt_chars.vi_bg "N" $prompt_chars.white_fg " ")
 
     return $prompt
 }

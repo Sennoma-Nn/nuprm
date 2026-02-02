@@ -12,6 +12,14 @@ let colors = {
     color5_fg: (prompt-make-utils color-to-ansi 35 70 94 "fg" "36"),
     color5_bg: (prompt-make-utils color-to-ansi 35 70 94 "bg" "46"),
     grey_fg: (prompt-make-utils color-to-ansi  64 64 64 "fg" "90"),
+
+    power_line1: (prompt-make-utils power-line-char "right_hard_divider") # 
+    power_line2: (prompt-make-utils power-line-char "left_hard_divider") # 
+    power_line3: (prompt-make-utils power-line-char "right_soft_divider") # 
+    power_line4: (prompt-make-utils power-line-char "left_soft_divider") # 
+    power_line5: (prompt-make-utils power-line-char "left_half_circle_thick") # 
+    power_line6: (prompt-make-utils power-line-char "right_half_circle_thick") # 
+
     reset_bg: "\e[49m",
     bold: "\e[1m",
     italic: "\e[3m",
@@ -27,11 +35,11 @@ def create-prompt-left [] {
     let user_host = $"($user_name)($host_name)"
 
     let prompt_list = [
-        $colors.color1_fg, "", $colors.reset,
+        $colors.color1_fg, $"($colors.power_line5)", $colors.reset,
         $colors.color1_bg, $colors.black_fg, " ", $colors.italic, $user_host, " ", $colors.reset,
-        $colors.color2_bg, $colors.color1_fg, "",
+        $colors.color2_bg, $colors.color1_fg, $"($colors.power_line2)",
         $colors.color2_bg, " ", $shells_index, $path, " ", $colors.reset,
-        $colors.color2_fg, "",
+        $colors.color2_fg, $"($colors.power_line2)($colors.power_line4)",
         $colors.reset, "\n"
     ]
     let prompt = ($prompt_list | str join "")
@@ -50,10 +58,10 @@ def create-prompt-right [] {
     )
 
     let prompt_list = [
-        $colors.color3_fg, "", $colors.reset, $colors.color3_bg, " ", $status_symbol, " ", $colors.reset, $colors.color3_fg, $colors.color3_bg,
-        $colors.color4_fg, "", $colors.reset, $colors.color4_bg, $colors.white_fg, $git_info, $colors.reset, $colors.color4_fg, $colors.color4_bg,
-        $colors.color5_fg, "", $colors.color5_bg, $colors.white_fg, $execution_time, $colors.reset, $colors.color5_fg, $colors.color5_bg,
-        $colors.reset_bg, "", $colors.reset
+        $colors.color3_fg, $"($colors.power_line3)($colors.power_line1)", $colors.reset, $colors.color3_bg, " ", $status_symbol, " ", $colors.reset, $colors.color3_fg, $colors.color3_bg,
+        $colors.color4_fg, $"($colors.power_line1)", $colors.reset, $colors.color4_bg, $colors.white_fg, $git_info, $colors.reset, $colors.color4_fg, $colors.color4_bg,
+        $colors.color5_fg, $"($colors.power_line1)", $colors.color5_bg, $colors.white_fg, $execution_time, $colors.reset, $colors.color5_fg, $colors.color5_bg,
+        $colors.reset_bg, $"($colors.power_line6)", $colors.reset
     ]
 
     let prompt = ($prompt_list | str join "")

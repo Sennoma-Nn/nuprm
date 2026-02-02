@@ -8,21 +8,27 @@ let pink_fg = (prompt-make-utils color-to-ansi 197 134 192 "fg" "95")
 let bold = "\e[1m"
 let reset = "\e[0m"
 
+let power_line1 = (prompt-make-utils power-line-char "right_hard_divider") # 
+let power_line2 = (prompt-make-utils power-line-char "left_hard_divider") # 
+let power_line3 = (prompt-make-utils power-line-char "left_soft_divider") # 
+let power_line4 = (prompt-make-utils power-line-char "left_hard_divider_inverse") # 
+let power_line5 = (prompt-make-utils power-line-char "upper_left_triangle") # 
+
 let user_name = get-prompt-info user-name
 let host_name = get-prompt-info host-name -l $" @ "
 let user_host = $"($user_name)($host_name)"
 
 def create-prompt [] {
-    let path = get-prompt-info path "  " -d $blue_fg -s $black_fg -l $"($dark_blue_bg)($blue_fg) " -r $" ($reset)($dark_blue_fg)" -ku
+    let path = get-prompt-info path $" ($power_line3) " -d $blue_fg -s $black_fg -l $"($power_line4)($dark_blue_bg)($blue_fg) " -r $" ($reset)($dark_blue_fg)($power_line2)" -ku
     let git_info = get-prompt-info git
-    let shells_info = get-prompt-info shells -Dl $" ($dark_blue_bg + $blue_fg) №"
+    let shells_info = get-prompt-info shells -Dl $" ($dark_blue_bg + $blue_fg)($power_line5) №"
     let exit_code = get-prompt-info exit-code
     let execution_time = get-prompt-info exec-time | $in + "sec"
 
     mut prompt = $"($reset)┌ "
-    $prompt += $"($blue_fg)($reset)"
+    $prompt += $"($blue_fg)($power_line1)($reset)"
     $prompt += $"($blue_bg)($black_fg) (get-prompt-info system-icon -r ' ▕ ')($user_host)($shells_info) ($reset)"
-    $prompt += $"(if $shells_info != "" { $dark_blue_fg } else { $blue_fg })($reset)"
+    $prompt += $"(if $shells_info != "" { $dark_blue_fg } else { $blue_fg })($power_line2)($reset)"
     $prompt += $"($dark_blue_fg)($path)($reset)"
 
     mut extra_info_list = []
@@ -32,18 +38,18 @@ def create-prompt [] {
     let extra_info = ($extra_info_list | str join $" ($reset) ")
     if not ($extra_info_list | is-empty) { $prompt += $" ($extra_info) " }
 
-    $prompt += $"($blue_fg)($reset)"
+    $prompt += $"($blue_fg)($power_line3)($reset)"
     $prompt += "\n└ "
     return $prompt
 }
 
 def transient-create-left-prompt [] {
-    let path = get-prompt-info path "  " -d $blue_fg -s $black_fg -l $"($reset)($dark_blue_bg + $blue_fg) " -r $" ($reset)($dark_blue_fg)" -ku
+    let path = get-prompt-info path $" ($power_line3) " -d $blue_fg -s $black_fg -l $"($power_line1)($reset)($dark_blue_bg + $blue_fg) " -r $" ($reset)($dark_blue_fg)($power_line2)" -ku
 
     mut prompt = ""
     $prompt += $"($dark_blue_fg)($path)($reset)"
 
-    $prompt += $"($blue_fg)($reset)"
+    $prompt += $"($blue_fg)($power_line3)($reset)"
     return $prompt
 }
 
