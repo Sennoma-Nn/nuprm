@@ -1,8 +1,6 @@
-const poss_err_alrt = "ERROR (If you see it, please file an issue)"
-
 # Get user config
 def get-config [
-    item: string
+    item: cell-path
     default: any
 ]: nothing -> any {
     let user_config = $env.NUPRMCONFIG
@@ -12,7 +10,7 @@ def get-config [
 def specific-abbreviations []: string -> string {
     let path = $in
     let path_list = $path | path split
-    let abbr_config = get-config "directory_abbreviation" {}
+    let abbr_config = get-config $.directory_abbreviation {}
     let abbr_enable = $abbr_config | get -o "enabled" | default "no" | $in == "yes"
     let abbr_home = $abbr_config | get -o "abbreviate_home" | default "no" | $in == "yes"
     let specific_abbr = $abbr_config | get -o "specific_mappings" | default {}
@@ -38,11 +36,11 @@ def specific-abbreviations []: string -> string {
             }
         }
         if $test_path in $specific_abbr_key {
-            let abbr = $specific_abbr_record | get -o $test_path | default $poss_err_alrt
+            let abbr = $specific_abbr_record | get -o $test_path | default ""
             $new_path_list ++= [$abbr]
             break
         } else {
-            $new_path_list ++= [($path_list | get -o ($i - 1) | default $poss_err_alrt)]
+            $new_path_list ++= [($path_list | get -o ($i - 1) | default "")]
         }
     }
     let new_path = $new_path_list | reverse | path join
@@ -51,7 +49,7 @@ def specific-abbreviations []: string -> string {
 
 # Retrieves current git branch information with optional formatting
 def get-git-info []: nothing -> string {
-    let is_show_git = get-config "display_elements" {} | get -o "git" | $in == "yes"
+    let is_show_git = get-config $.display_elements.git {} | $in == "yes"
 
     if not $is_show_git {
         return ""
@@ -65,11 +63,11 @@ def get-git-info []: nothing -> string {
     }
 }
 
-# Gets current shell index from directory stack with display options
+# Gets current shells index from directory stack with display options
 def get-where-shells [
     --dont_display_shells_if_not_used_shells (-d)  # Suppress output when only 1 shell exists
 ]: nothing -> string {
-    let is_show_shells = get-config "display_elements" {} | get -o "shells" | $in == "yes"
+    let is_show_shells = get-config $.display_elements.shells {} | $in == "yes"
 
     if not $is_show_shells { return "" }
 
@@ -82,7 +80,8 @@ def get-where-shells [
                 let shells_index = $shells_data
                     | enumerate
                     | where $it.item.active == true
-                    | get 0.index
+                    | get -o 0.index
+                    | default ""
 
                 return $shells_index
             }
@@ -100,7 +99,7 @@ def color2ansi [
     color_type: string  # Color type: "fg" (foreground) or "bg" (background)
     ansi_color: string  # If not enabled true_color use this (ansi m's arg (\e[?m))
 ]: nothing -> string {
-    let is_true_color = get-config "compatibility" {} | get -o "true_color" | default "yes" | $in == "yes"
+    let is_true_color = get-config $.compatibility.true_color {} | default "yes" | $in == "yes"
     if $is_true_color {
         let ansi_str = match $color_type {
             "fg" => { $"\e[38;2;($r);($g);($b)m" }
@@ -124,7 +123,7 @@ def is-os [
 
 # Get user name
 def get-user-name []: nothing -> string {
-    if (get-config "use_full_name" "no" | $in == "yes") {
+    if (get-config $.use_full_name "no" | $in == "yes") {
         return ($env | get "FULLNAME" -o | default "")
     } else {
         let username = get-username
@@ -184,7 +183,7 @@ def get-full-name []: nothing -> string {
 
 # Get host name
 def get-host []: nothing -> string {
-    let is_show_host = get-config "display_elements" {} | get -o "hostname" | $in == "yes"
+    let is_show_host = get-config $.display_elements.hostname {} | $in == "yes"
     if $is_show_host {
         let host_name = sys host | get hostname
         return $host_name
@@ -200,8 +199,6 @@ def format-path [
     --file_url (-u)                 # Format as clickable terminal hyperlink
 ]: string -> string {
     let path = $in
-    let abbreviation_config = get-config "directory_abbreviation" {}
-    let abbreviation_enable = $abbreviation_config | get -o "enabled" | default "no" | $in == "yes"
     let input_path = $path | specific-abbreviations
     let input_separators = $sep_style + $new_separators
 
@@ -224,25 +221,7 @@ def format-path [
         }
     }
 
-    if $abbreviation_enable {
-        let start_from_end = $abbreviation_config | get -o "start_from_end" | default 3 | into int
-        let display_chars = $abbreviation_config | get -o "display_chars" | default 1 | into int
-        let path_len = $path_list | length
-        mut counter = $path_list | length
-
-        let get_each_of_abbr_display_chars = {|item|
-            let substring_offset = if ($item.item | str starts-with ".") { 1 } else { 0 }
-            let substring_range = 0..([0, ($display_chars + $substring_offset - 1)] | math max)
-
-            if ($path_len - $item.index >= $start_from_end) and ($start_from_end > 0) {
-                $item.item | str substring --grapheme-clusters $substring_range
-            } else { $item.item }
-        }
-
-        $path_list = $path_list | enumerate | each $get_each_of_abbr_display_chars
-    }
-
-    mut new_path = $path_list | each {|it| $dir_style + $it } | str join $input_separators
+    mut new_path = $path_list | abbr_path | each {|it| $dir_style + $it } | str join $input_separators
     if $unix_root_start {
         $new_path = $input_separators + $new_path
     }
@@ -254,6 +233,34 @@ def format-path [
     } else {
         return $new_path_str
     }
+}
+
+# Abbreviate the path list
+def abbr_path []: list -> list {
+    let path_list = $in
+    let abbreviation_config = get-config $.directory_abbreviation {}
+    let abbreviation_enable = $abbreviation_config | get -o "enabled" | default "no" | $in == "yes"
+
+    let abbreviated_path_list = if $abbreviation_enable {
+        let start_from_end = $abbreviation_config | get -o "start_from_end" | default 3 | into int
+        let display_chars = $abbreviation_config | get -o "display_chars" | default 1 | into int
+        let path_len = $path_list | length
+
+        let get_each_of_abbr_display_chars = {|item|
+            let substring_offset = if ($item.item | str starts-with ".") { 1 } else { 0 }
+            let substring_range = $display_chars + $substring_offset - 1 | [0, $in] | math max | 0..$in
+
+            if ($path_len - $item.index >= $start_from_end) and ($start_from_end > 0) {
+                $item.item | str substring -g $substring_range
+            } else { $item.item }
+        }
+
+        $path_list | enumerate | each $get_each_of_abbr_display_chars
+    } else {
+        $path_list
+    }
+
+    return $abbreviated_path_list
 }
 
 # Get last directory of path
@@ -275,7 +282,7 @@ def make-file-url [
     file_path: string # Actual path for the link
 ]: string -> string {
     let display_path = $in
-    let enable_path_url = get-config "compatibility" {} | get -o "enable_path_url" | default "yes" | $in == "yes"
+    let enable_path_url = get-config $.compatibility.enable_path_url {} | default "yes" | $in == "yes"
 
     if not $enable_path_url {
         return $display_path
@@ -290,11 +297,15 @@ def make-file-url [
 
 # Get execution time (ms)
 def get-execution-time-ms []: nothing -> number {
-    let is_show_execution_time = get-config "display_elements" {} | get -o "execution_time" | $in == "yes"
-    if not $is_show_execution_time { return (-1) }
+    let is_show_execution_time = get-config $.display_elements.execution_time {} | $in == "yes"
+    let time = $env.CMD_DURATION_MS? | default 0
 
-    if $env.CMD_DURATION_MS != "0823" {
-        return ($env.CMD_DURATION_MS | into int)
+    if not $is_show_execution_time {
+        return (-1)
+    }
+
+    if $time != "0823" {
+        return ($time | into int)
     } else { return 0 }
 }
 
@@ -303,12 +314,13 @@ def get-execution-time-s []: nothing -> number {
     let time_s = get-execution-time-ms
         | $in / 1000
         | math round --precision 2
+
     return $time_s
 }
 
 # Get exit code
 def get-exit-code []: nothing -> number {
-    let is_show_exit = get-config "display_elements" {} | get -o "exit" | $in == "yes"
+    let is_show_exit = get-config $.display_elements.exit {} | $in == "yes"
     if not $is_show_exit { return 0 }
 
     return $env.LAST_EXIT_CODE
@@ -316,7 +328,7 @@ def get-exit-code []: nothing -> number {
 
 # Get system icon (Nerd Font)
 def get-system-icon []: nothing -> string {
-    let system_icon = get-config "display_elements" {} | get -o "system_icon" | $in == "yes"
+    let system_icon = get-config $.display_elements.system_icon {} | $in == "yes"
 
     if $system_icon {
         let system_type = $nu.os-info.name
@@ -419,54 +431,167 @@ def get-power-line-char [
     return $char
 }
 
-export def get-prompt-info [
-    type: string                                   # Get what info
-    ...args: any                                   # Command args
-    --dont_display_shells_if_not_used_shells (-D)  # Suppress output when only 1 shell exists in `shells` info
-    --keep_root (-k)                               # Keep root directory ( on: / > aaa > bbb | off: > aaa > bbb) in `path` info
-    --dir_style: string (-d) = ""                  # Directory styling (ANSI codes) in `path` info
-    --sep_style: string (-s) = ""                  # Separator styling (ANSI codes) in `path` info
-    --file_url (-u)                                # Format as clickable terminal hyperlink in `path` or `last-path` info
-    --left_char: string (-l) = ""                  # Left decorator for info
-    --right_char: string (-r) = ""                 # Right decorator for info
-]: nothing -> string {
-    let info = match $type {
-        "git"         => { get-git-info }
-        "shells"      => { get-where-shells --dont_display_shells_if_not_used_shells=$dont_display_shells_if_not_used_shells }
-        "user-name"   => { get-user-name }
-        "host-name"   => { get-host }
-        "full-name"   => { get-full-name }
-        "path"        => { $env.PWD | format-path $args.0 --keep_root=$keep_root --dir_style=$dir_style --sep_style=$sep_style --file_url=$file_url }
-        "last-path"   => { $env.PWD | get-path-last --file_url=$file_url }
-        "exec-time"   => { get-execution-time-s }
-        "exit-code"   => { get-exit-code }
-        "system-icon" => { get-system-icon }
-        "path-mode"   => { get-path-mode }
-        _             => { "" }
+############################################################################### export functions
+
+# Get prompt information
+export module get-prompt-info {
+    # Get git branch information for prompt
+    export def git [
+        --left_char: string (-l) = ""                  # Left decorator for info
+        --right_char: string (-r) = ""                 # Right decorator for info
+    ]: nothing -> string {
+        let info = get-git-info
+
+        if $info == "" { return "" }
+        let out = [ $left_char, $info, $right_char ] | str join ""
+        return $out
     }
 
-    if $info == "" {
-        return ""
+    # Get shells index information for prompt
+    export def shells [
+        --left_char: string (-l) = ""                  # Left decorator for info
+        --right_char: string (-r) = ""                 # Right decorator for info
+        --dont_display_shells_if_not_used_shells (-d)  # Suppress output when only 1 shell exists in `shells` info
+    ]: nothing -> string {
+        let info = get-where-shells --dont_display_shells_if_not_used_shells=$dont_display_shells_if_not_used_shells
+
+        if $info == "" { return "" }
+        let out = [ $left_char, $info, $right_char ] | str join ""
+        return $out
     }
 
-    let out = [
-        $left_char,
-        $info,
-        $right_char
-    ] | str join ""
+    # Get user name information for prompt
+    export def user-name [
+        --left_char: string (-l) = ""                  # Left decorator for info
+        --right_char: string (-r) = ""                 # Right decorator for info
+    ]: nothing -> string {
+        let info = get-user-name
 
-    return $out
+        if $info == "" { return "" }
+        let out = [ $left_char, $info, $right_char ] | str join ""
+        return $out
+    }
+
+    # Get host name information for prompt
+    export def host-name [
+        --left_char: string (-l) = ""                  # Left decorator for info
+        --right_char: string (-r) = ""                 # Right decorator for info
+    ]: nothing -> string {
+        let info = get-host
+
+        if $info == "" { return "" }
+        let out = [ $left_char, $info, $right_char ] | str join ""
+        return $out
+    }
+
+    # Get full name information for prompt
+    export def full-name [
+        --left_char: string (-l) = ""                  # Left decorator for info
+        --right_char: string (-r) = ""                 # Right decorator for info
+    ]: nothing -> string {
+        let info = get-full-name
+
+        if $info == "" { return "" }
+        let out = [ $left_char, $info, $right_char ] | str join ""
+        return $out
+    }
+
+    # Get formatted path information for prompt
+    export def path [
+        new_separators: string                         # Custom separator
+        --left_char: string (-l) = ""                  # Left decorator for info
+        --right_char: string (-r) = ""                 # Right decorator for info
+        --keep_root (-k)                               # Keep root directory ( on: / > aaa > bbb | off: > aaa > bbb) in `path` info
+        --dir_style: string (-d) = ""                  # Directory styling (ANSI codes) in `path` info
+        --sep_style: string (-s) = ""                  # Separator styling (ANSI codes) in `path` info
+        --file_url (-u)                                # Format as clickable terminal hyperlink in `path` or `last-path` info
+    ]: nothing -> string {
+        let info = $env.PWD | format-path $new_separators --keep_root=$keep_root --dir_style=$dir_style --sep_style=$sep_style --file_url=$file_url
+
+        if $info == "" { return "" }
+        let out = [ $left_char, $info, $right_char ] | str join ""
+        return $out
+    }
+
+    # Get last directory of path information for prompt
+    export def last-path [
+        --left_char: string (-l) = ""                  # Left decorator for info
+        --right_char: string (-r) = ""                 # Right decorator for info
+        --file_url (-u)                                # Format as clickable terminal hyperlink in `path` or `last-path` info
+    ]: nothing -> string {
+        let info = $env.PWD | get-path-last --file_url=$file_url
+
+        if $info == "" { return "" }
+        let out = [ $left_char, $info, $right_char ] | str join ""
+        return $out
+    }
+
+    # Get execution time information for prompt
+    export def exec-time [
+        --left_char: string (-l) = ""                  # Left decorator for info
+        --right_char: string (-r) = ""                 # Right decorator for info
+    ]: nothing -> string {
+        let info = get-execution-time-s
+
+        if $info == "" { return "" }
+        let out = [ $left_char, $info, $right_char ] | str join ""
+        return $out
+    }
+
+    # Get exit code information for prompt
+    export def exit-code [
+        --left_char: string (-l) = ""                  # Left decorator for info
+        --right_char: string (-r) = ""                 # Right decorator for info
+    ]: nothing -> string {
+        let info = get-exit-code
+
+        if $info == "" { return "" }
+        let out = [ $left_char, $info, $right_char ] | str join ""
+        return $out
+    }
+
+    # Get system icon information for prompt
+    export def system-icon [
+        --left_char: string (-l) = ""                  # Left decorator for info
+        --right_char: string (-r) = ""                 # Right decorator for info
+    ]: nothing -> string {
+        let info = get-system-icon
+
+        if $info == "" { return "" }
+        let out = [ $left_char, $info, $right_char ] | str join ""
+        return $out
+    }
+
+    # Get path mode information for prompt
+    export def path-mode [
+        --left_char: string (-l) = ""                  # Left decorator for info
+        --right_char: string (-r) = ""                 # Right decorator for info
+    ]: nothing -> string {
+        let info = get-path-mode
+
+        if $info == "" { return "" }
+        let out = [ $left_char, $info, $right_char ] | str join ""
+        return $out
+    }
 }
 
-export def prompt-make-utils [
-    type: string # Get what info
-    ...args: any # Command args
-] {
-    let info = match $type {
-        "color-to-ansi"   => { color2ansi $args.0 $args.1 $args.2 $args.3 $args.4 }
-        "power-line-char" => { get-power-line-char $args.0 }
-        _                 => { "" }
+# Prompt make utils
+export module prompt-make-utils {
+    # Convert RGB values to ANSI escape sequences for terminal colors
+    export def color-to-ansi [
+        r: int              # Red component (0-255)
+        g: int              # Green component (0-255)
+        b: int              # Blue component (0-255)
+        color_type: string  # Color type: "fg" (foreground) or "bg" (background)
+        ansi_color: string  # If not enabled true_color use this (ansi m's arg (\e[?m))
+    ]: nothing -> string {
+        color2ansi $r $g $b $color_type $ansi_color
     }
 
-    return $info
+    # Get Power Line characters for prompt styling
+    export def power-line-char [
+        name: string # Char name
+    ]: nothing -> string {
+        get-power-line-char $name
+    }
 }

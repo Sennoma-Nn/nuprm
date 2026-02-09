@@ -1,12 +1,7 @@
-const nu_prompt_const = {
-    prompt_utils_path: (["~" ".config" "nuprm" "utils" "prompt-utils.nu"] | path join | path expand)
-    exe_path: (["~" ".config" "nuprm"] | path join | path expand)
-    load_path: (["~" ".config" "nuprm" "load.nu"] | path join | path expand)
-}
+use (($nuprm_path | path split) ++ ["utils" "prompt-utils.nu"] | path join | path expand) *
+use (($nuprm_path | path split) ++ ["theme-list.nu"] | path join | path expand) theme_info
 
-use $nu_prompt_const.prompt_utils_path *
-
-do --env {
+do --env -i {
     try {
         let config_table = $env.NUPRMCONFIG? | default {}
         let is_enable = ($config_table | get -o "enabled" | default "no")
@@ -18,31 +13,56 @@ do --env {
         }
 
         if $is_enable == "yes" {
-            source $nuprm_theme
+            use $nuprm_theme nuprm-theme
+
+            $env.PROMPT_COMMAND = {|| nuprm-theme get-prompt-command-left }
+            $env.PROMPT_COMMAND_RIGHT = {|| nuprm-theme get-prompt-command-right }
+            $env.PROMPT_INDICATOR = {|| nuprm-theme get-prompt-indicator }
+            $env.PROMPT_MULTILINE_INDICATOR = {|| nuprm-theme get-prompt-multiline-indicator }
+            $env.PROMPT_INDICATOR_VI_INSERT = {|| nuprm-theme get-prompt-indicator-vi-insert }
+            $env.PROMPT_INDICATOR_VI_NORMAL = {|| nuprm-theme get-prompt-indicator-vi-normal }
+            $env.TRANSIENT_PROMPT_COMMAND = {|| nuprm-theme get-transient-prompt-command }
+            $env.TRANSIENT_PROMPT_COMMAND_RIGHT = {|| nuprm-theme get-transient-prompt-command-right }
+            $env.TRANSIENT_PROMPT_INDICATOR = {|| nuprm-theme get-transient-prompt-indicator }
+            $env.TRANSIENT_PROMPT_MULTILINE_INDICATOR = {|| nuprm-theme get-transient-prompt-multiline-indicator }
+            $env.TRANSIENT_PROMPT_INDICATOR_VI_INSERT = {|| nuprm-theme get-transient-prompt-indicator-vi-insert }
+            $env.TRANSIENT_PROMPT_INDICATOR_VI_NORMAL = {|| nuprm-theme get-transient-prompt-indicator-vi-normal }
         }
-    } catch { |e|
-        print "\e[31mERROR! CAN'T LOAD PROMPT!"
-        print "\e[0m"
-        print $e
-
-        $env.PROMPT_COMMAND = {|| $env.pwd}
-        $env.PROMPT_COMMAND_RIGHT = ""
-        $env.PROMPT_INDICATOR = "> "
-        $env.PROMPT_MULTILINE_INDICATOR = "::: "
-        $env.PROMPT_INDICATOR_VI_INSERT = ": "
-        $env.PROMPT_INDICATOR_VI_NORMAL = "> "
-
-        $env.TRANSIENT_PROMPT_COMMAND = $env.PROMPT_COMMAND
-        $env.TRANSIENT_PROMPT_COMMAND_RIGHT = $env.PROMPT_COMMAND_RIGHT
-        $env.TRANSIENT_PROMPT_INDICATOR = $env.PROMPT_INDICATOR
-        $env.TRANSIENT_PROMPT_MULTILINE_INDICATOR = $env.PROMPT_MULTILINE_INDICATOR
-        $env.TRANSIENT_PROMPT_INDICATOR_VI_INSERT = $env.PROMPT_INDICATOR_VI_INSERT
-        $env.TRANSIENT_PROMPT_INDICATOR_VI_NORMAL = $env.PROMPT_INDICATOR_VI_NORMAL
+    } catch {|e|
+        print "\e[31mERROR!\e[0m\n" $e
     }
 }
 
 # List all available prompt themes
 def "nuprm theme list" [] {
-    let description_path = ([$nu_prompt_const.exe_path "themes" ".description.yml"] | path join)
-    open $description_path | each { |item| $item | reject "by" } | sort-by "name"
+    $theme_info | each {|item| $item | reject by } | sort-by name
+}
+
+def "nuprm theme preview" [] {
+    let theme_name_list = $theme_info | get "name" | sort
+    $theme_name_list | each {|i|
+        let theme_path = (($nuprm_path | path split) ++ ["themes", $i] | path join | path expand)
+        let utils_path = (($nuprm_path | path split) ++ ["utils" "prompt-utils.nu"] | path join | path expand)
+        let config_json = $env.NUPRMCONFIG | to json
+        let preview = ^$nu.current-exe --no-config-file -c $"
+            $env.NUPRMCONFIG = '($config_json)' | from json
+            use ($utils_path) *
+            use ($theme_path) nuprm-theme
+            let command = do {|| nuprm-theme get-prompt-command-left }
+            let command_r = do {|| nuprm-theme get-prompt-command-right } | default ""
+            let indicator = do {|| nuprm-theme get-prompt-indicator }
+            let preview = {left: $"\($command\)\($indicator\)", right: $command_r} | to json
+
+            print $preview
+        "
+        
+        let preview_l = $preview | from json | get -o "left" | default ""
+        let preview_r = $preview | from json | get -o "right" | default ""
+
+        return {
+            name: $i
+            left: ($preview_l + "\e[5m▂\e[0m" + "\n")
+            right: ($preview_r + "\n")
+        }
+    }
 }
