@@ -17,12 +17,12 @@ export const theme_info = [
     {
         name: "neon-night.nu",
         by: "Sennoma-Nn",
-        tag: "Multiple Lines"
+        tag: "Minimalist, Multiple Lines"
     },
     {
         name: "retro-console.nu",
         by: "Sennoma-Nn",
-        tag: "Retro"
+        tag: "Minimalist"
     },
     {
         name: "simple-minimal.nu",
@@ -42,6 +42,6 @@ export const theme_info = [
     {
         name: "circuit.nu",
         by: "Sennoma-Nn",
-        tag: "Multiple Lines"
+        tag: "Minimalist, Multiple Lines"
     }
 ]

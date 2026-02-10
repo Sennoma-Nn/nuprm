@@ -1,11 +1,11 @@
 <h1>
   <img src="./images/icon.svg" alt="图标" width="48px" height="48px" style="vertical-align: middle; margin-right: 10px;" />
-  NuPrm
+  <b>Nu</b>shell <b>Pr</b>ompt <b>M</b>anager
 </h1>
 
 ## 介绍
 
-**NuPrm** 一个 Nushell 的主题框架以及主题管理脚本，它让您可以轻松地在不同的提示符主题之间切换，自定义 Nushell 提示符的外观，并通过环境变量管理提示符配置，同时使用 Nushell 脚本编写并且集成了 Nushell 的一些功能，并且提供了一些常用的接口让你能更方便的构建提示符
+**NuPrm** 是一个 Nushell 的主题框架以及主题管理脚本，它让您可以轻松地在不同的提示符主题之间切换，自定义 Nushell 提示符的外观，并通过环境变量管理提示符配置，同时使用 Nushell 脚本编写并且集成了 Nushell 的一些功能，并且提供了一些常用的接口让你能更方便的构建提示符
 
 ## 安装
 
@@ -122,20 +122,41 @@ nuprm 支持智能目录缩写功能，让长路径显示更加短。
 
 #### 主题管理
 您可以使用 `nuprm theme list` 命令来查看可用的主题：
+> 使用 `nuprm theme list --preview` 可以预览提示符
 
 ```nu
 ❯ nuprm theme list
- #        name                   tag
-─────────────────────────────────────────────────
- 0   azure            Minimalist
- 1   circuit          Multiple Lines
- 2   galaxy-dream     Emoji, Multiple Lines
- 3   gxy              Power Line, Multiple Lines
- 4   neon-night       Multiple Lines
- 5   power-blocks     Power Line
- 6   retro-console    Retro
- 7   simple-minimal   Minimalist
- 8   sunset-ocean     Power Line, Multiple Lines
+╭───┬───────────────────┬───────────────────────────────────────╮
+│ # │       name        │              information              │
+├───┼───────────────────┼───────────────────────────────────────┤
+│ 0 │ azure.nu          │ ┌──────┬────────────┐                 │
+│   │                   │ │ tags │ Minimalist │                 │
+│   │                   │ └──────┴────────────┘                 │
+│ 1 │ circuit.nu        │ ┌──────┬────────────────────────────┐ │
+│   │                   │ │ tags │ Minimalist, Multiple Lines │ │
+│   │                   │ └──────┴────────────────────────────┘ │
+│ 2 │ galaxy-dream.nu   │ ┌──────┬───────────────────────┐      │
+│   │                   │ │ tags │ Emoji, Multiple Lines │      │
+│   │                   │ └──────┴───────────────────────┘      │
+│ 3 │ gxy.nu            │ ┌──────┬────────────────────────────┐ │
+│   │                   │ │ tags │ Power Line, Multiple Lines │ │
+│   │                   │ └──────┴────────────────────────────┘ │
+│ 4 │ neon-night.nu     │ ┌──────┬────────────────────────────┐ │
+│   │                   │ │ tags │ Minimalist, Multiple Lines │ │
+│   │                   │ └──────┴────────────────────────────┘ │
+│ 5 │ power-blocks.nu   │ ┌──────┬────────────┐                 │
+│   │                   │ │ tags │ Power Line │                 │
+│   │                   │ └──────┴────────────┘                 │
+│ 6 │ retro-console.nu  │ ┌──────┬────────────┐                 │
+│   │                   │ │ tags │ Minimalist │                 │
+│   │                   │ └──────┴────────────┘                 │
+│ 7 │ simple-minimal.nu │ ┌──────┬────────────┐                 │
+│   │                   │ │ tags │ Minimalist │                 │
+│   │                   │ └──────┴────────────┘                 │
+│ 8 │ sunset-ocean.nu   │ ┌──────┬────────────────────────────┐ │
+│   │                   │ │ tags │ Power Line, Multiple Lines │ │
+│   │                   │ └──────┴────────────────────────────┘ │
+╰───┴───────────────────┴───────────────────────────────────────╯
 ```
 
 要设置主题，在您的环境配置文件中设置 `nuprm_theme` 常量：

@@ -1,6 +1,6 @@
 <h1>
   <img src="./images/icon.svg" alt="icon" width="48px" height="48px" style="vertical-align: middle; margin-right: 10px;" />
-  NuPrm
+  <b>Nu</b>shell <b>Pr</b>ompt <b>M</b>anager
 </h1>
 
 ## Introduction
@@ -122,20 +122,41 @@ nuprm supports intelligent directory abbreviation to make long paths more readab
 
 #### Theme Management
 You can use the `nuprm theme list` command to view available themes:
+> Using `nuprm theme list --preview` allows you to preview the prompt
 
 ```nu
 ❯ nuprm theme list
- #        name                   tag
-─────────────────────────────────────────────────
- 0   azure            Minimalist
- 1   circuit          Multiple Lines
- 2   galaxy-dream     Emoji, Multiple Lines
- 3   gxy              Power Line, Multiple Lines
- 4   neon-night       Multiple Lines
- 5   power-blocks     Power Line
- 6   retro-console    Retro
- 7   simple-minimal   Minimalist
- 8   sunset-ocean     Power Line, Multiple Lines
+╭───┬───────────────────┬───────────────────────────────────────╮
+│ # │       name        │              information              │
+├───┼───────────────────┼───────────────────────────────────────┤
+│ 0 │ azure.nu          │ ┌──────┬────────────┐                 │
+│   │                   │ │ tags │ Minimalist │                 │
+│   │                   │ └──────┴────────────┘                 │
+│ 1 │ circuit.nu        │ ┌──────┬────────────────────────────┐ │
+│   │                   │ │ tags │ Minimalist, Multiple Lines │ │
+│   │                   │ └──────┴────────────────────────────┘ │
+│ 2 │ galaxy-dream.nu   │ ┌──────┬───────────────────────┐      │
+│   │                   │ │ tags │ Emoji, Multiple Lines │      │
+│   │                   │ └──────┴───────────────────────┘      │
+│ 3 │ gxy.nu            │ ┌──────┬────────────────────────────┐ │
+│   │                   │ │ tags │ Power Line, Multiple Lines │ │
+│   │                   │ └──────┴────────────────────────────┘ │
+│ 4 │ neon-night.nu     │ ┌──────┬────────────────────────────┐ │
+│   │                   │ │ tags │ Minimalist, Multiple Lines │ │
+│   │                   │ └──────┴────────────────────────────┘ │
+│ 5 │ power-blocks.nu   │ ┌──────┬────────────┐                 │
+│   │                   │ │ tags │ Power Line │                 │
+│   │                   │ └──────┴────────────┘                 │
+│ 6 │ retro-console.nu  │ ┌──────┬────────────┐                 │
+│   │                   │ │ tags │ Minimalist │                 │
+│   │                   │ └──────┴────────────┘                 │
+│ 7 │ simple-minimal.nu │ ┌──────┬────────────┐                 │
+│   │                   │ │ tags │ Minimalist │                 │
+│   │                   │ └──────┴────────────┘                 │
+│ 8 │ sunset-ocean.nu   │ ┌──────┬────────────────────────────┐ │
+│   │                   │ │ tags │ Power Line, Multiple Lines │ │
+│   │                   │ └──────┴────────────────────────────┘ │
+╰───┴───────────────────┴───────────────────────────────────────╯
 ```
 
 To set a theme, configure the `nuprm_theme` constant in your environment file:

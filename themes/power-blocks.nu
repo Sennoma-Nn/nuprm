@@ -115,7 +115,7 @@ export module nuprm-theme {
     export def get-prompt-indicator [] { }
 
     export def get-prompt-multiline-indicator [] {
-        return $"(get-prompt-chars name_fg)➥ "
+        return $"(get-prompt-chars name_fg)➥ (get-prompt-chars reset)"
     }
 
     export def get-prompt-indicator-vi-insert [] {
@@ -143,7 +143,7 @@ export module nuprm-theme {
     export def get-transient-prompt-indicator [] { }
 
     export def get-transient-prompt-multiline-indicator [] {
-        return $"(get-prompt-chars path_fg)➥ "
+        return $"(get-prompt-chars path_fg)➥ (get-prompt-chars reset)"
     }
 
     export def get-transient-prompt-indicator-vi-insert [] { }
