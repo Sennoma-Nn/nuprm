@@ -105,27 +105,28 @@ export module nuprm-theme {
                         prompt-block (get-prompt-chars power_line4) (get-prompt-chars power_line3) (get-prompt-chars root_fg) (get-prompt-chars root_bg) (get-prompt-chars root_icon) (get-prompt-chars white_fg) ""
                     } else { "" }
                 )
-                " "
             ] | str join ""
         )
     }
 
     export def get-prompt-command-right [] { }
 
-    export def get-prompt-indicator [] { }
+    export def get-prompt-indicator [] {
+        return " "
+    }
 
     export def get-prompt-multiline-indicator [] {
         return $"(get-prompt-chars name_fg)➥ (get-prompt-chars reset)"
     }
 
     export def get-prompt-indicator-vi-insert [] {
-        let prompt = (prompt-block $"\b(get-prompt-chars power_line4)" $"(get-prompt-chars power_line3) " (get-prompt-chars vi_fg) (get-prompt-chars vi_bg) "I" (get-prompt-chars white_fg) " ")
+        let prompt = (prompt-block $"(get-prompt-chars power_line4)" $"(get-prompt-chars power_line3) " (get-prompt-chars vi_fg) (get-prompt-chars vi_bg) "INS" (get-prompt-chars white_fg) " ")
 
         return $prompt
     }
 
     export def get-prompt-indicator-vi-normal [] {
-        let prompt = (prompt-block $"\b(get-prompt-chars power_line4)" $"(get-prompt-chars power_line3) " (get-prompt-chars vi_fg) (get-prompt-chars vi_bg) "N" (get-prompt-chars white_fg) " ")
+        let prompt = (prompt-block $"(get-prompt-chars power_line4)" $"(get-prompt-chars power_line3) " (get-prompt-chars vi_fg) (get-prompt-chars vi_bg) "NOR" (get-prompt-chars white_fg) " ")
 
         return $prompt
     }

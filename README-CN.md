@@ -51,7 +51,11 @@ $env.NUPRMCONFIG = {
     },
     compatibility: {
         enable_path_url: "yes",
-        true_color: "yes",
+        true_color: "yes"
+    },
+    git: {
+        dirty: "yes",
+        staged: "yes"
     }
 }
 ```
@@ -119,6 +123,9 @@ nuprm 支持智能目录缩写功能，让长路径显示更加短。
 
 - `display_elements.exit: "yes"` - 显示退出码信息
 - `display_elements.exit: "no"` - 不显示退出码信息
+
+- `git.dirty: "yes"` - 启用后，如果检测到未暂存的更改，在 Git 分支名称后附加 `*` 指示符。
+- `git.staged: "yes"` - 启用后，如果检测到已暂存的更改，在分支名称后附加 `+` 指示符。
 
 #### 主题管理
 您可以使用 `nuprm theme list` 命令来查看可用的主题：

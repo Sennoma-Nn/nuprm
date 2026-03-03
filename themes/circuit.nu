@@ -20,7 +20,7 @@ export module nuprm-theme {
         let user_host = $"($user_name)($host_name)"
         let path_info = get-prompt-info path -u (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -d $"($status_color)" -s $"(get-color white)" -r "\e[0m" -u
         let path_show = $"[ ($path_info) (get-color white)]"
-        let git_info = (get-prompt-info git -l $" in ($status_color)" -r (get-color reset))
+        let git_info = (get-prompt-info git -l $" in ($status_color)" -r (get-color reset) -d $"(get-color white)*" -s $"(get-color white)+")
         let execution_time = if (get-prompt-info exec-time | into float) > 0.5 { $" ($status_color)- (get-color white)(get-prompt-info exec-time)sec" } else { "" }
 
         return $"(get-color white)╭── ($user_host) ($path_show)($status_mark)($git_info)($execution_time)\n(get-color white)╰─(get-color reset)"

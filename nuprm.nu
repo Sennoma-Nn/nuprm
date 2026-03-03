@@ -50,12 +50,17 @@ def "nuprm theme list" [
             try {
                 ^$nu.current-exe --no-config-file -c $"
                     $env.NUPRMCONFIG = '($config_json)' | from json
+                    $env.config.edit_mode = '($env | get -o $.config.edit_mode | default emacs)'
                     use ($utils_path) *
                     use ($theme_path) nuprm-theme
-                    let command_l = do {|| nuprm-theme get-prompt-command-left } | default ""
-                    let command_r = do {|| nuprm-theme get-prompt-command-right } | default ""
-                    let indicator = do {|| nuprm-theme get-prompt-indicator } | default ""
-                    let multiline = do {|| nuprm-theme get-prompt-multiline-indicator } | default ""
+                    let command_l = do {|| nuprm-theme get-prompt-command-left } | default ''
+                    let command_r = do {|| nuprm-theme get-prompt-command-right } | default ''
+                    let indicator = if $env.config.edit_mode == 'vi' {
+                        do {|| nuprm-theme get-prompt-indicator-vi-insert } | default ''
+                    } else {
+                        do {|| nuprm-theme get-prompt-indicator } | default ''
+                    }
+                    let multiline = do {|| nuprm-theme get-prompt-multiline-indicator } | default ''
                     let preview_json = {
                         command_l: $command_l,
                         indicator: $indicator

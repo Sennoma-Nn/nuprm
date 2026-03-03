@@ -47,27 +47,106 @@ def specific-abbreviations []: string -> string {
     return $new_path
 }
 
+# Get git branch information
+def get-git-branch []: nothing -> string {
+    let is_show_git_branch = get-config $.git.branch "yes" | $in == "yes"
+
+    if not $is_show_git_branch {
+        return ""
+    }
+
+    let get_branch = {
+        ^git symbolic-ref --short HEAD
+            | complete
+            | get -o "stdout"
+            | str trim
+    }
+
+    let branch = try {
+        do -i $get_branch
+    } catch { "" }
+
+    return $branch
+}
+
+# Check if git working directory is dirty
+def get-is-git-dirty []: nothing -> bool {
+    let is_show_git_dirty = get-config $.git.dirty "yes" | $in == "yes"
+
+    if not $is_show_git_dirty {
+        return false
+    }
+
+    let get_dirty = {
+        ^git status --porcelain
+            | complete
+            | get -o "stdout"
+            | str trim
+            | is-empty
+            | not $in
+    }
+
+    let dirty = try {
+        do -i $get_dirty
+    } catch { false }
+
+    return $dirty
+}
+
+# Check if git has staged changes
+def git-has-staged []: nothing -> bool {
+    let is_show_git_staged = get-config $.git.staged "yes" | $in == "yes"
+
+    if not $is_show_git_staged {
+        return false
+    }
+
+    let get_staged = {
+        ^git diff-index --cached --quiet HEAD
+            | complete
+            | get -o "exit_code"
+            | $in != 0
+    }
+
+    let staged = try {
+        do -i $get_staged
+    } catch { false }
+
+    return $staged
+}
+
 # Retrieves current git branch information with optional formatting
-def get-git-info []: nothing -> string {
-    let is_show_git = get-config $.display_elements.git {} | $in == "yes"
+def get-git-info [
+    --dirty_char (-d) = "*"     # Character to display when working directory is dirty
+    --staged_char (-s) = "+"    # Character to display when there are staged changes
+]: nothing -> string {
+    let is_show_git = get-config $.display_elements.git "yes" | $in == "yes"
+    let is_git_dir = git rev-parse --git-dir | complete | get "exit_code" | $in == 0
+    let is_git_installed = which git | length | $in > 0
 
-    if not $is_show_git {
+    if not ($is_show_git and $is_git_dir and $is_git_installed) {
         return ""
     }
 
-    try {
-        let branch = do -i { ^git symbolic-ref --short HEAD | complete | get -o "stdout" | str trim }
-        return $branch
-    } catch {
-        return ""
-    }
+    let git_branch = get-git-branch
+    let is_git_dirty = get-is-git-dirty
+    let git_has_staged = git-has-staged
+
+    let show_string = [
+        $git_branch,
+        " ",
+        (if $is_git_dirty { $dirty_char } else { "" })
+        (if $git_has_staged { $staged_char } else { "" })
+    ] | str join | str trim
+
+    return $show_string
 }
 
 # Gets current shells index from directory stack with display options
 def get-where-shells [
     --dont_display_shells_if_not_used_shells (-d)  # Suppress output when only 1 shell exists
 ]: nothing -> string {
-    let is_show_shells = get-config $.display_elements.shells {} | $in == "yes"
+    let is_show_shells = get-config $.display_elements.shells "yes" | $in == "yes"
 
     if not $is_show_shells { return "" }
 
@@ -99,7 +178,7 @@ def color2ansi [
     color_type: string  # Color type: "fg" (foreground) or "bg" (background)
     ansi_color: string  # If not enabled true_color use this (ansi m's arg (\e[?m))
 ]: nothing -> string {
-    let is_true_color = get-config $.compatibility.true_color {} | default "yes" | $in == "yes"
+    let is_true_color = get-config $.compatibility.true_color "yes" | $in == "yes"
     if $is_true_color {
         let ansi_str = match $color_type {
             "fg" => { $"\e[38;2;($r);($g);($b)m" }
@@ -183,7 +262,7 @@ def get-full-name []: nothing -> string {
 
 # Get host name
 def get-host []: nothing -> string {
-    let is_show_host = get-config $.display_elements.hostname {} | $in == "yes"
+    let is_show_host = get-config $.display_elements.hostname "yes" | $in == "yes"
     if $is_show_host {
         let host_name = sys host | get hostname
         return $host_name
@@ -282,7 +361,7 @@ def make-file-url [
     file_path: string # Actual path for the link
 ]: string -> string {
     let display_path = $in
-    let enable_path_url = get-config $.compatibility.enable_path_url {} | default "yes" | $in == "yes"
+    let enable_path_url = get-config $.compatibility.enable_path_url "yes" | $in == "yes"
 
     if not $enable_path_url {
         return $display_path
@@ -297,7 +376,7 @@ def make-file-url [
 
 # Get execution time (ms)
 def get-execution-time-ms []: nothing -> number {
-    let is_show_execution_time = get-config $.display_elements.execution_time {} | $in == "yes"
+    let is_show_execution_time = get-config $.display_elements.execution_time "yes" | $in == "yes"
     let time = $env.CMD_DURATION_MS? | default 0
 
     if not $is_show_execution_time {
@@ -320,7 +399,7 @@ def get-execution-time-s []: nothing -> number {
 
 # Get exit code
 def get-exit-code []: nothing -> number {
-    let is_show_exit = get-config $.display_elements.exit {} | $in == "yes"
+    let is_show_exit = get-config $.display_elements.exit "yes" | $in == "yes"
     if not $is_show_exit { return 0 }
 
     return $env.LAST_EXIT_CODE
@@ -328,7 +407,7 @@ def get-exit-code []: nothing -> number {
 
 # Get system icon (Nerd Font)
 def get-system-icon []: nothing -> string {
-    let system_icon = get-config $.display_elements.system_icon {} | $in == "yes"
+    let system_icon = get-config $.display_elements.system_icon "no" | $in == "yes"
 
     if $system_icon {
         let system_type = $nu.os-info.name
@@ -439,8 +518,10 @@ export module get-prompt-info {
     export def git [
         --left_char: string (-l) = ""                  # Left decorator for info
         --right_char: string (-r) = ""                 # Right decorator for info
+        --dirty_char (-d) = "*"                        # Character to display when working directory is dirty
+        --staged_char (-s) = "+"                       # Character to display when there are staged changes
     ]: nothing -> string {
-        let info = get-git-info
+        let info = get-git-info --dirty_char=$dirty_char --staged_char=$staged_char
 
         if $info == "" { return "" }
         let out = [ $left_char, $info, $right_char ] | str join ""

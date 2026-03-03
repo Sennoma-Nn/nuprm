@@ -51,7 +51,11 @@ $env.NUPRMCONFIG = {
     },
     compatibility: {
         enable_path_url: "yes",
-        true_color: "yes",
+        true_color: "yes"
+    },
+    git: {
+        dirty: "yes",
+        staged: "yes"
     }
 }
 ```
@@ -119,6 +123,9 @@ nuprm supports intelligent directory abbreviation to make long paths more readab
 
 - `display_elements.exit: "yes"` - Display exit code information
 - `display_elements.exit: "no"` - Do not display exit code information
+
+- `git.dirty: "yes"` - When enabled, appends `*` after the Git branch name if unstaged changes are detected.
+- `git.staged: "yes"` - When enabled, appends `+` after the branch name if staged changes are detected.
 
 #### Theme Management
 You can use the `nuprm theme list` command to view available themes:
