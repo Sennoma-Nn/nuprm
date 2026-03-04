@@ -408,6 +408,7 @@ def get-exit-code []: nothing -> number {
 # Get system icon (Nerd Font)
 def get-system-icon []: nothing -> string {
     let system_icon = get-config $.display_elements.system_icon "no" | $in == "yes"
+    let whith_space = get-config $.compatibility.system_icon_with_space "yes" | $in == "yes"
 
     if $system_icon {
         let system_type = $nu.os-info.name
@@ -421,7 +422,7 @@ def get-system-icon []: nothing -> string {
                     "almalinux"             => ""
                     "almalinux9"            => ""
                     "alpine"                => ""
-                    "aosc"                  => ""
+                    "aosc os"               => "" # Tested
                     "arch linux"            => "" # Tested
                     "centos"                => ""
                     "coreos"                => ""
@@ -444,6 +445,7 @@ def get-system-icon []: nothing -> string {
                     "sabayon"               => ""
                     "slackware"             => ""
                     "ubuntu"                => "" # Tested
+                    "void"                  => "" # Tested
                     _                       => "" # Tested
                 }
             }
@@ -453,7 +455,12 @@ def get-system-icon []: nothing -> string {
             _           => { "" }
         }
 
-        return $icon
+        let return_icon_str = [
+            $icon,
+            (if $whith_space { " " } else {})
+        ] | str join
+
+        return $return_icon_str
     } else { "" }
 }
 

@@ -12,7 +12,8 @@ export module nuprm-theme {
     }
 
     export def get-prompt-command-left [] {
-        let user_name = get-prompt-info user-name -l $"✨ (get-color purple)🚀 (get-color pink)"
+        let system_icon = get-prompt-info system-icon -l $"(get-color purple)" -r " "
+        let user_name = get-prompt-info user-name -l $"✨ (get-color purple)🚀 ($system_icon)(get-color pink)"
         let host_name = get-prompt-info host-name -l $"(get-color purple) at (get-color pink)"
         let user_host = $"($user_name)($host_name) (get-color purple)✨"
         let path_seg = $"(get-color pink)🪐 " + (get-prompt-info path (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -d $"(get-color purple)" -s $"(get-color pink)" -r "\e[0m" -u)

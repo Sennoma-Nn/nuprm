@@ -13,6 +13,7 @@ export module nuprm-theme {
     }
 
     export def get-prompt-command-left [] {
+        let system_icon = get-prompt-info system-icon -l $"(get-color white)" -r " "
         let user_name = get-prompt-info user-name
         let host_name = get-prompt-info host-name -l $"((get-color white)) @ ((get-color green))"
         let user_info = $"((get-color green))($user_name)($host_name)((get-color reset))"
@@ -22,7 +23,7 @@ export module nuprm-theme {
         let execution_time = if (get-prompt-info exec-time | into float) > 0.5 { $" ((get-color green))(get-prompt-info exec-time)sec((get-color reset))" } else { "" }
         let exit_code = if (get-prompt-info exit-code) != "0" { $" ((get-color red))[(get-prompt-info exit-code)]" } else { "" }
 
-        return $"($user_info) ($shells_index)($path_info)($git_info)($execution_time)($exit_code) "
+        return $"($system_icon)($user_info) ($shells_index)($path_info)($git_info)($execution_time)($exit_code) "
     }
 
     export def get-prompt-command-right [] { }

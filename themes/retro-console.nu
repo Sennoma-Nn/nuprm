@@ -12,13 +12,14 @@ export module nuprm-theme {
     }
 
     export def get-prompt-command-left [] {
+        let system_icon = get-prompt-info system-icon -l $"(get-color terminal_green)" -r $"(get-color dim_green) : "
         let shells_index = get-prompt-info shells -dl $"(get-color terminal_green)#" -r $"(get-color dim_green) : "
         let path_str = get-prompt-info path (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -u -d (get-color terminal_green) -s (get-color dim_green)
         let git_branch = (get-prompt-info git)
         let execution_time = if (get-prompt-info exec-time | into float) > 0.5 { $" (get-color dim_green)(get-prompt-info exec-time)sec(get-color reset)" } else { "" }
         let git_str = if not ($git_branch | is-empty) { $" (get-color dim_green)($git_branch)(get-color reset)" } else { "" }
 
-        return $"($shells_index)(get-color terminal_green)($path_str)($git_str)($execution_time)(get-color reset) "
+        return $"($system_icon)($shells_index)(get-color terminal_green)($path_str)($git_str)($execution_time)(get-color reset) "
     }
 
     export def get-prompt-command-right [] { }

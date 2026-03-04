@@ -33,6 +33,7 @@ export module nuprm-theme {
     }
 
     export def get-prompt-command-left [] {
+        let system_icon = get-prompt-info system-icon -r " "
         let shells_index = get-prompt-info shells -dl $"((get-color black_fg))#" -r $" : "
         let path = (get-prompt-info path (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -u -d (get-color black_fg) -s (get-color grey_fg))
         let host_name = get-prompt-info host-name -l " @ "
@@ -41,7 +42,7 @@ export module nuprm-theme {
 
         let prompt_list = [
             (get-color color1_fg), $"((get-color power_line5))", (get-color reset),
-            (get-color color1_bg), (get-color black_fg), " ", (get-color italic), $user_host, " ", (get-color reset),
+            (get-color color1_bg), (get-color black_fg), " ", (get-color italic), $system_icon, $user_host, " ", (get-color reset),
             (get-color color2_bg), (get-color color1_fg), $"((get-color power_line2))",
             (get-color color2_bg), " ", $shells_index, $path, " ", (get-color reset),
             (get-color color2_fg), $"((get-color power_line2))((get-color power_line4))",

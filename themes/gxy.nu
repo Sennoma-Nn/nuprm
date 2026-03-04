@@ -34,7 +34,7 @@ export module nuprm-theme {
 
         mut prompt = $"(get-color reset)┌ "
         $prompt += $"(get-color blue_fg)(get-color power_line1)(get-color reset)"
-        $prompt += $"(get-color blue_bg)(get-color black_fg) (get-prompt-info system-icon -r ' ▕ ')($user_host)($shells_info) (get-color reset)"
+        $prompt += $"(get-color blue_bg)(get-color black_fg) (get-prompt-info system-icon -r '▕ ')($user_host)($shells_info) (get-color reset)"
         $prompt += $"(if $shells_info != "" { (get-color dark_blue_fg) } else { (get-color blue_fg) })(get-color power_line2)(get-color reset)"
         $prompt += $"(get-color dark_blue_fg)($path)(get-color reset)"
 

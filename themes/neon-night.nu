@@ -15,6 +15,7 @@ export module nuprm-theme {
     }
 
     export def get-prompt-command-left [] {
+        let system_icon = get-prompt-info system-icon -l $"(get-color magenta)" -r " " 
         let user_name = get-prompt-info user-name -l (get-color cyan)
         let host_name = get-prompt-info host-name -l $"(get-color magenta) at (get-color cyan)"
         let user_host = $"($user_name)($host_name)"
@@ -25,7 +26,7 @@ export module nuprm-theme {
         let git_info = if not ($git_branch | is-empty) { $"(get-color grey) | (get-color cyan)git: (get-color magenta)($git_branch)(ansi reset)" } else { "" }
         let execution_time = if (get-prompt-info exec-time | into float) > 0.5 { $"(get-color grey) | (get-color cyan)exec time: (get-color magenta)(get-prompt-info exec-time)sec(ansi reset)" } else { "" }
 
-        return $"($user_info) (get-color grey)in ($path_info)($git_info)($shells_index)($execution_time)\n"
+        return $"($system_icon)($user_info) (get-color grey)in ($path_info)($git_info)($shells_index)($execution_time)\n"
     }
 
     export def get-prompt-command-right [] {
