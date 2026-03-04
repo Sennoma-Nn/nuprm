@@ -51,7 +51,8 @@ $env.NUPRMCONFIG = {
     },
     compatibility: {
         enable_path_url: "yes",
-        true_color: "yes"
+        true_color: "yes",
+        system_icon_with_space: "yes"
     },
     git: {
         dirty: "yes",
@@ -78,6 +79,9 @@ $env.NUPRMCONFIG = {
 **路径 URL 支持**
 - `compatibility.enable_path_url: "yes"` - 启用路径 URL 支持
 - `compatibility.enable_path_url: "no"` - 禁用路径 URL 支持
+
+- `compatibility.system_icon_with_space: "yes"` - 在系统图标后添加一个空格
+- `compatibility.system_icon_with_space: "no"` - 在系统图标后不添加一个空格
 
 **目录缩写配置**
 nuprm 支持智能目录缩写功能，让长路径显示更加短。
@@ -124,8 +128,11 @@ nuprm 支持智能目录缩写功能，让长路径显示更加短。
 - `display_elements.exit: "yes"` - 显示退出码信息
 - `display_elements.exit: "no"` - 不显示退出码信息
 
-- `git.dirty: "yes"` - 启用后，如果检测到未暂存的更改，在 Git 分支名称后附加 `*` 指示符。
-- `git.staged: "yes"` - 启用后，如果检测到已暂存的更改，在分支名称后附加 `+` 指示符。
+- `git.dirty: "yes"` - 如果检测到未暂存的更改，在 Git 分支名称后附加 `*` 指示符。
+- `git.dirty: "no"` - 即使检测到未暂存的更改，也不在 Git 分支名称后附加 `*` 指示符。
+
+- `git.staged: "yes"` - 如果检测到已暂存的更改，在分支名称后附加 `+` 指示符。
+- `git.staged: "no"` - 即使检测到已暂存的更改，也不分支名称后附加 `+` 指示符。
 
 #### 主题管理
 您可以使用 `nuprm theme list` 命令来查看可用的主题：

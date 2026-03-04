@@ -51,7 +51,8 @@ $env.NUPRMCONFIG = {
     },
     compatibility: {
         enable_path_url: "yes",
-        true_color: "yes"
+        true_color: "yes",
+        system_icon_with_space: "yes"
     },
     git: {
         dirty: "yes",
@@ -78,6 +79,10 @@ $env.NUPRMCONFIG = {
 **Path URL support**
 - `compatibility.enable_path_url: "yes"` - Enable path URL support
 - `compatibility.enable_path_url: "no"` - Disable path URL support
+
+- `compatibility.system_icon_with_space: "yes"` - Add a space after the system icon 
+
+- `compatibility.system_icon_with_space: "no"` - Do not add a space after the system icon
 
 **Directory abbreviation configuration**
 nuprm supports intelligent directory abbreviation to make long paths more readable.
@@ -124,8 +129,11 @@ nuprm supports intelligent directory abbreviation to make long paths more readab
 - `display_elements.exit: "yes"` - Display exit code information
 - `display_elements.exit: "no"` - Do not display exit code information
 
-- `git.dirty: "yes"` - When enabled, appends `*` after the Git branch name if unstaged changes are detected.
-- `git.staged: "yes"` - When enabled, appends `+` after the branch name if staged changes are detected.
+- `git.dirty: "yes"` - Appends the `*` indicator after the Git branch name if unstaged changes are detected.
+- `git.dirty: "no"` - Does not append the `*` indicator after the Git branch name, even if unstaged changes are detected.
+
+- `git.staged: "yes"` - Appends the `+` indicator after the branch name if staged changes are detected.
+- `git.staged: "no"` - Does not append the `+` indicator after the branch name, even if staged changes are detected.
 
 #### Theme Management
 You can use the `nuprm theme list` command to view available themes:
