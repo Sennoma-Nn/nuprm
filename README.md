@@ -80,8 +80,7 @@ $env.NUPRMCONFIG = {
 - `compatibility.enable_path_url: "yes"` - Enable path URL support
 - `compatibility.enable_path_url: "no"` - Disable path URL support
 
-- `compatibility.system_icon_with_space: "yes"` - Add a space after the system icon 
-
+- `compatibility.system_icon_with_space: "yes"` - Add a space after the system icon
 - `compatibility.system_icon_with_space: "no"` - Do not add a space after the system icon
 
 **Directory abbreviation configuration**
