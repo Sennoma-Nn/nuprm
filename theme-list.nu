@@ -43,5 +43,10 @@ export const theme_info = [
         name: "circuit.nu",
         by: "Sennoma-Nn",
         tag: "Minimalist, Multiple Lines"
+    },
+    {
+        name: "violet-line.nu",
+        by: "Sennoma-Nn",
+        tag: "Power Line, Multiple Lines"
     }
 ]

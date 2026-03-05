@@ -243,8 +243,8 @@ def get-full-name []: nothing -> string {
             $full_name = open "/etc/passwd"
                 | lines
                 | split column ":"
-                | where "column1" == $username
-                | get "column5"
+                | where "column0" == $username
+                | get "column4"
                 | first
                 | str replace "," " " --all
                 | str trim
