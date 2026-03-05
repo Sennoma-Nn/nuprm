@@ -14,9 +14,9 @@ def specific-abbreviations []: string -> string {
     let abbr_enable = $abbr_config | get -o "enabled" | default "no" | $in == "yes"
     let abbr_home = $abbr_config | get -o "abbreviate_home" | default "no" | $in == "yes"
     let specific_abbr = $abbr_config | get -o "specific_mappings" | default {}
-    let specific_abbr_record = $specific_abbr | transpose key value | update key {|r| $r.key | path expand } | transpose -rd
+    let specific_abbr_record = $specific_abbr | transpose key value | update key {|r| $r.key | path expand --no-symlink } | transpose -rd
     let specific_abbr_key = $specific_abbr_record | columns
-    let home_dir = $nu.home-path? | default $nu.home-dir? | default ("~" | path expand)
+    let home_dir = $nu.home-path? | default $nu.home-dir? | default ("~" | path expand --no-symlink)
     
     if not $abbr_enable {
         return $path
@@ -40,7 +40,7 @@ def specific-abbreviations []: string -> string {
             $new_path_list ++= [$abbr]
             break
         } else {
-            $new_path_list ++= [($path_list | get -o ($i - 1) | default "")]
+            $new_path_list ++= $path_list | get -o ($i - 1) | default "" | [$in]
         }
     }
     let new_path = $new_path_list | reverse | path join
@@ -267,6 +267,10 @@ def get-host []: nothing -> string {
         let host_name = sys host | get hostname
         return $host_name
     } else { return "" }
+}
+
+def get-pwd []: nothing -> string {
+    return $env.PWD
 }
 
 # Formats path
@@ -594,7 +598,7 @@ export module get-prompt-info {
         --sep_style: string (-s) = ""                  # Separator styling (ANSI codes) in `path` info
         --file_url (-u)                                # Format as clickable terminal hyperlink in `path` or `last-path` info
     ]: nothing -> string {
-        let info = $env.PWD | format-path $new_separators --keep_root=$keep_root --dir_style=$dir_style --sep_style=$sep_style --file_url=$file_url
+        let info = get-pwd | format-path $new_separators --keep_root=$keep_root --dir_style=$dir_style --sep_style=$sep_style --file_url=$file_url
 
         if $info == "" { return "" }
         let out = [ $left_char, $info, $right_char ] | str join ""
@@ -607,7 +611,7 @@ export module get-prompt-info {
         --right_char: string (-r) = ""                 # Right decorator for info
         --file_url (-u)                                # Format as clickable terminal hyperlink in `path` or `last-path` info
     ]: nothing -> string {
-        let info = $env.PWD | get-path-last --file_url=$file_url
+        let info = get-pwd | get-path-last --file_url=$file_url
 
         if $info == "" { return "" }
         let out = [ $left_char, $info, $right_char ] | str join ""
