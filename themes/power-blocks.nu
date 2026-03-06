@@ -97,7 +97,7 @@ export module nuprm-theme {
                 )
                 (
                     if $status.shells != "" {
-                        prompt-block (get-prompt-chars power_line4) (get-prompt-chars power_line3) (get-prompt-chars shells_fg) (get-prompt-chars shells_bg) $status.shells (get-prompt-chars white_fg) " "
+                        prompt-block (get-prompt-chars power_line4) (get-prompt-chars power_line3) (get-prompt-chars shells_fg) (get-prompt-chars shells_bg) $status.shells (get-prompt-chars white_fg) "󰞷 "
                     } else { "" }
                 )
                 (

@@ -80,7 +80,7 @@ export module nuprm-theme {
                             ] | where $it != "" | str join " "
                         ),
                         (
-                            if ($"($status.icon)($status.host)" | is-empty) { "" } else { "" }
+                            if ($"($status.icon)($status.host)" | is-empty) { "󰤃" } else { "" }
                         )
                         (
                             [
@@ -95,13 +95,13 @@ export module nuprm-theme {
                                         $"󰔛 ($status.time)s"
                                     } else { "" }
                                 ),
-                            ] | where $it != "" | str join "  "
+                            ] | where $it != "" | str join " 󰤃 "
                         ),
                     ]
                         | where $it != ""
                         | str join " "
-                        | str trim -c ""
-                        | str replace --all "" $"(get-color purple_fg)(get-color reset)(get-color white_fg)"
+                        | str trim -c "󰤃"
+                        | str replace --all "󰤃" $"(get-color purple_fg)󰤃(get-color reset)(get-color white_fg)"
                         | str replace --all "" $"(get-color purple_fg)(get-color bold)(get-color reset)(get-color white_fg)"
                         | str replace --all "" $"(get-color purple_fg)(get-color bold)(get-color reset)(get-color white_fg)"
                 )
