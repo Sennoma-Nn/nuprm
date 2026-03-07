@@ -49,12 +49,6 @@ def specific-abbreviations []: string -> string {
 
 # Get git branch information
 def get-git-branch []: nothing -> string {
-    let is_show_git_branch = get-config $.git.branch "yes" | $in == "yes"
-
-    if not $is_show_git_branch {
-        return ""
-    }
-
     let get_branch = {
         ^git symbolic-ref --short HEAD
             | complete
