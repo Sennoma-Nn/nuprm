@@ -58,7 +58,9 @@ def get-git-branch []: nothing -> string {
 
     let branch = try {
         do -i $get_branch
-    } catch { "" }
+    } catch {
+        ""
+    }
 
     return $branch
 }
@@ -82,7 +84,9 @@ def get-is-git-dirty []: nothing -> bool {
 
     let dirty = try {
         do -i $get_dirty
-    } catch { false }
+    } catch {
+        false
+    }
 
     return $dirty
 }
@@ -104,7 +108,9 @@ def git-has-staged []: nothing -> bool {
 
     let staged = try {
         do -i $get_staged
-    } catch { false }
+    } catch {
+        false
+    }
 
     return $staged
 }
@@ -129,8 +135,20 @@ def get-git-info [
     let show_string = [
         $git_branch,
         " ",
-        (if $is_git_dirty { $dirty_char } else { "" })
-        (if $git_has_staged { $staged_char } else { "" })
+        (
+            if $is_git_dirty {
+                $dirty_char
+            } else {
+                ""
+            }
+        ),
+        (
+            if $git_has_staged {
+                $staged_char
+            } else {
+                ""
+            }
+        )
     ] | str join | str trim
 
     return $show_string
@@ -142,11 +160,18 @@ def get-where-shells [
 ]: nothing -> string {
     let is_show_shells = get-config $.display_elements.shells "yes" | $in == "yes"
 
-    if not $is_show_shells { return "" }
+    if not $is_show_shells {
+        return ""
+    }
 
     try {
         if (((which "dirs") ++ (which "shells")) | length) > 0 {
-            let shells_data = if (which "dirs" | length) > 0 { dirs } else { shells }
+            let shells_data = if (which "dirs" | length) > 0 {
+                dirs
+            } else {
+                shells
+            }
+            
             if $dont_display_shells_if_not_used_shells and ($shells_data | length) == 1 {
                 return ""
             } else {
@@ -161,7 +186,9 @@ def get-where-shells [
         } else {
             return ""
         }
-    } catch { return "" }
+    } catch {
+        return ""
+    }
 }
 
 # Converts RGB values to ANSI escape sequences for terminal colors
@@ -175,9 +202,9 @@ def color2ansi [
     let is_true_color = get-config $.compatibility.true_color "yes" | $in == "yes"
     if $is_true_color {
         let ansi_str = match $color_type {
-            "fg" => { $"\e[38;2;($r);($g);($b)m" }
-            "bg" => { $"\e[48;2;($r);($g);($b)m" }
-            _    => { "" }
+            "fg" => $"\e[38;2;($r);($g);($b)m"
+            "bg" => $"\e[48;2;($r);($g);($b)m"
+            _    => ""
         }
         return $"($ansi_str)"
     } else {
@@ -260,7 +287,9 @@ def get-host []: nothing -> string {
     if $is_show_host {
         let host_name = sys host | get hostname
         return $host_name
-    } else { return "" }
+    } else {
+        return ""
+    }
 }
 
 def get-pwd []: nothing -> string {
@@ -324,12 +353,19 @@ def abbr_path []: list -> list {
         let path_len = $path_list | length
 
         let get_each_of_abbr_display_chars = {|item|
-            let substring_offset = if ($item.item | str starts-with ".") { 1 } else { 0 }
+            let substring_offset = if ($item.item | str starts-with ".") {
+                1
+            } else {
+                0
+            }
+
             let substring_range = $display_chars + $substring_offset - 1 | [0, $in] | math max | 0..$in
 
             if ($path_len - $item.index >= $start_from_end) and ($start_from_end > 0) {
                 $item.item | str substring -g $substring_range
-            } else { $item.item }
+            } else {
+                $item.item
+            }
         }
 
         $path_list | enumerate | each $get_each_of_abbr_display_chars
@@ -383,7 +419,9 @@ def get-execution-time-ms []: nothing -> number {
 
     if $time != "0823" {
         return ($time | into int)
-    } else { return 0 }
+    } else {
+        return 0
+    }
 }
 
 # Get execution time (s)
@@ -398,7 +436,9 @@ def get-execution-time-s []: nothing -> number {
 # Get exit code
 def get-exit-code []: nothing -> number {
     let is_show_exit = get-config $.display_elements.exit "yes" | $in == "yes"
-    if not $is_show_exit { return 0 }
+    if not $is_show_exit {
+        return 0
+    }
 
     return $env.LAST_EXIT_CODE
 }
@@ -413,7 +453,7 @@ def get-system-icon []: nothing -> string {
         let system_name = sys host | get name | str downcase
 
         let icon = match $system_type {
-            "windows"   => { "" }
+            "windows"   => ""
             "linux"     => {
                 match $system_name {
                     "alma"                  => ""
@@ -447,19 +487,27 @@ def get-system-icon []: nothing -> string {
                     _                       => "" # Tested
                 }
             }
-            "android"   => { "" }
-            "macos"     => { "" }
-            "freebsd"   => { "" }
-            _           => { "" }
+            "android"   => ""
+            "macos"     => ""
+            "freebsd"   => ""
+            _           => ""
         }
 
         let return_icon_str = [
             $icon,
-            (if $whith_space { " " } else {})
+            (
+                if $whith_space {
+                    " "
+                } else {
+                    ""
+                }
+            )
         ] | str join
 
         return $return_icon_str
-    } else { "" }
+    } else {
+        ""
+    }
 }
 
 # Get path mode, DOS (?:\???\???\???), UNIX (/???/???/???)
@@ -476,40 +524,40 @@ def get-power-line-char [
     name: string # Char name
 ]: nothing -> string {
     let char = match $name {
-        "left_hard_divider"                 => { char -u "e0b0" } # 
-        "left_soft_divider"                 => { char -u "e0b1" } # 
-        "right_hard_divider"                => { char -u "e0b2" } # 
-        "right_soft_divider"                => { char -u "e0b3" } # 
-        "right_half_circle_thick"           => { char -u "e0b4" } # 
-        "right_half_circle_thin"            => { char -u "e0b5" } # 
-        "left_half_circle_thick"            => { char -u "e0b6" } # 
-        "left_half_circle_thin"             => { char -u "e0b7" } # 
-        "lower_left_triangle"               => { char -u "e0b8" } # 
-        "backslash_separator"               => { char -u "e0b9" } # 
-        "lower_right_triangle"              => { char -u "e0ba" } # 
-        "forwardslash_separator"            => { char -u "e0bb" } # 
-        "upper_left_triangle"               => { char -u "e0bc" } # 
-        "forwardslash_separator_redundant"  => { char -u "e0bd" } # 
-        "upper_right_triangle"              => { char -u "e0be" } # 
-        "backslash_separator_redundant"     => { char -u "e0bf" } # 
-        "flame_thick"                       => { char -u "e0c0" } # 
-        "flame_thin"                        => { char -u "e0c1" } # 
-        "flame_thick_mirrored"              => { char -u "e0c2" } # 
-        "flame_thin_mirrored"               => { char -u "e0c3" } # 
-        "pixelated_squares_small"           => { char -u "e0c4" } # 
-        "pixelated_squares_small_mirrored"  => { char -u "e0c5" } # 
-        "pixelated_squares_big"             => { char -u "e0c6" } # 
-        "pixelated_squares_big_mirrored"    => { char -u "e0c7" } # 
-        "ice_waveform"                      => { char -u "e0c8" } # 
-        "ice_waveform_mirrored"             => { char -u "e0ca" } # 
-        "honeycomb"                         => { char -u "e0cc" } # 
-        "honeycomb_outline"                 => { char -u "e0cd" } # 
-        "lego_block_sideways"               => { char -u "e0d1" } # 
-        "trapezoid_top_bottom"              => { char -u "e0d2" } # 
-        "trapezoid_top_bottom_mirrored"     => { char -u "e0d4" } # 
-        "right_hard_divider_inverse"        => { char -u "e0d6" } # 
-        "left_hard_divider_inverse"         => { char -u "e0d7" } # 
-        _                                   => { "" }
+        "left_hard_divider"                 => "\u{e0b0}" # 
+        "left_soft_divider"                 => "\u{e0b1}" # 
+        "right_hard_divider"                => "\u{e0b2}" # 
+        "right_soft_divider"                => "\u{e0b3}" # 
+        "right_half_circle_thick"           => "\u{e0b4}" # 
+        "right_half_circle_thin"            => "\u{e0b5}" # 
+        "left_half_circle_thick"            => "\u{e0b6}" # 
+        "left_half_circle_thin"             => "\u{e0b7}" # 
+        "lower_left_triangle"               => "\u{e0b8}" # 
+        "backslash_separator"               => "\u{e0b9}" # 
+        "lower_right_triangle"              => "\u{e0ba}" # 
+        "forwardslash_separator"            => "\u{e0bb}" # 
+        "upper_left_triangle"               => "\u{e0bc}" # 
+        "forwardslash_separator_redundant"  => "\u{e0bd}" # 
+        "upper_right_triangle"              => "\u{e0be}" # 
+        "backslash_separator_redundant"     => "\u{e0bf}" # 
+        "flame_thick"                       => "\u{e0c0}" # 
+        "flame_thin"                        => "\u{e0c1}" # 
+        "flame_thick_mirrored"              => "\u{e0c2}" # 
+        "flame_thin_mirrored"               => "\u{e0c3}" # 
+        "pixelated_squares_small"           => "\u{e0c4}" # 
+        "pixelated_squares_small_mirrored"  => "\u{e0c5}" # 
+        "pixelated_squares_big"             => "\u{e0c6}" # 
+        "pixelated_squares_big_mirrored"    => "\u{e0c7}" # 
+        "ice_waveform"                      => "\u{e0c8}" # 
+        "ice_waveform_mirrored"             => "\u{e0ca}" # 
+        "honeycomb"                         => "\u{e0cc}" # 
+        "honeycomb_outline"                 => "\u{e0cd}" # 
+        "lego_block_sideways"               => "\u{e0d1}" # 
+        "trapezoid_top_bottom"              => "\u{e0d2}" # 
+        "trapezoid_top_bottom_mirrored"     => "\u{e0d4}" # 
+        "right_hard_divider_inverse"        => "\u{e0d6}" # 
+        "left_hard_divider_inverse"         => "\u{e0d7}" # 
+        _                                   => ""
     }
 
     return $char
@@ -528,7 +576,10 @@ export module get-prompt-info {
     ]: nothing -> string {
         let info = get-git-info --dirty_char=$dirty_char --staged_char=$staged_char
 
-        if $info == "" { return "" }
+        if $info == "" {
+            return ""
+        }
+
         let out = [ $left_char, $info, $right_char ] | str join ""
         return $out
     }
@@ -541,7 +592,10 @@ export module get-prompt-info {
     ]: nothing -> string {
         let info = get-where-shells --dont_display_shells_if_not_used_shells=$dont_display_shells_if_not_used_shells
 
-        if $info == "" { return "" }
+        if $info == "" {
+            return ""
+        }
+
         let out = [ $left_char, $info, $right_char ] | str join ""
         return $out
     }
@@ -553,7 +607,10 @@ export module get-prompt-info {
     ]: nothing -> string {
         let info = get-user-name
 
-        if $info == "" { return "" }
+        if $info == "" {
+            return ""
+        }
+
         let out = [ $left_char, $info, $right_char ] | str join ""
         return $out
     }
@@ -565,7 +622,10 @@ export module get-prompt-info {
     ]: nothing -> string {
         let info = get-host
 
-        if $info == "" { return "" }
+        if $info == "" {
+            return ""
+        }
+
         let out = [ $left_char, $info, $right_char ] | str join ""
         return $out
     }
@@ -577,7 +637,10 @@ export module get-prompt-info {
     ]: nothing -> string {
         let info = get-full-name
 
-        if $info == "" { return "" }
+        if $info == "" {
+            return ""
+        }
+
         let out = [ $left_char, $info, $right_char ] | str join ""
         return $out
     }
@@ -594,7 +657,10 @@ export module get-prompt-info {
     ]: nothing -> string {
         let info = get-pwd | format-path $new_separators --keep_root=$keep_root --dir_style=$dir_style --sep_style=$sep_style --file_url=$file_url
 
-        if $info == "" { return "" }
+        if $info == "" {
+            return ""
+        }
+
         let out = [ $left_char, $info, $right_char ] | str join ""
         return $out
     }
@@ -607,7 +673,10 @@ export module get-prompt-info {
     ]: nothing -> string {
         let info = get-pwd | get-path-last --file_url=$file_url
 
-        if $info == "" { return "" }
+        if $info == "" {
+            return ""
+        }
+
         let out = [ $left_char, $info, $right_char ] | str join ""
         return $out
     }
@@ -619,7 +688,10 @@ export module get-prompt-info {
     ]: nothing -> string {
         let info = get-execution-time-s
 
-        if $info == "" { return "" }
+        if $info == "" {
+            return ""
+        }
+
         let out = [ $left_char, $info, $right_char ] | str join ""
         return $out
     }
@@ -631,7 +703,10 @@ export module get-prompt-info {
     ]: nothing -> string {
         let info = get-exit-code
 
-        if $info == "" { return "" }
+        if $info == "" {
+            return ""
+        }
+
         let out = [ $left_char, $info, $right_char ] | str join ""
         return $out
     }
@@ -643,7 +718,10 @@ export module get-prompt-info {
     ]: nothing -> string {
         let info = get-system-icon
 
-        if $info == "" { return "" }
+        if $info == "" {
+            return ""
+        }
+
         let out = [ $left_char, $info, $right_char ] | str join ""
         return $out
     }
@@ -655,7 +733,10 @@ export module get-prompt-info {
     ]: nothing -> string {
         let info = get-path-mode
 
-        if $info == "" { return "" }
+        if $info == "" {
+            return ""
+        }
+
         let out = [ $left_char, $info, $right_char ] | str join ""
         return $out
     }
