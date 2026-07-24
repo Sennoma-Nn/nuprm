@@ -10,19 +10,19 @@
 ## Installation
 
 - Clone this repository to your .config directory:
-    ```nu
+    ```nushell
     git clone https://github.com/Sennoma-Nn/nuprm.git ~/.config/nuprm
     ```
 
 - Add the following to your Nushell configuration file (`config nu`):
-    ```nu
+    ```nushell
     const nuprm_path = "~/.config/nuprm"
     const nuprm_theme = "~/.config/nuprm/themes/simple-minimal.nu"
     source ~/.config/nuprm/nuprm.nu
     ```
 
 - Restart your Nushell session:
-    ```nu
+    ```nushell
     exec $nu.current-exe
     ```
 
@@ -30,33 +30,34 @@
 
 Add the following to your Nushell environment variables file (`config env`):
 
-```nu
+```nushell
 $env.NUPRMCONFIG = {
-    enabled: "yes",
-    use_full_name: "yes",
+    enabled: true,
+    use_full_name: true,
     directory_abbreviation: {
-        enabled: "yes",
+        enabled: true,
         start_from_end: 3,
         display_chars: 2,
-        abbreviate_home: "yes",
+        abbreviate_home: true,
         specific_mappings: {}
     },
     display_elements: {
-        system_icon: "no",
-        hostname: "yes",
-        git: "yes",
-        shells: "yes",
-        execution_time: "yes",
-        exit: "yes"
+        system_icon: false,
+        hostname: true,
+        git: true,
+        shells: true,
+        startup_time: true,
+        execution_time: true,
+        exit: true
     },
     compatibility: {
-        enable_path_url: "yes",
-        true_color: "yes",
-        system_icon_with_space: "yes"
+        enable_path_url: true,
+        true_color: true,
+        system_icon_with_space: true
     },
     git: {
-        dirty: "yes",
-        staged: "yes"
+        dirty: true,
+        staged: true
     }
 }
 ```
@@ -122,6 +123,9 @@ nuprm supports intelligent directory abbreviation to make long paths more readab
 - `display_elements.shells: "yes"` - Display Shells information
 - `display_elements.shells: "no"` - Do not display Shells information
 
+- `display_elements.startup_time: true` - Display startup time (on execution time information)
+- `display_elements.startup_time: false` - Do not display startup time (on execution time information)
+
 - `display_elements.execution_time: "yes"` - Display execution time information
 - `display_elements.execution_time: "no"` - Do not display execution time information
 
@@ -138,7 +142,7 @@ nuprm supports intelligent directory abbreviation to make long paths more readab
 You can use the `nuprm theme list` command to view available themes:
 > Using `nuprm theme list --preview` allows you to preview the prompt
 
-```nu
+```nushell
 ❯ nuprm theme list
 ╭───┬───────────────────┬───────────────────────────────────────╮
 │ # │       name        │              information              │
@@ -175,14 +179,14 @@ You can use the `nuprm theme list` command to view available themes:
 
 To set a theme, configure the `nuprm_theme` constant in your environment file:
 
-```nu
+```nushell
 # Set theme
 const nuprm_theme = "~/.config/nuprm/themes/theme-name.nu"
 ```
 
 After modifying the configuration, restart your Nushell session or re-enter to apply changes:
 
-```nu
+```nushell
 exec $nu.current-exe
 ```
 
@@ -195,7 +199,7 @@ exec $nu.current-exe
 <details>
   <summary>(Click here if you encounter script errors)</summary>
 
-```nu
+```nushell
 Error: nu::parser::unknown_flag
 
   × The `get` command doesn't have flag `-o`.
@@ -214,16 +218,16 @@ If you get the error<br>``The `get` command doesn't have flag `-o`.``<br>then yo
 
 ---
 
-```nu
+```nushell
 Error: nu::parser::variable_not_found
 
   × Variable not found.
-    ╭─[/home/username/.config/nuprm/nuprm.nu:18:20]
- 17 │         if $is_enable == "yes" {
- 18 │             source $nuprm_theme
-    ·                    ──────┬─────
-    ·                          ╰── variable not found. 
- 19 │         }
+    ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
+ 13 │         if $is_enable {
+ 14 │             use $nuprm_theme nuprm-theme
+    ·                 ──────┬─────
+    ·                       ╰── variable not found. 
+ 15 │ 
     ╰────
 ```
 
@@ -231,29 +235,29 @@ If you get the error<br>``Variable not found.``<br>then you haven't set the `nup
 
 ---
 
-```
+```nushell
 Error: nu::parser::error
 
   × Error: nu::shell::not_a_constant
   │ 
   │   × Not a constant.
-  │     ╭─[/home/username/.config/nuprm/nuprm.nu:18:20]
-  │  17 │         if $is_enable == "yes" {
-  │  18 │             source $nuprm_theme
-  │     ·                    ──────┬─────
-  │     ·                          ╰── Value is not a parse-time constant
-  │  19 │         }
+  │     ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
+  │  13 │         if $is_enable {
+  │  14 │             use $nuprm_theme nuprm-theme
+  │     ·                 ──────┬─────
+  │     ·                       ╰── Value is not a parse-time constant
+  │  15 │
   │     ╰────
   │   help: Only a subset of expressions are allowed constants during parsing.
   │ Try
   │         using the 'const' command or typing the value literally.
   │ 
-    ╭─[/home/username/.config/nuprm/nuprm.nu:18:20]
- 17 │         if $is_enable == "yes" {
- 18 │             source $nuprm_theme
-    ·                    ──────┬─────
-    ·                          ╰── Encountered error during parse-time evaluation
- 19 │         }
+    ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
+ 13 │         if $is_enable {
+ 14 │             use $nuprm_theme nuprm-theme
+    ·                 ────────────┬───────────
+    ·                             ╰── Encountered error during parse-time evaluation
+ 15 │ 
     ╰────
 ```
 
@@ -261,20 +265,21 @@ If you get the error<br>``Encountered error during parse-time evaluation``<br>th
 
 ---
 
-```
-Error: nu::parser::sourced_file_not_found
+```nushell
+Error: nu::parser::module_not_found
 
-  × File not found
-    ╭─[/home/username/.config/nuprm/nuprm.nu:18:20]
- 17 │         if $is_enable == "yes" {
- 18 │             source $nuprm_theme
-    ·                    ──────┬─────
-    ·                          ╰── File not found: ~/.config/nuprm/themes/never-gonna-give-you-up.nu
- 19 │         }
+  × Module not found.
+    ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
+ 13 │         if $is_enable {
+ 14 │             use $nuprm_theme nuprm-theme
+    ·                 ──────┬─────
+    ·                       ╰── module ~/.config/nuprm/themes/never-gonna-give-you-up.nu not found
+ 15 │ 
     ╰────
-  help: sourced files need to be available before your script is run
+  help: module files and their paths must be available before your script is
+        run as parsing occurs before anything is evaluated
 ```
 
-If you get the error<br>``File not found: ...``<br>then the file pointed to by your `nuprm_theme` constant doesn't exist
+If you get the error<br>``module ... not found``<br>then the file pointed to by your `nuprm_theme` constant doesn't exist
 
 </details>

@@ -33,10 +33,12 @@ export module nuprm-theme {
     }
 
     export def get-prompt-command-left [] {
-        let system_icon = get-prompt-info system-icon -r " "
-        let shells_index = get-prompt-info shells -dl $"((get-color black_fg))#" -r $" : "
+        alias surround = prompt-make-utils surround
+
+        let system_icon = surround (get-prompt-info system-icon) -r " "
+        let shells_index = surround (get-prompt-info shells -d) -l $"((get-color black_fg))#" -r $" : "
         let path = (get-prompt-info path (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -u -d (get-color black_fg) -s (get-color grey_fg))
-        let host_name = get-prompt-info host-name -l " @ "
+        let host_name = surround (get-prompt-info host-name) -l " @ "
         let user_name = get-prompt-info user-name
         let user_host = $"($user_name)($host_name)"
 
@@ -53,10 +55,12 @@ export module nuprm-theme {
     }
 
     export def get-prompt-command-right [] {
-        let git_info = (get-prompt-info git -l " 󰊢 " -r " ") | if $in != "" { $"($in)" }
-        let execution_time = if (get-prompt-info exec-time | into float) > 0.5 { $" (get-prompt-info exec-time)sec " } else { "" }
+        alias surround = prompt-make-utils surround
+
+        let git_info = (surround (get-prompt-info git) -l " 󰊢 " -r " ") | if $in != "" { $"($in)" }
+        let execution_time = if (get-prompt-info exec-time) > 0.5 { $" (get-prompt-info exec-time)sec " } else { "" }
         let status_symbol = (
-            if (get-prompt-info exit-code) != "0" {
+            if (get-prompt-info exit-code) != 0 {
                 [(get-color color5_fg), " ", (get-prompt-info exit-code)] | str join ""
             } else {
                 [(get-color color5_fg), "󰄬"] | str join ""

@@ -1,18 +1,16 @@
-
 do --env -i {
     use (($nuprm_path | path split) ++ ["utils" "prompt-utils.nu"] | path join | path expand) *
 
     try {
-        let config_table = $env.NUPRMCONFIG? | default {}
-        let is_enable = ($config_table | get -o "enabled" | default "no")
+        let is_enable = get-prompt-info nuprm-enabled
 
-        if ($config_table | get -o "use_full_name" | default "no") == "yes" {
+        if (get-prompt-info full-name-enabled) {
             if ($env.FULLNAME? == null) {
                 $env.FULLNAME = get-prompt-info full-name
             }
         }
 
-        if $is_enable == "yes" {
+        if $is_enable {
             use $nuprm_theme nuprm-theme
 
             $env.PROMPT_COMMAND = {|| nuprm-theme get-prompt-command-left }

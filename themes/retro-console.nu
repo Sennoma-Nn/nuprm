@@ -12,11 +12,13 @@ export module nuprm-theme {
     }
 
     export def get-prompt-command-left [] {
-        let system_icon = get-prompt-info system-icon -l $"(get-color terminal_green)" -r $"(get-color dim_green) : "
-        let shells_index = get-prompt-info shells -dl $"(get-color terminal_green)#" -r $"(get-color dim_green) : "
+        alias surround = prompt-make-utils surround
+
+        let system_icon = surround (get-prompt-info system-icon) -l $"(get-color terminal_green)" -r $"(get-color dim_green) : "
+        let shells_index = surround (get-prompt-info shells -d) -l $"(get-color terminal_green)#" -r $"(get-color dim_green) : "
         let path_str = get-prompt-info path (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -u -d (get-color terminal_green) -s (get-color dim_green)
         let git_branch = (get-prompt-info git)
-        let execution_time = if (get-prompt-info exec-time | into float) > 0.5 { $" (get-color dim_green)(get-prompt-info exec-time)sec(get-color reset)" } else { "" }
+        let execution_time = if (get-prompt-info exec-time) > 0.5 { $" (get-color dim_green)(get-prompt-info exec-time)sec(get-color reset)" } else { "" }
         let git_str = if not ($git_branch | is-empty) { $" (get-color dim_green)($git_branch)(get-color reset)" } else { "" }
 
         return $"($system_icon)($shells_index)(get-color terminal_green)($path_str)($git_str)($execution_time)(get-color reset) "
@@ -25,7 +27,7 @@ export module nuprm-theme {
     export def get-prompt-command-right [] { }
 
     export def get-prompt-indicator [] {
-        if (get-prompt-info exit-code) == "0" {
+        if (get-prompt-info exit-code) == 0 {
             return $"(get-color terminal_green)> (get-color reset)"
         } else {
             return $"(get-color error_red)! (get-color reset)"
@@ -37,7 +39,7 @@ export module nuprm-theme {
     }
 
     export def get-prompt-indicator-vi-insert [] {
-        if (get-prompt-info exit-code) == "0" {
+        if (get-prompt-info exit-code) == 0 {
             return $"(get-color terminal_green): (get-color reset)"
         } else {
             return $"(get-color error_red): (get-color reset)"
@@ -45,7 +47,7 @@ export module nuprm-theme {
     }
 
     export def get-prompt-indicator-vi-normal [] {
-        if (get-prompt-info exit-code) == "0" {
+        if (get-prompt-info exit-code) == 0 {
         return $"(get-color terminal_green)> (get-color reset)"
         } else {
             return $"(get-color error_red)> (get-color reset)"

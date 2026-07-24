@@ -15,23 +15,25 @@ export module nuprm-theme {
     }
 
     export def get-prompt-command-left [] {
-        let system_icon = get-prompt-info system-icon -l $"(get-color magenta)" -r " " 
-        let user_name = get-prompt-info user-name -l (get-color cyan)
-        let host_name = get-prompt-info host-name -l $"(get-color magenta) at (get-color cyan)"
+        alias surround = prompt-make-utils surround
+
+        let system_icon = surround (get-prompt-info system-icon) -l $"(get-color magenta)" -r " " 
+        let user_name = surround (get-prompt-info user-name) -l (get-color cyan)
+        let host_name = surround (get-prompt-info host-name) -l $"(get-color magenta) at (get-color cyan)"
         let user_host = $"($user_name)($host_name)"
         let user_info = $"($user_host)(ansi reset)"
-        let path_info = get-prompt-info path (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -d (ansi reset) -s (get-color grey) -r (get-color white) -u
+        let path_info = surround (get-prompt-info path (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -d (ansi reset) -s (get-color grey) -u) -r (get-color white)
         let git_branch = (get-prompt-info git -d $"(get-color cyan)*" -s $"(get-color cyan)+")
-        let shells_index = get-prompt-info shells -dl $"(get-color grey) | (get-color cyan)dirs: (get-color magenta)№"
+        let shells_index = surround (get-prompt-info shells -d) -l $"(get-color grey) | (get-color cyan)dirs: (get-color magenta)№"
         let git_info = if not ($git_branch | is-empty) { $"(get-color grey) | (get-color cyan)git: (get-color magenta)($git_branch)(ansi reset)" } else { "" }
-        let execution_time = if (get-prompt-info exec-time | into float) > 0.5 { $"(get-color grey) | (get-color cyan)exec time: (get-color magenta)(get-prompt-info exec-time)sec(ansi reset)" } else { "" }
+        let execution_time = if (get-prompt-info exec-time) > 0.5 { $"(get-color grey) | (get-color cyan)exec time: (get-color magenta)(get-prompt-info exec-time)sec(ansi reset)" } else { "" }
 
         return $"($system_icon)($user_info) (get-color grey)in ($path_info)($git_info)($shells_index)($execution_time)\n"
     }
 
     export def get-prompt-command-right [] {
         let exit_code = get-prompt-info exit-code
-        if $exit_code != "0" {
+        if $exit_code != 0 {
             return $"(get-color red)status: ($exit_code)(get-color reset)"
         } else {
             return ""

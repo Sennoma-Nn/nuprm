@@ -10,17 +10,19 @@ export module nuprm-theme {
     }
 
     export def get-prompt-command-left [] {
+        alias surround = prompt-make-utils surround
+
         let colors = [(get-color blue), (get-color white)]
 
-        let system_icon = get-prompt-info system-icon -l $colors.1 -r " "
+        let system_icon = surround (get-prompt-info system-icon) -l $colors.1 -r " "
         let user_name = get-prompt-info user-name
-        let host_name = get-prompt-info host-name -l $"($colors.1) at ($colors.0)"
+        let host_name = surround (get-prompt-info host-name) -l $"($colors.1) at ($colors.0)"
         let user_host = $"($user_name)($host_name) "
-        let shells_index = get-prompt-info shells -dl $"($colors.1)№" -r $"($colors.0) : "
-        let path_segment = get-prompt-info path (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -d $"\e[0;1m($colors.1)" -s "\e[0;2m" -r "\e[0m" -u
-        let execution_time = if (get-prompt-info exec-time | into float) > 0.5 { $" ($colors.1)(get-prompt-info exec-time)sec " } else { "" }
-        let git_info = get-prompt-info git -l $"($colors.1) in ($colors.0)" -r (if ($execution_time | is-empty) { " " } else { "" }) -d $"($colors.1)*" -s $"($colors.1)+"
-        let exit_code = if (get-prompt-info exit-code) != "0" { get-prompt-info exit-code -l $colors.0 -r $"($colors.1) | " } else { "" }
+        let shells_index = surround (get-prompt-info shells -d) -l $"($colors.1)№" -r $"($colors.0) : "
+        let path_segment = surround (get-prompt-info path (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -d $"\e[0;1m($colors.1)" -s "\e[0;2m" -u) -r "\e[0m"
+        let execution_time = if (get-prompt-info exec-time) > 0.5 { $" ($colors.1)(get-prompt-info exec-time)sec " } else { "" }
+        let git_info = surround (get-prompt-info git -d $"($colors.1)*" -s $"($colors.1)+") -l $"($colors.1) in ($colors.0)" -r (if ($execution_time | is-empty) { " " } else { "" })
+        let exit_code = if (get-prompt-info exit-code) != 0 { surround (get-prompt-info exit-code) -l $colors.0 -r $"($colors.1) | " } else { "" }
 
         return $"($system_icon)($exit_code)($colors.0)($user_host)\e[1m[ ($shells_index)\e[0;1m($colors.1)($path_segment)($colors.0) \e[1m]\e[0m($git_info)($execution_time)(ansi reset)"
     }

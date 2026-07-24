@@ -10,19 +10,19 @@
 ## 安装
 
 - 将此仓库克隆到您的 .config 目录：
-    ```nu
+    ```nushell
     git clone https://github.com/Sennoma-Nn/nuprm.git ~/.config/nuprm
     ```
 
 - 在您的 Nushell 配置文件（`config nu`）中添加以下内容：
-    ```nu
+    ```nushell
     const nuprm_path = "~/.config/nuprm"
     const nuprm_theme = "~/.config/nuprm/themes/simple-minimal.nu"
     source ~/.config/nuprm/nuprm.nu
     ```
 
 - 重启您的 Nushell 会话。
-    ```nu
+    ```nushell
     exec $nu.current-exe
     ```
 
@@ -30,33 +30,34 @@
 
 在您的 Nushell 环境变量文件（`config env`）中添加以下内容：
 
-```nu
+```nushell
 $env.NUPRMCONFIG = {
-    enabled: "yes",
-    use_full_name: "yes",
+    enabled: true,
+    use_full_name: true,
     directory_abbreviation: {
-        enabled: "yes",
+        enabled: true,
         start_from_end: 3,
         display_chars: 2,
-        abbreviate_home: "yes",
+        abbreviate_home: true,
         specific_mappings: {}
     },
     display_elements: {
-        system_icon: "no",
-        hostname: "yes",
-        git: "yes",
-        shells: "yes",
-        execution_time: "yes",
-        exit: "yes"
+        system_icon: false,
+        hostname: true,
+        git: true,
+        shells: true,
+        startup_time: true,
+        execution_time: true,
+        exit: true
     },
     compatibility: {
-        enable_path_url: "yes",
-        true_color: "yes",
-        system_icon_with_space: "yes"
+        enable_path_url: true,
+        true_color: true,
+        system_icon_with_space: true
     },
     git: {
-        dirty: "yes",
-        staged: "yes"
+        dirty: true,
+        staged: true
     }
 }
 ```
@@ -65,29 +66,29 @@ $env.NUPRMCONFIG = {
   <summary>（详细配置请预览这里）</summary>
 
 **启用 nuprm**
-- `enabled: "yes"` - 启用 nuprm
-- `enabled: "no"` - 禁用 nuprm
+- `enabled: true` - 启用 nuprm
+- `enabled: false` - 禁用 nuprm
 
 **显示全名**
-- `use_full_name: "yes"` - 显示用户全名
-- `use_full_name: "no"` - 显示用户名
+- `use_full_name: true` - 显示用户全名
+- `use_full_name: false` - 显示用户名
 
 **真彩色支持**
-- `compatibility.true_color: "yes"` - 启用真彩色支持
-- `compatibility.true_color: "no"` - 禁用真彩色支持
+- `compatibility.true_color: true` - 启用真彩色支持
+- `compatibility.true_color: false` - 禁用真彩色支持
 
 **路径 URL 支持**
-- `compatibility.enable_path_url: "yes"` - 启用路径 URL 支持
-- `compatibility.enable_path_url: "no"` - 禁用路径 URL 支持
+- `compatibility.enable_path_url: true` - 启用路径 URL 支持
+- `compatibility.enable_path_url: false` - 禁用路径 URL 支持
 
-- `compatibility.system_icon_with_space: "yes"` - 在系统图标后添加一个空格
-- `compatibility.system_icon_with_space: "no"` - 在系统图标后不添加一个空格
+- `compatibility.system_icon_with_space: true` - 在系统图标后添加一个空格
+- `compatibility.system_icon_with_space: false` - 在系统图标后不添加一个空格
 
 **目录缩写配置**
 nuprm 支持智能目录缩写功能，让长路径显示更加短。
 
-- `directory_abbreviation.enabled: "yes"` - 启用目录缩写
-- `directory_abbreviation.enabled: "no"` - 禁用目录缩写
+- `directory_abbreviation.enabled: true` - 启用目录缩写
+- `directory_abbreviation.enabled: false` - 禁用目录缩写
 
 - `directory_abbreviation.start_from_end: 3` - 从倒数第几个目录开始缩写
   - 设置为 `0` 禁用从倒数开始缩写，显示完整路径
@@ -102,43 +103,46 @@ nuprm 支持智能目录缩写功能，让长路径显示更加短。
 - `directory_abbreviation.display_chars: 2` - 缩写后显示几个字符
   - 例如设置为 3：`/home/laism/.test/123456/demo/path` 会显示为 `~/.tes/123/demo/path`
 
-- `directory_abbreviation.abbreviate_home: "yes"` - 启用家目录缩写为 `~`
-- `directory_abbreviation.abbreviate_home: "no"` - 禁用家目录缩写
+- `directory_abbreviation.abbreviate_home: true` - 启用家目录缩写为 `~`
+- `directory_abbreviation.abbreviate_home: false` - 禁用家目录缩写
 
 - `directory_abbreviation.specific_mappings: {}` - 自定义特殊目录缩写
   - 您可以添加自定义目录缩写，例如将 `~/Documents` 设置为 `📄`，将家目录设置为 `🏠`
   > 如果你想要把家目录重新设置缩写显示，你必须禁用 `directory_abbreviation.abbreviate_home`
 
 **显示元素配置**
-- `display_elements.system_icon: "yes"` - 显示系统图标
-- `display_elements.system_icon: "no"` - 不显示系统图标
+- `display_elements.system_icon: true` - 显示系统图标
+- `display_elements.system_icon: false` - 不显示系统图标
 
-- `display_elements.hostname: "yes"` - 显示主机名
-- `display_elements.hostname: "no"` - 不显示主机名
+- `display_elements.hostname: true` - 显示主机名
+- `display_elements.hostname: false` - 不显示主机名
 
-- `display_elements.git: "yes"` - 显示 Git 仓库信息
-- `display_elements.git: "no"` - 不显示 Git 仓库信息
+- `display_elements.git: true` - 显示 Git 仓库信息
+- `display_elements.git: false` - 不显示 Git 仓库信息
 
-- `display_elements.shells: "yes"` - 显示 Shells 信息
-- `display_elements.shells: "no"` - 不显示 Shells 信息
+- `display_elements.shells: true` - 显示 Shells 信息
+- `display_elements.shells: false` - 不显示 Shells 信息
 
-- `display_elements.execution_time: "yes"` - 显示运行时间信息
-- `display_elements.execution_time: "no"` - 不显示运行时间信息
+- `display_elements.startup_time: true` - 显示启动时间（在运行时间信息的位置）
+- `display_elements.startup_time: false` - 不显示启动时间（在运行时间信息的位置）
 
-- `display_elements.exit: "yes"` - 显示退出码信息
-- `display_elements.exit: "no"` - 不显示退出码信息
+- `display_elements.execution_time: true` - 显示运行时间信息
+- `display_elements.execution_time: false` - 不显示运行时间信息
 
-- `git.dirty: "yes"` - 如果检测到未暂存的更改，在 Git 分支名称后附加 `*` 指示符。
-- `git.dirty: "no"` - 即使检测到未暂存的更改，也不在 Git 分支名称后附加 `*` 指示符。
+- `display_elements.exit: true` - 显示退出码信息
+- `display_elements.exit: false` - 不显示退出码信息
 
-- `git.staged: "yes"` - 如果检测到已暂存的更改，在分支名称后附加 `+` 指示符。
-- `git.staged: "no"` - 即使检测到已暂存的更改，也不分支名称后附加 `+` 指示符。
+- `git.dirty: true` - 如果检测到未暂存的更改，在 Git 分支名称后附加 `*` 指示符。
+- `git.dirty: false` - 即使检测到未暂存的更改，也不在 Git 分支名称后附加 `*` 指示符。
+
+- `git.staged: true` - 如果检测到已暂存的更改，在分支名称后附加 `+` 指示符。
+- `git.staged: false` - 即使检测到已暂存的更改，也不分支名称后附加 `+` 指示符。
 
 #### 主题管理
 您可以使用 `nuprm theme list` 命令来查看可用的主题：
 > 使用 `nuprm theme list --preview` 可以预览提示符
 
-```nu
+```nushell
 ❯ nuprm theme list
 ╭───┬───────────────────┬───────────────────────────────────────╮
 │ # │       name        │              information              │
@@ -175,14 +179,14 @@ nuprm 支持智能目录缩写功能，让长路径显示更加短。
 
 要设置主题，在您的环境配置文件中设置 `nuprm_theme` 常量：
 
-```nu
+```nushell
 # 设置主题
 const nuprm_theme = "~/.config/nuprm/themes/主题名称.nu"
 ```
 
 修改配置后，重启 Nushell 会话或重新进入以使更改生效：
 
-```nu
+```nushell
 exec $nu.current-exe
 ```
 
@@ -193,7 +197,7 @@ exec $nu.current-exe
 <details>
   <summary>（如果脚本出现了报错请预览这里）</summary>
 
-```nu
+```nushell
 Error: nu::parser::unknown_flag
 
   × The `get` command doesn't have flag `-o`.
@@ -212,16 +216,16 @@ Error: nu::parser::unknown_flag
 
 ---
 
-```nu
+```nushell
 Error: nu::parser::variable_not_found
 
   × Variable not found.
-    ╭─[/home/username/.config/nuprm/nuprm.nu:18:20]
- 17 │         if $is_enable == "yes" {
- 18 │             source $nuprm_theme
-    ·                    ──────┬─────
-    ·                          ╰── variable not found. 
- 19 │         }
+    ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
+ 13 │         if $is_enable {
+ 14 │             use $nuprm_theme nuprm-theme
+    ·                 ──────┬─────
+    ·                       ╰── variable not found. 
+ 15 │ 
     ╰────
 ```
 
@@ -229,29 +233,29 @@ Error: nu::parser::variable_not_found
 
 ---
 
-```
+```nushell
 Error: nu::parser::error
 
   × Error: nu::shell::not_a_constant
   │ 
   │   × Not a constant.
-  │     ╭─[/home/username/.config/nuprm/nuprm.nu:18:20]
-  │  17 │         if $is_enable == "yes" {
-  │  18 │             source $nuprm_theme
-  │     ·                    ──────┬─────
-  │     ·                          ╰── Value is not a parse-time constant
-  │  19 │         }
+  │     ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
+  │  13 │         if $is_enable {
+  │  14 │             use $nuprm_theme nuprm-theme
+  │     ·                 ──────┬─────
+  │     ·                       ╰── Value is not a parse-time constant
+  │  15 │
   │     ╰────
   │   help: Only a subset of expressions are allowed constants during parsing.
   │ Try
   │         using the 'const' command or typing the value literally.
   │ 
-    ╭─[/home/username/.config/nuprm/nuprm.nu:18:20]
- 17 │         if $is_enable == "yes" {
- 18 │             source $nuprm_theme
-    ·                    ──────┬─────
-    ·                          ╰── Encountered error during parse-time evaluation
- 19 │         }
+    ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
+ 13 │         if $is_enable {
+ 14 │             use $nuprm_theme nuprm-theme
+    ·                 ────────────┬───────────
+    ·                             ╰── Encountered error during parse-time evaluation
+ 15 │ 
     ╰────
 ```
 
@@ -259,20 +263,21 @@ Error: nu::parser::error
 
 ---
 
-```
-Error: nu::parser::sourced_file_not_found
+```nushell
+Error: nu::parser::module_not_found
 
-  × File not found
-    ╭─[/home/username/.config/nuprm/nuprm.nu:18:20]
- 17 │         if $is_enable == "yes" {
- 18 │             source $nuprm_theme
-    ·                    ──────┬─────
-    ·                          ╰── File not found: ~/.config/nuprm/themes/never-gonna-give-you-up.nu
- 19 │         }
+  × Module not found.
+    ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
+ 13 │         if $is_enable {
+ 14 │             use $nuprm_theme nuprm-theme
+    ·                 ──────┬─────
+    ·                       ╰── module ~/.config/nuprm/themes/never-gonna-give-you-up.nu not found
+ 15 │ 
     ╰────
-  help: sourced files need to be available before your script is run
+  help: module files and their paths must be available before your script is
+        run as parsing occurs before anything is evaluated
 ```
 
-如果报错<br>``File not found: ...``<br>那就是你常量 `nuprm_theme` 指向的文件不存在
+如果报错<br>``module ... not found``<br>那就是你常量 `nuprm_theme` 指向的文件不存在
 
 </details>

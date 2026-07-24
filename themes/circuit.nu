@@ -12,17 +12,19 @@ export module nuprm-theme {
     }
 
     export def get-prompt-command-left [] {
+        alias surround = prompt-make-utils surround
+
         let exit_code = get-prompt-info exit-code
-        let status_color = if $exit_code == "0" { get-color green } else { get-color red }
-        let status_mark = if $exit_code != "0" { $" ($status_color)×(get-color reset) ($exit_code)" } else { "" }
-        let system_icon = get-prompt-info system-icon -l $status_color -r " "
-        let host_name = get-prompt-info host-name -l $"($status_color) @ (get-color white)"
+        let status_color = if $exit_code == 0 { get-color green } else { get-color red }
+        let status_mark = if $exit_code != 0 { $" ($status_color)×(get-color reset) ($exit_code)" } else { "" }
+        let system_icon = surround (get-prompt-info system-icon) -l $status_color -r " "
+        let host_name = surround (get-prompt-info host-name) -l $"($status_color) @ (get-color white)"
         let user_name = $"(get-color white)(get-prompt-info user-name)"
         let user_host = $"($user_name)($host_name)"
-        let path_info = get-prompt-info path -u (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -d $"($status_color)" -s $"(get-color white)" -r "\e[0m" -u
+        let path_info = surround (get-prompt-info path -u (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -d $"($status_color)" -s $"(get-color white)" -u) -r "\e[0m"
         let path_show = $"[ ($path_info) (get-color white)]"
-        let git_info = (get-prompt-info git -l $" in ($status_color)" -r (get-color reset) -d $"(get-color white)*" -s $"(get-color white)+")
-        let execution_time = if (get-prompt-info exec-time | into float) > 0.5 { $" ($status_color)- (get-color white)(get-prompt-info exec-time)sec" } else { "" }
+        let git_info = surround (get-prompt-info git -d $"(get-color white)*" -s $"(get-color white)+") -l $" in ($status_color)" -r (get-color reset)
+        let execution_time = if (get-prompt-info exec-time) > 0.5 { $" ($status_color)- (get-color white)(get-prompt-info exec-time)sec" } else { "" }
 
         return $"(get-color white)╭── ($system_icon)($user_host) ($path_show)($status_mark)($git_info)($execution_time)\n(get-color white)╰─(get-color reset)"
     }

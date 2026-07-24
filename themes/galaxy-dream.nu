@@ -12,20 +12,24 @@ export module nuprm-theme {
     }
 
     export def get-prompt-command-left [] {
-        let system_icon = get-prompt-info system-icon -l $"(get-color purple)" -r " "
-        let user_name = get-prompt-info user-name -l $"✨ (get-color purple)🚀 ($system_icon)(get-color pink)"
-        let host_name = get-prompt-info host-name -l $"(get-color purple) at (get-color pink)"
+        alias surround = prompt-make-utils surround
+
+        let system_icon = surround (get-prompt-info system-icon) -l $"(get-color purple)" -r " "
+        let user_name = surround (get-prompt-info user-name) -l $"✨ (get-color purple)🚀 ($system_icon)(get-color pink)"
+        let host_name = surround (get-prompt-info host-name) -l $"(get-color purple) at (get-color pink)"
         let user_host = $"($user_name)($host_name) (get-color purple)✨"
-        let path_seg = $"(get-color pink)🪐 " + (get-prompt-info path (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -d $"(get-color purple)" -s $"(get-color pink)" -r "\e[0m" -u)
-        let git_info = (get-prompt-info git -l " (" -r ")")
+        let path_seg = $"(get-color pink)🪐 " + (surround (get-prompt-info path (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -d $"(get-color purple)" -s $"(get-color pink)" -u) -r "\e[0m")
+        let git_info = surround (get-prompt-info git) -l " (" -r ")"
         let git_status = if ($git_info | str length) > 0 { $" (get-color pink)🌟(get-color star)($git_info)" } else { "" }
-        let exit_status = if (get-prompt-info exit-code) != "0" { $" (get-color pink)💥(get-color purple) (get-prompt-info exit-code)" } else { "" }
-        let execution_time = if (get-prompt-info exec-time | into float) > 0.5 { $" (get-color pink)⌛(get-color purple) (get-prompt-info exec-time)sec" } else { "" }
+        let exit_status = if (get-prompt-info exit-code) != 0 { $" (get-color pink)💥(get-color purple) (get-prompt-info exit-code)" } else { "" }
+        let execution_time = if (get-prompt-info exec-time) > 0.5 { $" (get-color pink)⌛(get-color purple) (get-prompt-info exec-time)sec" } else { "" }
         return $"($user_host)\n($path_seg)($git_status)($exit_status)($execution_time)\n"
     }
 
     export def get-prompt-command-right [] {
-        let shells_index = get-prompt-info shells -dl $"№" -r $" "
+        alias surround = prompt-make-utils surround
+
+        let shells_index = surround (get-prompt-info shells -d) -l $"№" -r $" "
         return $"(get-color purple)($shells_index)(get-color pink)⏰ (get-color purple)(date now | format date '%H:%M')"
     }
 

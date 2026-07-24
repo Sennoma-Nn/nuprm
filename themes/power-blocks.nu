@@ -63,16 +63,18 @@ export module nuprm-theme {
     }
 
     export def get-prompt-command-left [] {
+        alias surround = prompt-make-utils surround
+
         let status = {
-            icon: (get-prompt-info system-icon -r " ")
+            icon: (surround (get-prompt-info system-icon) -r " ")
             user: (get-prompt-info user-name)
-            host: (get-prompt-info host-name -l $" @ ")
-            path: (get-prompt-info path (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -d $"\e[0;1m(get-prompt-chars white_fg)(get-prompt-chars path_bg)" -s $"\e[0;2m(get-prompt-chars path_bg)" -u)
+            host: (surround (get-prompt-info host-name) -l $" @ ")
+            path: (surround (get-prompt-info path (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -d $"\e[0;1m(get-prompt-chars white_fg)(get-prompt-chars path_bg)" -s $"\e[0;2m(get-prompt-chars path_bg)" -u))
             git: (get-prompt-info git)
             exit: (get-prompt-info exit-code)
             admin: (is-admin)
-            shells: (get-prompt-info shells -dl "#")
-            time: (get-prompt-info exec-time | into float)
+            shells: (surround (get-prompt-info shells -d) -l "#")
+            time: (get-prompt-info exec-time)
         }
         return (
             [
@@ -89,7 +91,7 @@ export module nuprm-theme {
                     } else { "" }
                 )
                 (
-                    if $status.exit == "0" {
+                    if $status.exit == 0 {
                         prompt-block (get-prompt-chars power_line1) (get-prompt-chars power_line3) (get-prompt-chars status_fg) (get-prompt-chars status_bg) (get-prompt-chars right_char) (get-prompt-chars white_fg) ""
                     } else {
                         prompt-block (get-prompt-chars power_line1) (get-prompt-chars power_line3) (get-prompt-chars status_err_fg) (get-prompt-chars status_err_bg) $"(get-prompt-chars wrong_char) ($status.exit)" (get-prompt-chars white_fg) ""
