@@ -1,5 +1,5 @@
 do --env -i {
-    use (($nuprm_path | path split) ++ ["utils" "prompt-utils.nu"] | path join | path expand) *
+    use utils/prompt-utils.nu *
 
     try {
         let is_enable = get-prompt-info nuprm-enabled
@@ -35,7 +35,7 @@ do --env -i {
 def "nuprm theme list" [
     --preview (-p)
 ] {
-    use (($nuprm_path | path split) ++ ["theme-list.nu"] | path join | path expand) theme_info
+    use theme-list.nu theme_info
 
     let theme_name_list = $theme_info | sort-by "name"
     $theme_name_list | each {|i|
