@@ -68,11 +68,12 @@ export module nuprm-theme {
     export def get-prompt-command-left [] {
         alias surround = prompt-make-utils surround
 
+        let path_sep = if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }
         let status = {
             icon: (surround (get-prompt-info system-icon) -r " ")
             user: (get-prompt-info user-name)
             host: (surround (get-prompt-info host-name) -l $" @ ")
-            path: (surround (get-prompt-info path (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -d $"\e[0;1m(get-prompt-chars white_fg)(get-prompt-chars path_bg)" -s $"\e[0;2m(get-prompt-chars path_bg)" -u))
+            path: (surround (get-prompt-info path $path_sep -d $"\e[0;1m(get-prompt-chars white_fg)(get-prompt-chars path_bg)" -s $"\e[0;2m(get-prompt-chars path_bg)" -u))
             git: (get-prompt-info git)
             exit: (get-prompt-info exit-code)
             admin: (is-admin)

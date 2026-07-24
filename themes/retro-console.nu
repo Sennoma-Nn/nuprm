@@ -19,7 +19,8 @@ export module nuprm-theme {
 
         let system_icon = surround (get-prompt-info system-icon) -l $"(get-color terminal_green)" -r $"(get-color dim_green) : "
         let shells_index = surround (get-prompt-info shells -d) -l $"(get-color terminal_green)#" -r $"(get-color dim_green) : "
-        let path_str = get-prompt-info path (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -u -d (get-color terminal_green) -s (get-color dim_green)
+        let path_sep = if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }
+        let path_str = get-prompt-info path $path_sep -u -d (get-color terminal_green) -s (get-color dim_green)
         let git_branch = (get-prompt-info git)
         let execution_time = if (get-prompt-info exec-time) > 0.5 { $" (get-color dim_green)(get-prompt-info exec-time)sec(get-color reset)" } else { "" }
         let git_str = if not ($git_branch | is-empty) { $" (get-color dim_green)($git_branch)(get-color reset)" } else { "" }
@@ -61,23 +62,14 @@ export module nuprm-theme {
 
     export def get-transient-prompt-command-right [] { }
 
-    export def get-transient-prompt-indicator [] {
-        let indicator = get-prompt-indicator
-        return $indicator
-    }
+    export alias get-transient-prompt-indicator = get-prompt-indicator
 
     export def get-transient-prompt-multiline-indicator [] {
         let indicator = get-prompt-multiline-indicator
         return $indicator
     }
 
-    export def get-transient-prompt-indicator-vi-insert [] {
-        let indicator = get-prompt-indicator-vi-insert
-        return $indicator
-    }
+    export alias get-transient-prompt-indicator-vi-insert = get-prompt-indicator-vi-insert
 
-    export def get-transient-prompt-indicator-vi-normal [] {
-        let indicator = get-prompt-indicator-vi-normal
-        return $indicator
-    }
+    export alias get-transient-prompt-indicator-vi-normal = get-prompt-indicator-vi-normal
 }

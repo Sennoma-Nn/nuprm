@@ -24,7 +24,8 @@ export module nuprm-theme {
         let host_name = surround (get-prompt-info host-name) -l $"($status_color) @ (get-color white)"
         let user_name = $"(get-color white)(get-prompt-info user-name)"
         let user_host = $"($user_name)($host_name)"
-        let path_info = surround (get-prompt-info path -u (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -d $"($status_color)" -s $"(get-color white)" -u) -r "\e[0m"
+        let path_sep = if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }
+        let path_info = surround (get-prompt-info path -u $path_sep -d $"($status_color)" -s $"(get-color white)" -u) -r "\e[0m"
         let path_show = $"[ ($path_info) (get-color white)]"
         let git_info = surround (get-prompt-info git -d $"(get-color white)*" -s $"(get-color white)+") -l $" in ($status_color)" -r (get-color reset)
         let execution_time = if (get-prompt-info exec-time) > 0.5 { $" ($status_color)- (get-color white)(get-prompt-info exec-time)sec" } else { "" }
@@ -46,31 +47,19 @@ export module nuprm-theme {
         return $"(get-color white)◉ (get-color reset)"
     }
 
-    export def get-prompt-indicator-vi-normal [] {
-        let indicator = get-prompt-indicator
-        return $indicator
-    }
+    export alias get-prompt-indicator-vi-normal = get-prompt-indicator
 
     export def get-transient-prompt-command [] { }
 
     export def get-transient-prompt-command-right [] { }
 
-    export def get-transient-prompt-indicator [] {
-        let indicator = get-prompt-indicator
-        return $indicator
-    }
+    export alias get-transient-prompt-indicator = get-prompt-indicator
 
     export def get-transient-prompt-multiline-indicator [] {
         return $"(get-color white)◇ (get-color reset)"
     }
 
-    export def get-transient-prompt-indicator-vi-insert [] {
-        let indicator = get-prompt-indicator-vi-insert
-        return $indicator
-    }
+    export alias get-transient-prompt-indicator-vi-insert = get-prompt-indicator-vi-insert
 
-    export def get-transient-prompt-indicator-vi-normal [] {
-        let indicator = get-prompt-indicator-vi-normal
-        return $indicator
-    }
+    export alias get-transient-prompt-indicator-vi-normal = get-prompt-indicator-vi-normal
 }

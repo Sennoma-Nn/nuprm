@@ -25,7 +25,8 @@ export module nuprm-theme {
         let host_name = surround (get-prompt-info host-name) -l $"(get-color magenta) at (get-color cyan)"
         let user_host = $"($user_name)($host_name)"
         let user_info = $"($user_host)(ansi reset)"
-        let path_info = surround (get-prompt-info path (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -d (ansi reset) -s (get-color grey) -u) -r (get-color white)
+        let path_sep = if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }
+        let path_info = surround (get-prompt-info path $path_sep -d (ansi reset) -s (get-color grey) -u) -r (get-color white)
         let git_branch = (get-prompt-info git -d $"(get-color cyan)*" -s $"(get-color cyan)+")
         let shells_index = surround (get-prompt-info shells -d) -l $"(get-color grey) | (get-color cyan)dirs: (get-color magenta)№"
         let git_info = if not ($git_branch | is-empty) { $"(get-color grey) | (get-color cyan)git: (get-color magenta)($git_branch)(ansi reset)" } else { "" }
@@ -64,23 +65,14 @@ export module nuprm-theme {
 
     export def get-transient-prompt-command-right [] { }
 
-    export def get-transient-prompt-indicator [] {
-        let indicator = get-prompt-indicator
-        return $indicator
-    }
+    export alias get-transient-prompt-indicator = get-prompt-indicator
 
     export def get-transient-prompt-multiline-indicator [] {
         let indicator = get-prompt-multiline-indicator
         return $indicator
     }
 
-    export def get-transient-prompt-indicator-vi-insert [] {
-        let indicator = get-prompt-indicator-vi-insert
-        return $indicator
-    }
+    export alias get-transient-prompt-indicator-vi-insert = get-prompt-indicator-vi-insert
 
-    export def get-transient-prompt-indicator-vi-normal [] {
-        let indicator = get-prompt-indicator-vi-normal
-        return $indicator
-    }
+    export alias get-transient-prompt-indicator-vi-normal = get-prompt-indicator-vi-normal
 }

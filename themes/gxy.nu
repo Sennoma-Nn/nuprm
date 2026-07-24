@@ -70,10 +70,7 @@ export module nuprm-theme {
         return ((get-color reset) + ": ")
     }
 
-    export def get-prompt-indicator-vi-normal [] {
-        let indicator = get-prompt-indicator
-        return $indicator
-    }
+    export alias get-prompt-indicator-vi-normal = get-prompt-indicator
 
     export def get-transient-prompt-command [] {
         alias surround = prompt-make-utils surround
@@ -97,13 +94,7 @@ export module nuprm-theme {
         return ((get-color dark_blue_fg) + (get-color faint) + "┆ - " + (get-color reset))
     }
 
-    export def get-transient-prompt-indicator-vi-insert [] {
-        let indicator = get-transient-prompt-indicator
-        return $indicator
-    }
+    export alias get-transient-prompt-indicator-vi-insert = get-transient-prompt-indicator
 
-    export def get-transient-prompt-indicator-vi-normal [] {
-        let indicator = get-transient-prompt-indicator
-        return $indicator
-    }
+    export alias get-transient-prompt-indicator-vi-normal = get-transient-prompt-indicator
 }

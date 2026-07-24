@@ -21,7 +21,8 @@ export module nuprm-theme {
         let user_name = surround (get-prompt-info user-name) -l $"✨ (get-color purple)🚀 ($system_icon)(get-color pink)"
         let host_name = surround (get-prompt-info host-name) -l $"(get-color purple) at (get-color pink)"
         let user_host = $"($user_name)($host_name) (get-color purple)✨"
-        let path_seg = $"(get-color pink)🪐 " + (surround (get-prompt-info path (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -d $"(get-color purple)" -s $"(get-color pink)" -u) -r "\e[0m")
+        let path_sep = if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }
+        let path_seg = $"(get-color pink)🪐 " + (surround (get-prompt-info path $path_sep -d $"(get-color purple)" -s $"(get-color pink)" -u) -r "\e[0m")
         let git_info = surround (get-prompt-info git) -l " (" -r ")"
         let git_status = if ($git_info | str length) > 0 { $" (get-color pink)🌟(get-color star)($git_info)" } else { "" }
         let exit_status = if (get-prompt-info exit-code) != 0 { $" (get-color pink)💥(get-color purple) (get-prompt-info exit-code)" } else { "" }
@@ -48,35 +49,17 @@ export module nuprm-theme {
         return $"(get-color pink): (get-color reset)"
     }
 
-    export def get-prompt-indicator-vi-normal [] {
-        let indicator = get-prompt-indicator
-        return $indicator
-    }
+    export alias get-prompt-indicator-vi-normal = get-prompt-indicator
 
-    export def get-transient-prompt-command [] {
-        let prompt = get-prompt-command-left
-        return $prompt
-    }
+    export alias get-transient-prompt-command = get-prompt-command-left
 
     export def get-transient-prompt-command-right [] { }
 
-    export def get-transient-prompt-indicator [] {
-        let indicator = get-prompt-indicator
-        return $indicator
-    }
+    export alias get-transient-prompt-indicator = get-prompt-indicator
 
-    export def get-transient-prompt-multiline-indicator [] {
-        let indicator = get-prompt-multiline-indicator
-        return $indicator
-    }
+    export alias get-transient-prompt-multiline-indicator = get-prompt-multiline-indicator
 
-    export def get-transient-prompt-indicator-vi-insert [] {
-        let indicator = get-prompt-indicator-vi-insert
-        return $indicator
-    }
+    export alias get-transient-prompt-indicator-vi-insert = get-prompt-indicator-vi-insert
 
-    export def get-transient-prompt-indicator-vi-normal [] {
-        let indicator = get-prompt-indicator
-        return $indicator
-    }
+    export alias get-transient-prompt-indicator-vi-normal = get-prompt-indicator
 }

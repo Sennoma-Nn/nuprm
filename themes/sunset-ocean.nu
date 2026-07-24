@@ -40,7 +40,8 @@ export module nuprm-theme {
 
         let system_icon = surround (get-prompt-info system-icon) -r " "
         let shells_index = surround (get-prompt-info shells -d) -l $"((get-color black_fg))#" -r $" : "
-        let path = (get-prompt-info path (if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }) -u -d (get-color black_fg) -s (get-color grey_fg))
+        let path_sep = if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }
+        let path = (get-prompt-info path $path_sep -u -d (get-color black_fg) -s (get-color grey_fg))
         let host_name = surround (get-prompt-info host-name) -l " @ "
         let user_name = get-prompt-info user-name
         let user_host = $"($user_name)($host_name)"
@@ -103,23 +104,14 @@ export module nuprm-theme {
 
     export def get-transient-prompt-command-right [] { }
 
-    export def get-transient-prompt-indicator [] {
-        let indicator = get-prompt-indicator
-        return $indicator
-    }
+    export alias get-transient-prompt-indicator = get-prompt-indicator
 
     export def get-transient-prompt-multiline-indicator [] {
         let indicator = get-prompt-multiline-indicator
         return $indicator
     }
 
-    export def get-transient-prompt-indicator-vi-insert [] {
-        let indicator = get-prompt-indicator-vi-insert
-        return $indicator
-    }
+    export alias get-transient-prompt-indicator-vi-insert = get-prompt-indicator-vi-insert
 
-    export def get-transient-prompt-indicator-vi-normal [] {
-        let indicator = get-prompt-indicator-vi-normal
-        return $indicator
-    }
+    export alias get-transient-prompt-indicator-vi-normal = get-prompt-indicator-vi-normal
 }
