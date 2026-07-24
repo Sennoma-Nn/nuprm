@@ -1,35 +1,38 @@
 export module nuprm-theme {
     def get-prompt-chars [color] {
+        alias color-to-ansi = prompt-make-utils color-to-ansi
+        alias power-line-char = prompt-make-utils power-line-char
+
         let prompt_chars = {
             right_char: "󰄬"
             wrong_char: ""
             root_icon: ""
             italic: "\e[3m"
             reset: "\e[0m"
-            power_line1: (prompt-make-utils power-line-char "lower_right_triangle") # 
-            power_line2: (prompt-make-utils power-line-char "upper_left_triangle") # 
-            power_line3: (prompt-make-utils power-line-char "left_hard_divider") # 
-            power_line4: (prompt-make-utils power-line-char "left_hard_divider_inverse") # 
-            white_fg: (prompt-make-utils color-to-ansi 255 255 255 "fg" "37")
-            black_fg: (prompt-make-utils color-to-ansi 0 0 0 "fg" "30")
-            name_fg: (prompt-make-utils color-to-ansi 255 146 72 "fg" "33")
-            name_bg: (prompt-make-utils color-to-ansi 255 146 72 "bg" "43")
-            path_fg: (prompt-make-utils color-to-ansi 52 100 164 "fg" "34")
-            path_bg: (prompt-make-utils color-to-ansi 52 100 164 "bg" "44")
-            git_fg: (prompt-make-utils color-to-ansi 196 110 170 "fg" "95")
-            git_bg: (prompt-make-utils color-to-ansi 196 110 170 "bg" "105")
-            status_fg: (prompt-make-utils color-to-ansi 46 149 153 "fg" "36")
-            status_bg: (prompt-make-utils color-to-ansi 46 149 153 "bg" "46")
-            status_err_fg: (prompt-make-utils color-to-ansi 240 83 80 "fg" "31")
-            status_err_bg: (prompt-make-utils color-to-ansi 240 83 80 "bg" "41")
-            shells_fg: (prompt-make-utils color-to-ansi 122 64 152 "fg" "35")
-            shells_bg: (prompt-make-utils color-to-ansi 122 64 152 "bg" "45")
-            time_fg: (prompt-make-utils color-to-ansi 78 144 61 "fg" "32")
-            time_bg: (prompt-make-utils color-to-ansi 78 144 61 "bg" "42")
-            root_fg: (prompt-make-utils color-to-ansi 248 102 122 "fg" "91")
-            root_bg: (prompt-make-utils color-to-ansi 248 102 122 "bg" "101")
-            vi_fg: (prompt-make-utils color-to-ansi 78 144 61 "fg" "32")
-            vi_bg: (prompt-make-utils color-to-ansi 78 144 61 "bg" "42")
+            power_line1: (power-line-char "lower_right_triangle") # 
+            power_line2: (power-line-char "upper_left_triangle") # 
+            power_line3: (power-line-char "left_hard_divider") # 
+            power_line4: (power-line-char "left_hard_divider_inverse") # 
+            white_fg: (color-to-ansi 255 255 255 "fg" "37")
+            black_fg: (color-to-ansi 0 0 0 "fg" "30")
+            name_fg: (color-to-ansi 255 146 72 "fg" "33")
+            name_bg: (color-to-ansi 255 146 72 "bg" "43")
+            path_fg: (color-to-ansi 52 100 164 "fg" "34")
+            path_bg: (color-to-ansi 52 100 164 "bg" "44")
+            git_fg: (color-to-ansi 196 110 170 "fg" "95")
+            git_bg: (color-to-ansi 196 110 170 "bg" "105")
+            status_fg: (color-to-ansi 46 149 153 "fg" "36")
+            status_bg: (color-to-ansi 46 149 153 "bg" "46")
+            status_err_fg: (color-to-ansi 240 83 80 "fg" "31")
+            status_err_bg: (color-to-ansi 240 83 80 "bg" "41")
+            shells_fg: (color-to-ansi 122 64 152 "fg" "35")
+            shells_bg: (color-to-ansi 122 64 152 "bg" "45")
+            time_fg: (color-to-ansi 78 144 61 "fg" "32")
+            time_bg: (color-to-ansi 78 144 61 "bg" "42")
+            root_fg: (color-to-ansi 248 102 122 "fg" "91")
+            root_bg: (color-to-ansi 248 102 122 "bg" "101")
+            vi_fg: (color-to-ansi 78 144 61 "fg" "32")
+            vi_bg: (color-to-ansi 78 144 61 "bg" "42")
         }
         
         let return_prompt_chars = $prompt_chars | get -o $color | default ""

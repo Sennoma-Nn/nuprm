@@ -1,19 +1,22 @@
 export module nuprm-theme {
     def get-color [color] {
+        alias color-to-ansi = prompt-make-utils color-to-ansi
+        alias power-line-char = prompt-make-utils power-line-char
+
         let colors = {
             bold: "\e[1m",
             italic: "\e[3m"
             reset: "\e[0m"
-            power_line1: (prompt-make-utils power-line-char "right_hard_divider") # 
-            power_line2: (prompt-make-utils power-line-char "right_hard_divider_inverse") # 
-            power_line3: (prompt-make-utils power-line-char "left_hard_divider") # 
-            power_line4: (prompt-make-utils power-line-char "left_hard_divider_inverse") # 
-            white_fg: (prompt-make-utils color-to-ansi 255 255 255 "fg" "37")
-            black_fg: (prompt-make-utils color-to-ansi 0 0 0 "fg" "30")
-            normal_fg: (prompt-make-utils color-to-ansi 255 255 255 "fg" "37")
-            normal_bg: (prompt-make-utils color-to-ansi 255 255 255 "bg" "47")
-            purple_fg: (prompt-make-utils color-to-ansi 191 90 218 "fg" "35")
-            purple_bg: (prompt-make-utils color-to-ansi 191 90 218 "bg" "45")
+            power_line1: (power-line-char "right_hard_divider") # 
+            power_line2: (power-line-char "right_hard_divider_inverse") # 
+            power_line3: (power-line-char "left_hard_divider") # 
+            power_line4: (power-line-char "left_hard_divider_inverse") # 
+            white_fg: (color-to-ansi 255 255 255 "fg" "37")
+            black_fg: (color-to-ansi 0 0 0 "fg" "30")
+            normal_fg: (color-to-ansi 255 255 255 "fg" "37")
+            normal_bg: (color-to-ansi 255 255 255 "bg" "47")
+            purple_fg: (color-to-ansi 191 90 218 "fg" "35")
+            purple_bg: (color-to-ansi 191 90 218 "bg" "45")
         }
         
         let return_prompt_chars = $colors | get -o $color | default ""

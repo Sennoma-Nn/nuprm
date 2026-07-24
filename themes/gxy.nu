@@ -1,18 +1,21 @@
 export module nuprm-theme {
     def get-color [color] {
+        alias color-to-ansi = prompt-make-utils color-to-ansi
+        alias power-line-char = prompt-make-utils power-line-char
+
         let colors = {
-            black_fg: (prompt-make-utils color-to-ansi 0 0 0 "fg" "30")
-            black_bg: (prompt-make-utils color-to-ansi 0 0 0 "bg" "40")
-            blue_fg: (prompt-make-utils color-to-ansi 129 169 254 "fg" "94")
-            blue_bg: (prompt-make-utils color-to-ansi 129 169 254 "bg" "104")
-            dark_blue_fg: (prompt-make-utils color-to-ansi 59 66 97 "fg" "34")
-            dark_blue_bg: (prompt-make-utils color-to-ansi 59 66 97 "bg" "44")
-            pink_fg: (prompt-make-utils color-to-ansi 197 134 192 "fg" "95")
-            power_line1: (prompt-make-utils power-line-char "right_hard_divider") # 
-            power_line2: (prompt-make-utils power-line-char "left_hard_divider") # 
-            power_line3: (prompt-make-utils power-line-char "left_soft_divider") # 
-            power_line4: (prompt-make-utils power-line-char "left_hard_divider_inverse") # 
-            power_line5: (prompt-make-utils power-line-char "upper_left_triangle") # 
+            black_fg: (color-to-ansi 0 0 0 "fg" "30")
+            black_bg: (color-to-ansi 0 0 0 "bg" "40")
+            blue_fg: (color-to-ansi 129 169 254 "fg" "94")
+            blue_bg: (color-to-ansi 129 169 254 "bg" "104")
+            dark_blue_fg: (color-to-ansi 59 66 97 "fg" "34")
+            dark_blue_bg: (color-to-ansi 59 66 97 "bg" "44")
+            pink_fg: (color-to-ansi 197 134 192 "fg" "95")
+            power_line1: (power-line-char "right_hard_divider") # 
+            power_line2: (power-line-char "left_hard_divider") # 
+            power_line3: (power-line-char "left_soft_divider") # 
+            power_line4: (power-line-char "left_hard_divider_inverse") # 
+            power_line5: (power-line-char "upper_left_triangle") # 
             bold: "\e[1m"
             reset: "\e[0m"
             faint: "\e[2m"

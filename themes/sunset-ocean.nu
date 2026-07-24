@@ -1,26 +1,29 @@
 export module nuprm-theme {
     def get-color [color] {
-        let colors = {
-            black_fg: (prompt-make-utils color-to-ansi 0 0 0 "fg" "30"),
-            white_fg: (prompt-make-utils color-to-ansi 255 255 255 "fg" "37"),
-            color1_fg: (prompt-make-utils color-to-ansi 253 172 65 "fg" "33"),
-            color1_bg: (prompt-make-utils color-to-ansi 253 172 65 "bg" "43"),
-            color2_fg: (prompt-make-utils color-to-ansi 245 114 46 "fg" "31"),
-            color2_bg: (prompt-make-utils color-to-ansi 245 114 46 "bg" "41"),
-            color3_fg: (prompt-make-utils color-to-ansi 135 188 215 "fg" "94"),
-            color3_bg: (prompt-make-utils color-to-ansi 135 188 215 "bg" "104"),
-            color4_fg: (prompt-make-utils color-to-ansi 51 102 137 "fg" "34"),
-            color4_bg: (prompt-make-utils color-to-ansi 51 102 137 "bg" "44"),
-            color5_fg: (prompt-make-utils color-to-ansi 35 70 94 "fg" "36"),
-            color5_bg: (prompt-make-utils color-to-ansi 35 70 94 "bg" "46"),
-            grey_fg: (prompt-make-utils color-to-ansi  64 64 64 "fg" "90"),
+        alias color-to-ansi = prompt-make-utils color-to-ansi
+        alias power-line-char = prompt-make-utils power-line-char
 
-            power_line1: (prompt-make-utils power-line-char "right_hard_divider"), # 
-            power_line2: (prompt-make-utils power-line-char "left_hard_divider"), # 
-            power_line3: (prompt-make-utils power-line-char "right_soft_divider"), # 
-            power_line4: (prompt-make-utils power-line-char "left_soft_divider"), # 
-            power_line5: (prompt-make-utils power-line-char "left_half_circle_thick"), # 
-            power_line6: (prompt-make-utils power-line-char "right_half_circle_thick"), # 
+        let colors = {
+            black_fg: (color-to-ansi 0 0 0 "fg" "30"),
+            white_fg: (color-to-ansi 255 255 255 "fg" "37"),
+            color1_fg: (color-to-ansi 253 172 65 "fg" "33"),
+            color1_bg: (color-to-ansi 253 172 65 "bg" "43"),
+            color2_fg: (color-to-ansi 245 114 46 "fg" "31"),
+            color2_bg: (color-to-ansi 245 114 46 "bg" "41"),
+            color3_fg: (color-to-ansi 135 188 215 "fg" "94"),
+            color3_bg: (color-to-ansi 135 188 215 "bg" "104"),
+            color4_fg: (color-to-ansi 51 102 137 "fg" "34"),
+            color4_bg: (color-to-ansi 51 102 137 "bg" "44"),
+            color5_fg: (color-to-ansi 35 70 94 "fg" "36"),
+            color5_bg: (color-to-ansi 35 70 94 "bg" "46"),
+            grey_fg: (color-to-ansi  64 64 64 "fg" "90"),
+
+            power_line1: (power-line-char "right_hard_divider"), # 
+            power_line2: (power-line-char "left_hard_divider"), # 
+            power_line3: (power-line-char "right_soft_divider"), # 
+            power_line4: (power-line-char "left_soft_divider"), # 
+            power_line5: (power-line-char "left_half_circle_thick"), # 
+            power_line6: (power-line-char "right_half_circle_thick"), # 
 
             reset_bg: "\e[49m",
             bold: "\e[1m",

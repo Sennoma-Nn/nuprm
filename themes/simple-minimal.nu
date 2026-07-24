@@ -1,7 +1,7 @@
 export module nuprm-theme {
-    alias color-to-ansi = prompt-make-utils color-to-ansi
-
     def get-color [color] {
+        alias color-to-ansi = prompt-make-utils color-to-ansi
+
         let colors = {
             green: (color-to-ansi 100 200 100 "fg" "32"),
             white: (color-to-ansi 240 240 240 "fg" "37"),
