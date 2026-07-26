@@ -511,7 +511,7 @@ def get-system-icon []: nothing -> string {
 
     if $system_icon {
         let system_type = $nu.os-info.name
-        let system_name = sys host | get name | str downcase
+        let system_name = sys host | get name
 
         let icon = match $system_type {
             "windows"   => ""
