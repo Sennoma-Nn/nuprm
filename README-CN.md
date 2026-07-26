@@ -144,37 +144,37 @@ nuprm 支持智能目录缩写功能，让长路径显示更加短。
 
 ```nushell
 ❯ nuprm theme list
-╭───┬───────────────────┬───────────────────────────────────────╮
-│ # │       name        │              information              │
-├───┼───────────────────┼───────────────────────────────────────┤
-│ 0 │ azure.nu          │ ┌──────┬────────────┐                 │
-│   │                   │ │ tags │ Minimalist │                 │
-│   │                   │ └──────┴────────────┘                 │
-│ 1 │ circuit.nu        │ ┌──────┬────────────────────────────┐ │
-│   │                   │ │ tags │ Minimalist, Multiple Lines │ │
-│   │                   │ └──────┴────────────────────────────┘ │
-│ 2 │ galaxy-dream.nu   │ ┌──────┬───────────────────────┐      │
-│   │                   │ │ tags │ Emoji, Multiple Lines │      │
-│   │                   │ └──────┴───────────────────────┘      │
-│ 3 │ gxy.nu            │ ┌──────┬────────────────────────────┐ │
-│   │                   │ │ tags │ Power Line, Multiple Lines │ │
-│   │                   │ └──────┴────────────────────────────┘ │
-│ 4 │ neon-night.nu     │ ┌──────┬────────────────────────────┐ │
-│   │                   │ │ tags │ Minimalist, Multiple Lines │ │
-│   │                   │ └──────┴────────────────────────────┘ │
-│ 5 │ power-blocks.nu   │ ┌──────┬────────────┐                 │
-│   │                   │ │ tags │ Power Line │                 │
-│   │                   │ └──────┴────────────┘                 │
-│ 6 │ retro-console.nu  │ ┌──────┬────────────┐                 │
-│   │                   │ │ tags │ Minimalist │                 │
-│   │                   │ └──────┴────────────┘                 │
-│ 7 │ simple-minimal.nu │ ┌──────┬────────────┐                 │
-│   │                   │ │ tags │ Minimalist │                 │
-│   │                   │ └──────┴────────────┘                 │
-│ 8 │ sunset-ocean.nu   │ ┌──────┬────────────────────────────┐ │
-│   │                   │ │ tags │ Power Line, Multiple Lines │ │
-│   │                   │ └──────┴────────────────────────────┘ │
-╰───┴───────────────────┴───────────────────────────────────────╯
+# => ╭───┬───────────────────┬───────────────────────────────────────╮
+# => │ # │       name        │              information              │
+# => ├───┼───────────────────┼───────────────────────────────────────┤
+# => │ 0 │ azure.nu          │ ┌──────┬────────────┐                 │
+# => │   │                   │ │ tags │ Minimalist │                 │
+# => │   │                   │ └──────┴────────────┘                 │
+# => │ 1 │ circuit.nu        │ ┌──────┬────────────────────────────┐ │
+# => │   │                   │ │ tags │ Minimalist, Multiple Lines │ │
+# => │   │                   │ └──────┴────────────────────────────┘ │
+# => │ 2 │ galaxy-dream.nu   │ ┌──────┬───────────────────────┐      │
+# => │   │                   │ │ tags │ Emoji, Multiple Lines │      │
+# => │   │                   │ └──────┴───────────────────────┘      │
+# => │ 3 │ gxy.nu            │ ┌──────┬────────────────────────────┐ │
+# => │   │                   │ │ tags │ Power Line, Multiple Lines │ │
+# => │   │                   │ └──────┴────────────────────────────┘ │
+# => │ 4 │ neon-night.nu     │ ┌──────┬────────────────────────────┐ │
+# => │   │                   │ │ tags │ Minimalist, Multiple Lines │ │
+# => │   │                   │ └──────┴────────────────────────────┘ │
+# => │ 5 │ power-blocks.nu   │ ┌──────┬────────────┐                 │
+# => │   │                   │ │ tags │ Power Line │                 │
+# => │   │                   │ └──────┴────────────┘                 │
+# => │ 6 │ retro-console.nu  │ ┌──────┬────────────┐                 │
+# => │   │                   │ │ tags │ Minimalist │                 │
+# => │   │                   │ └──────┴────────────┘                 │
+# => │ 7 │ simple-minimal.nu │ ┌──────┬────────────┐                 │
+# => │   │                   │ │ tags │ Minimalist │                 │
+# => │   │                   │ └──────┴────────────┘                 │
+# => │ 8 │ sunset-ocean.nu   │ ┌──────┬────────────────────────────┐ │
+# => │   │                   │ │ tags │ Power Line, Multiple Lines │ │
+# => │   │                   │ └──────┴────────────────────────────┘ │
+# => ╰───┴───────────────────┴───────────────────────────────────────╯
 ```
 
 要设置主题，在您的环境配置文件中设置 `nuprm_theme` 常量：
@@ -198,18 +198,18 @@ exec $nu.current-exe
   <summary>（如果脚本出现了报错请预览这里）</summary>
 
 ```nushell
-Error: nu::parser::unknown_flag
-
-  × The `get` command doesn't have flag `-o`.
-    ╭─[/home/username/.config/nuprm/utils/prompt-utils.nu:14:39]
- 13 │     let user_config = $env.NUPRMCONFIG
- 14 │     return ($user_config | get $item -o | default $default)
-    ·                                       ┬
-    ·                                       ╰── unknown flag
- 15 │ }
-    ╰────
-  help: Available flags: --help(-h), --ignore-errors(-i), --sensitive(-s). Use
-        `--help` for more information.
+# => Error: nu::parser::unknown_flag
+# => 
+# =>   × The get command doesn't have flag -o.
+# =>    ╭─[/home/username/.config/nuprm/utils/config-utils.nu:8:39]
+# =>  7 │     let user_config = $env.NUPRMCONFIG
+# =>  8 │     return ($user_config | get $item -o | default $default)
+# =>    ·                                       ┬
+# =>    ·                                       ╰── unknown flag
+# =>  9 │ }
+# =>    ╰────
+# =>   help: Available flags: --help(-h), --ignore-errors(-i),
+# =>         --sensitive(-s). Use --help for more information.
 ```
 
 如果报错<br>``The `get` command doesn't have flag `-o`.``<br>那就是你的 Nushell 版本低于 0.105.0，你需要升级 Nushell 版本
@@ -217,16 +217,16 @@ Error: nu::parser::unknown_flag
 ---
 
 ```nushell
-Error: nu::parser::variable_not_found
-
-  × Variable not found.
-    ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
- 13 │         if $is_enable {
- 14 │             use $nuprm_theme nuprm-theme
-    ·                 ──────┬─────
-    ·                       ╰── variable not found. 
- 15 │ 
-    ╰────
+# => Error: nu::parser::variable_not_found
+# => 
+# =>   × Variable not found.
+# =>     ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
+# =>  13 │         if $is_enable {
+# =>  14 │             use $nuprm_theme nuprm-theme
+# =>     ·                 ──────┬─────
+# =>     ·                       ╰── variable not found. 
+# =>  15 │ 
+# =>     ╰────
 ```
 
 如果报错<br>``Variable not found.``<br>那就是你没有设置 `nuprm_theme` 常量
@@ -234,29 +234,29 @@ Error: nu::parser::variable_not_found
 ---
 
 ```nushell
-Error: nu::parser::error
-
-  × Error: nu::shell::not_a_constant
-  │ 
-  │   × Not a constant.
-  │     ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
-  │  13 │         if $is_enable {
-  │  14 │             use $nuprm_theme nuprm-theme
-  │     ·                 ──────┬─────
-  │     ·                       ╰── Value is not a parse-time constant
-  │  15 │
-  │     ╰────
-  │   help: Only a subset of expressions are allowed constants during parsing.
-  │ Try
-  │         using the 'const' command or typing the value literally.
-  │ 
-    ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
- 13 │         if $is_enable {
- 14 │             use $nuprm_theme nuprm-theme
-    ·                 ────────────┬───────────
-    ·                             ╰── Encountered error during parse-time evaluation
- 15 │ 
-    ╰────
+# => Error: nu::parser::error
+# => 
+# =>   × Error: nu::shell::not_a_constant
+# =>   │ 
+# =>   │   × Not a constant.
+# =>   │     ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
+# =>   │  13 │         if $is_enable {
+# =>   │  14 │             use $nuprm_theme nuprm-theme
+# =>   │     ·                 ──────┬─────
+# =>   │     ·                       ╰── Value is not a parse-time constant
+# =>   │  15 │
+# =>   │     ╰────
+# =>   │   help: Only a subset of expressions are allowed constants during parsing.
+# =>   │ Try
+# =>   │         using the 'const' command or typing the value literally.
+# =>   │ 
+# =>     ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
+# =>  13 │         if $is_enable {
+# =>  14 │             use $nuprm_theme nuprm-theme
+# =>     ·                 ────────────┬───────────
+# =>     ·                             ╰── Encountered error during parse-time evaluation
+# =>  15 │ 
+# =>     ╰────
 ```
 
 如果报错<br>``Encountered error during parse-time evaluation``<br>那就是你把常量 `nuprm_theme` 设置为了变量
@@ -264,18 +264,18 @@ Error: nu::parser::error
 ---
 
 ```nushell
-Error: nu::parser::module_not_found
-
-  × Module not found.
-    ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
- 13 │         if $is_enable {
- 14 │             use $nuprm_theme nuprm-theme
-    ·                 ──────┬─────
-    ·                       ╰── module ~/.config/nuprm/themes/never-gonna-give-you-up.nu not found
- 15 │ 
-    ╰────
-  help: module files and their paths must be available before your script is
-        run as parsing occurs before anything is evaluated
+# => Error: nu::parser::module_not_found
+# => 
+# =>   × Module not found.
+# =>     ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
+# =>  13 │         if $is_enable {
+# =>  14 │             use $nuprm_theme nuprm-theme
+# =>     ·                 ──────┬─────
+# =>     ·                       ╰── module ~/.config/nuprm/themes/never-gonna-give-you-up.nu not found
+# =>  15 │ 
+# =>     ╰────
+# =>   help: module files and their paths must be available before your script is
+# =>         run as parsing occurs before anything is evaluated
 ```
 
 如果报错<br>``module ... not found``<br>那就是你常量 `nuprm_theme` 指向的文件不存在

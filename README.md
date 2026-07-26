@@ -144,37 +144,37 @@ You can use the `nuprm theme list` command to view available themes:
 
 ```nushell
 ❯ nuprm theme list
-╭───┬───────────────────┬───────────────────────────────────────╮
-│ # │       name        │              information              │
-├───┼───────────────────┼───────────────────────────────────────┤
-│ 0 │ azure.nu          │ ┌──────┬────────────┐                 │
-│   │                   │ │ tags │ Minimalist │                 │
-│   │                   │ └──────┴────────────┘                 │
-│ 1 │ circuit.nu        │ ┌──────┬────────────────────────────┐ │
-│   │                   │ │ tags │ Minimalist, Multiple Lines │ │
-│   │                   │ └──────┴────────────────────────────┘ │
-│ 2 │ galaxy-dream.nu   │ ┌──────┬───────────────────────┐      │
-│   │                   │ │ tags │ Emoji, Multiple Lines │      │
-│   │                   │ └──────┴───────────────────────┘      │
-│ 3 │ gxy.nu            │ ┌──────┬────────────────────────────┐ │
-│   │                   │ │ tags │ Power Line, Multiple Lines │ │
-│   │                   │ └──────┴────────────────────────────┘ │
-│ 4 │ neon-night.nu     │ ┌──────┬────────────────────────────┐ │
-│   │                   │ │ tags │ Minimalist, Multiple Lines │ │
-│   │                   │ └──────┴────────────────────────────┘ │
-│ 5 │ power-blocks.nu   │ ┌──────┬────────────┐                 │
-│   │                   │ │ tags │ Power Line │                 │
-│   │                   │ └──────┴────────────┘                 │
-│ 6 │ retro-console.nu  │ ┌──────┬────────────┐                 │
-│   │                   │ │ tags │ Minimalist │                 │
-│   │                   │ └──────┴────────────┘                 │
-│ 7 │ simple-minimal.nu │ ┌──────┬────────────┐                 │
-│   │                   │ │ tags │ Minimalist │                 │
-│   │                   │ └──────┴────────────┘                 │
-│ 8 │ sunset-ocean.nu   │ ┌──────┬────────────────────────────┐ │
-│   │                   │ │ tags │ Power Line, Multiple Lines │ │
-│   │                   │ └──────┴────────────────────────────┘ │
-╰───┴───────────────────┴───────────────────────────────────────╯
+# => ╭───┬───────────────────┬───────────────────────────────────────╮
+# => │ # │       name        │              information              │
+# => ├───┼───────────────────┼───────────────────────────────────────┤
+# => │ 0 │ azure.nu          │ ┌──────┬────────────┐                 │
+# => │   │                   │ │ tags │ Minimalist │                 │
+# => │   │                   │ └──────┴────────────┘                 │
+# => │ 1 │ circuit.nu        │ ┌──────┬────────────────────────────┐ │
+# => │   │                   │ │ tags │ Minimalist, Multiple Lines │ │
+# => │   │                   │ └──────┴────────────────────────────┘ │
+# => │ 2 │ galaxy-dream.nu   │ ┌──────┬───────────────────────┐      │
+# => │   │                   │ │ tags │ Emoji, Multiple Lines │      │
+# => │   │                   │ └──────┴───────────────────────┘      │
+# => │ 3 │ gxy.nu            │ ┌──────┬────────────────────────────┐ │
+# => │   │                   │ │ tags │ Power Line, Multiple Lines │ │
+# => │   │                   │ └──────┴────────────────────────────┘ │
+# => │ 4 │ neon-night.nu     │ ┌──────┬────────────────────────────┐ │
+# => │   │                   │ │ tags │ Minimalist, Multiple Lines │ │
+# => │   │                   │ └──────┴────────────────────────────┘ │
+# => │ 5 │ power-blocks.nu   │ ┌──────┬────────────┐                 │
+# => │   │                   │ │ tags │ Power Line │                 │
+# => │   │                   │ └──────┴────────────┘                 │
+# => │ 6 │ retro-console.nu  │ ┌──────┬────────────┐                 │
+# => │   │                   │ │ tags │ Minimalist │                 │
+# => │   │                   │ └──────┴────────────┘                 │
+# => │ 7 │ simple-minimal.nu │ ┌──────┬────────────┐                 │
+# => │   │                   │ │ tags │ Minimalist │                 │
+# => │   │                   │ └──────┴────────────┘                 │
+# => │ 8 │ sunset-ocean.nu   │ ┌──────┬────────────────────────────┐ │
+# => │   │                   │ │ tags │ Power Line, Multiple Lines │ │
+# => │   │                   │ └──────┴────────────────────────────┘ │
+# => ╰───┴───────────────────┴───────────────────────────────────────╯
 ```
 
 To set a theme, configure the `nuprm_theme` constant in your environment file:
@@ -200,18 +200,18 @@ exec $nu.current-exe
   <summary>(Click here if you encounter script errors)</summary>
 
 ```nushell
-Error: nu::parser::unknown_flag
-
-  × The `get` command doesn't have flag `-o`.
-    ╭─[/home/username/.config/nuprm/utils/prompt-utils.nu:14:39]
- 13 │     let user_config = $env.NUPRMCONFIG
- 14 │     return ($user_config | get $item -o | default $default)
-    ·                                       ┬
-    ·                                       ╰── unknown flag
- 15 │ }
-    ╰────
-  help: Available flags: --help(-h), --ignore-errors(-i), --sensitive(-s). Use
-        `--help` for more information.
+# => Error: nu::parser::unknown_flag
+# => 
+# =>   × The get command doesn't have flag -o.
+# =>    ╭─[/home/username/.config/nuprm/utils/config-utils.nu:8:39]
+# =>  7 │     let user_config = $env.NUPRMCONFIG
+# =>  8 │     return ($user_config | get $item -o | default $default)
+# =>    ·                                       ┬
+# =>    ·                                       ╰── unknown flag
+# =>  9 │ }
+# =>    ╰────
+# =>   help: Available flags: --help(-h), --ignore-errors(-i),
+# =>         --sensitive(-s). Use --help for more information.
 ```
 
 If you get the error<br>``The `get` command doesn't have flag `-o`.``<br>then your Nushell version is below 0.105.0
@@ -219,16 +219,16 @@ If you get the error<br>``The `get` command doesn't have flag `-o`.``<br>then yo
 ---
 
 ```nushell
-Error: nu::parser::variable_not_found
-
-  × Variable not found.
-    ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
- 13 │         if $is_enable {
- 14 │             use $nuprm_theme nuprm-theme
-    ·                 ──────┬─────
-    ·                       ╰── variable not found. 
- 15 │ 
-    ╰────
+# => Error: nu::parser::variable_not_found
+# => 
+# =>   × Variable not found.
+# =>     ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
+# =>  13 │         if $is_enable {
+# =>  14 │             use $nuprm_theme nuprm-theme
+# =>     ·                 ──────┬─────
+# =>     ·                       ╰── variable not found. 
+# =>  15 │ 
+# =>     ╰────
 ```
 
 If you get the error<br>``Variable not found.``<br>then you haven't set the `nuprm_theme` constant
@@ -236,29 +236,29 @@ If you get the error<br>``Variable not found.``<br>then you haven't set the `nup
 ---
 
 ```nushell
-Error: nu::parser::error
-
-  × Error: nu::shell::not_a_constant
-  │ 
-  │   × Not a constant.
-  │     ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
-  │  13 │         if $is_enable {
-  │  14 │             use $nuprm_theme nuprm-theme
-  │     ·                 ──────┬─────
-  │     ·                       ╰── Value is not a parse-time constant
-  │  15 │
-  │     ╰────
-  │   help: Only a subset of expressions are allowed constants during parsing.
-  │ Try
-  │         using the 'const' command or typing the value literally.
-  │ 
-    ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
- 13 │         if $is_enable {
- 14 │             use $nuprm_theme nuprm-theme
-    ·                 ────────────┬───────────
-    ·                             ╰── Encountered error during parse-time evaluation
- 15 │ 
-    ╰────
+# => Error: nu::parser::error
+# => 
+# =>   × Error: nu::shell::not_a_constant
+# =>   │ 
+# =>   │   × Not a constant.
+# =>   │     ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
+# =>   │  13 │         if $is_enable {
+# =>   │  14 │             use $nuprm_theme nuprm-theme
+# =>   │     ·                 ──────┬─────
+# =>   │     ·                       ╰── Value is not a parse-time constant
+# =>   │  15 │
+# =>   │     ╰────
+# =>   │   help: Only a subset of expressions are allowed constants during parsing.
+# =>   │ Try
+# =>   │         using the 'const' command or typing the value literally.
+# =>   │ 
+# =>     ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
+# =>  13 │         if $is_enable {
+# =>  14 │             use $nuprm_theme nuprm-theme
+# =>     ·                 ────────────┬───────────
+# =>     ·                             ╰── Encountered error during parse-time evaluation
+# =>  15 │ 
+# =>     ╰────
 ```
 
 If you get the error<br>``Encountered error during parse-time evaluation``<br>then you set the `nuprm_theme` constant as a variable
@@ -266,18 +266,18 @@ If you get the error<br>``Encountered error during parse-time evaluation``<br>th
 ---
 
 ```nushell
-Error: nu::parser::module_not_found
-
-  × Module not found.
-    ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
- 13 │         if $is_enable {
- 14 │             use $nuprm_theme nuprm-theme
-    ·                 ──────┬─────
-    ·                       ╰── module ~/.config/nuprm/themes/never-gonna-give-you-up.nu not found
- 15 │ 
-    ╰────
-  help: module files and their paths must be available before your script is
-        run as parsing occurs before anything is evaluated
+# => Error: nu::parser::module_not_found
+# => 
+# =>   × Module not found.
+# =>     ╭─[/home/username/.config/nuprm/nuprm.nu:14:17]
+# =>  13 │         if $is_enable {
+# =>  14 │             use $nuprm_theme nuprm-theme
+# =>     ·                 ──────┬─────
+# =>     ·                       ╰── module ~/.config/nuprm/themes/never-gonna-give-you-up.nu not found
+# =>  15 │ 
+# =>     ╰────
+# =>   help: module files and their paths must be available before your script is
+# =>         run as parsing occurs before anything is evaluated
 ```
 
 If you get the error<br>``module ... not found``<br>then the file pointed to by your `nuprm_theme` constant doesn't exist
