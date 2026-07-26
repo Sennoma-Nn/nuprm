@@ -11,7 +11,7 @@
 
 - Clone this repository to your .config directory:
     ```nushell
-    git clone https://github.com/Sennoma-Nn/nuprm.git ~/.config/nuprm
+    git clone -b stable https://github.com/Sennoma-Nn/nuprm.git ~/.config/nuprm
     ```
 
 - Add the following to your Nushell configuration file (`config nu`):

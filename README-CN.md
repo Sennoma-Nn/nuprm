@@ -11,7 +11,7 @@
 
 - 将此仓库克隆到您的 .config 目录：
     ```nushell
-    git clone https://github.com/Sennoma-Nn/nuprm.git ~/.config/nuprm
+    git clone -b stable https://github.com/Sennoma-Nn/nuprm.git ~/.config/nuprm
     ```
 
 - 在您的 Nushell 配置文件（`config nu`）中添加以下内容：
