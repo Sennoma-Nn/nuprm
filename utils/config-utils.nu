@@ -9,13 +9,9 @@ export def get-config [
 }
 
 export def is-config-enable [
-    item?: cell-path
-    default?: bool
-]: any -> bool {
-    if $in == null {
-        let config_vel = get-config $item $default
-        return ($config_vel in $enable_vel)
-    } else {
-        return ($in in $enable_vel)
-    }
+    item: cell-path
+    default: bool
+]: nothing -> bool {
+    let config_vel = get-config $item $default
+    return ($config_vel in $enable_vel)
 }
