@@ -478,45 +478,44 @@ def get-system-icon []: nothing -> string {
     let system_icon = is-config-enable $.display_elements.system_icon false
     let whith_space = is-config-enable $.compatibility.system_icon_with_space true
 
+    let linux_distro_icons = {
+        "alma"               : ""
+        "almalinux"          : ""
+        "almalinux9"         : ""
+        "alpine"             : ""
+        "aosc os"            : "" # Tested
+        "arch linux"         : "" # Tested
+        "centos"             : ""
+        "coreos"             : ""
+        "debian"             : ""
+        "deepin"             : "" # Tested
+        "devuan"             : ""
+        "elementary"         : ""
+        "endeavouros"        : ""
+        "fedora linux"       : "" # Tested
+        "gentoo"             : ""
+        "mageia"             : ""
+        "manjaro"            : ""
+        "mint"               : ""
+        "nixos"              : "" # Tested
+        "opensuse"           : ""
+        "opensuse tumbleweed": "" # Tested
+        "raspbian"           : ""
+        "redhat"             : ""
+        "rocky"              : ""
+        "sabayon"            : ""
+        "slackware"          : ""
+        "ubuntu"             : "" # Tested
+        "void"               : "" # Tested
+    }
+
     if $system_icon {
         let system_type = $nu.os-info.name
         let system_name = sys host | get name | str downcase
 
         let icon = match $system_type {
             "windows"   => ""
-            "linux"     => {
-                match $system_name {
-                    "alma"                  => ""
-                    "almalinux"             => ""
-                    "almalinux9"            => ""
-                    "alpine"                => ""
-                    "aosc os"               => "" # Tested
-                    "arch linux"            => "" # Tested
-                    "centos"                => ""
-                    "coreos"                => ""
-                    "debian"                => ""
-                    "deepin"                => "" # Tested
-                    "devuan"                => ""
-                    "elementary"            => ""
-                    "endeavouros"           => ""
-                    "fedora linux"          => "" # Tested
-                    "gentoo"                => ""
-                    "mageia"                => ""
-                    "manjaro"               => ""
-                    "mint"                  => ""
-                    "nixos"                 => "" # Tested
-                    "opensuse"              => ""
-                    "opensuse tumbleweed"   => "" # Tested
-                    "raspbian"              => ""
-                    "redhat"                => ""
-                    "rocky"                 => ""
-                    "sabayon"               => ""
-                    "slackware"             => ""
-                    "ubuntu"                => "" # Tested
-                    "void"                  => "" # Tested
-                    _                       => "" # Tested
-                }
-            }
+            "linux"     => { $linux_distro_icons | get -o --ignore-case $system_name | default "" }
             "android"   => ""
             "macos"     => ""
             "freebsd"   => ""
