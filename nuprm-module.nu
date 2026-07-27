@@ -8,16 +8,20 @@ def show-theme [
     let config_json = $env | get -o NUPRMCONFIG | default {} | to json
     let shells_index = get-prompt-info shells | if $in == "" { 0 } else { $in | into int }
     let shells_json = 0..$shells_index | each { { active: false } } | update $shells_index { active: true } | to json
-    let preview_prompt = if true {
-        ^$nu.current-exe --no-config-file -c $"
-            $env.NUPRMCONFIG = '($config_json)' | from json
-            $env.config.edit_mode = '($env | get -o $.config.edit_mode | default emacs)'
-            let shells_data = '($shells_json)' | from json
+    let preview_prompt = with-env {
+        CONFIG_JSON: $config_json
+        SHELLS_JSON: $shells_json
+        EDIT_MODE: ($env | get -o $.config.edit_mode | default emacs)
+    } {
+        let run_code = "
+            $env.NUPRMCONFIG = $env.CONFIG_JSON | from json
+            $env.config.edit_mode = $env.EDIT_MODE
+            let shells_data = $env.SHELLS_JSON | from json
 
             alias shells = echo $shells_data
 
-            use ($utils_path) *
-            use ($theme_path) nuprm-theme
+            use " + $utils_path + " *
+            use " + $theme_path + " nuprm-theme
 
             let command_l = do {|| nuprm-theme get-prompt-command-left } | default ''
             let command_r = do {|| nuprm-theme get-prompt-command-right } | default ''
@@ -37,7 +41,9 @@ def show-theme [
             } | to json
 
             print $preview_json
-        " | complete | get -o "stdout"
+        "
+
+        ^$nu.current-exe --no-config-file -c $run_code | complete | get -o "stdout"
     }
 
     let preview_command_l = $preview_prompt | from json | get -o "command_l" | default ""
