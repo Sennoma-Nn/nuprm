@@ -185,6 +185,7 @@ def get-where-shells [
                     | enumerate
                     | where $it.item.active == true
                     | get -o 0.index
+                    | into string
                     | default ""
 
                 return $shells_index
