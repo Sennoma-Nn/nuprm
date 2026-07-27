@@ -1,15 +1,24 @@
+use utils/prompt-utils.nu *
+
 # Show theme
 def show-theme [
     theme_path: string # Theme path
 ] {
     let utils_path = (($nuprm_path | path expand | path split) ++ ["utils", "prompt-utils.nu"] | path join | path expand)
     let config_json = $env | get -o NUPRMCONFIG | default {} | to json
+    let shells_index = get-prompt-info shells | if $in == "" { 0 } else { $in | into int }
+    let shells_json = 0..$shells_index | each { { active: false } } | update $shells_index { active: true } | to json
     let preview_prompt = if true {
         ^$nu.current-exe --no-config-file -c $"
             $env.NUPRMCONFIG = '($config_json)' | from json
             $env.config.edit_mode = '($env | get -o $.config.edit_mode | default emacs)'
+            let shells_data = '($shells_json)' | from json
+
+            alias shells = echo $shells_data
+
             use ($utils_path) *
             use ($theme_path) nuprm-theme
+
             let command_l = do {|| nuprm-theme get-prompt-command-left } | default ''
             let command_r = do {|| nuprm-theme get-prompt-command-right } | default ''
             let theme_info = do {|| nuprm-theme get-info } | default ''
@@ -35,10 +44,10 @@ def show-theme [
     let preview_indicator = $preview_prompt | from json | get -o "indicator" | default ""
     let preview_multiline = $preview_prompt | from json | get -o "multiline" | default ""
     let preview_command_r = $preview_prompt | from json | get -o "command_r" | default ""
-    let preview_theme_info = $preview_prompt | from json | get -o "theme_info" | default ""
+    let preview_theme_info = $preview_prompt | from json | get -o "theme_info" | default { }
 
     let preview_record = {
-        tags: ($preview_theme_info.tags | str join "\e[2m,\e[0m ")
+        tags: ($preview_theme_info | get -o "tags" | default [] | str join "\e[2m,\e[0m ")
         left: $"($preview_command_l)($preview_indicator)",
         right: $preview_command_r
     }
@@ -66,8 +75,6 @@ export module nuprm {
 
     # Load nuprm
     export def --env load [] {
-        use utils/prompt-utils.nu *
-
         try {
             let is_enable = get-prompt-info nuprm-enabled
 

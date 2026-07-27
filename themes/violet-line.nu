@@ -28,7 +28,7 @@ export module nuprm-theme {
         end_char: string
         block_fg: string
         block_bg: string
-        block_text: string
+        block_text: any
         text_fg: string
         icon?: string
         --display_if (-d) = true
