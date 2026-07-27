@@ -123,4 +123,6 @@ export module nuprm {
         # Show theme
         export alias show = show-theme
     }
+
+    export use theme
 }
