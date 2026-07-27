@@ -46,8 +46,8 @@ def show-theme [
     return $preview_record
 }
 
-# Nushell Prompt Manager
 export module nuprm {
+    # Nushell Prompt Manager
     export def main [
         --version (-v) # Show version
     ] {
