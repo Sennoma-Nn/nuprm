@@ -1,6 +1,56 @@
+# Show theme
+def show-theme [
+    theme_path: string # Theme path
+    --preview (-p)     # Preview theme
+] {
+    let utils_path = (($nuprm_path | path expand | path split) ++ ["utils" "prompt-utils.nu"] | path join | path expand)
+    let config_json = $env.NUPRMCONFIG | to json
+    let preview_prompt = if $preview {
+        try {
+            ^$nu.current-exe --no-config-file -c $"
+                $env.NUPRMCONFIG = '($config_json)' | from json
+                $env.config.edit_mode = '($env | get -o $.config.edit_mode | default emacs)'
+                use ($utils_path) *
+                use ($theme_path) nuprm-theme
+                let command_l = do {|| nuprm-theme get-prompt-command-left } | default ''
+                let command_r = do {|| nuprm-theme get-prompt-command-right } | default ''
+                let indicator = if $env.config.edit_mode == 'vi' {
+                    do {|| nuprm-theme get-prompt-indicator-vi-insert } | default ''
+                } else {
+                    do {|| nuprm-theme get-prompt-indicator } | default ''
+                }
+                let multiline = do {|| nuprm-theme get-prompt-multiline-indicator } | default ''
+                let preview_json = {
+                    command_l: $command_l,
+                    indicator: $indicator
+                    multiline: $multiline
+                    command_r: $command_r
+                } | to json
+
+                print $preview_json
+            " | complete | get -o "stdout"
+        }
+    } else { null }
+
+    let preview_command_l = if $preview { $preview_prompt | from json | get -o "command_l" | default "" } else { null }
+    let preview_indicator = if $preview { $preview_prompt | from json | get -o "indicator" | default "" } else { null }
+    let preview_multiline = if $preview { $preview_prompt | from json | get -o "multiline" | default "" } else { null }
+    let preview_command_r = if $preview { $preview_prompt | from json | get -o "command_r" | default "" } else { null }
+    let preview_record = if $preview {
+        {
+            left: $"($preview_command_l)($preview_indicator)",
+            right: $preview_command_r
+        }
+    } else {
+        { }
+    }
+
+    return $preview_record
+}
+
 export module nuprm {
     export def main [
-        --version (-v)
+        --version (-v) # Show version
     ] {
         if not $version {
             let color = "\e[32m"
@@ -52,7 +102,7 @@ export module nuprm {
     export module theme {
         # List all available prompt themes
         export def list [
-            --preview (-p)
+            --preview (-p) # Preview theme
         ] {
             use theme-list.nu theme_info
 
@@ -61,49 +111,7 @@ export module nuprm {
                 let theme_name = $i.name
                 let theme_tags = $i.tag
                 let theme_path = (($nuprm_path | path expand | path split) ++ ["themes", $theme_name] | path join | path expand)
-                let utils_path = (($nuprm_path | path expand | path split) ++ ["utils" "prompt-utils.nu"] | path join | path expand)
-                let config_json = $env.NUPRMCONFIG | to json
-                let preview_prompt = if $preview {
-                    try {
-                        ^$nu.current-exe --no-config-file -c $"
-                            $env.NUPRMCONFIG = '($config_json)' | from json
-                            $env.config.edit_mode = '($env | get -o $.config.edit_mode | default emacs)'
-                            use ($utils_path) *
-                            use ($theme_path) nuprm-theme
-                            let command_l = do {|| nuprm-theme get-prompt-command-left } | default ''
-                            let command_r = do {|| nuprm-theme get-prompt-command-right } | default ''
-                            let indicator = if $env.config.edit_mode == 'vi' {
-                                do {|| nuprm-theme get-prompt-indicator-vi-insert } | default ''
-                            } else {
-                                do {|| nuprm-theme get-prompt-indicator } | default ''
-                            }
-                            let multiline = do {|| nuprm-theme get-prompt-multiline-indicator } | default ''
-                            let preview_json = {
-                                command_l: $command_l,
-                                indicator: $indicator
-                                multiline: $multiline
-                                command_r: $command_r
-                            } | to json
-
-                            print $preview_json
-                        " | complete | get -o "stdout"
-                    }
-                } else { null }
-                
-                let preview_command_l = if $preview { $preview_prompt | from json | get -o "command_l" | default "" } else { null }
-                let preview_indicator = if $preview { $preview_prompt | from json | get -o "indicator" | default "" } else { null }
-                let preview_multiline = if $preview { $preview_prompt | from json | get -o "multiline" | default "" } else { null }
-                let preview_command_r = if $preview { $preview_prompt | from json | get -o "command_r" | default "" } else { null }
-                let preview_record = if $preview {
-                    {
-                        left: $"($preview_command_l)($preview_indicator)",
-                        right: $preview_command_r
-                    }
-                } else {
-                    {
-                        # empty record
-                    }
-                }
+                let preview_record = if $preview { show-theme $theme_path --preview=$preview } else { { } }
 
                 let list =  {
                     tags: $theme_tags
@@ -116,5 +124,8 @@ export module nuprm {
                 }
             }
         }
+
+        # Show theme
+        export alias show = show-theme
     }
 }
