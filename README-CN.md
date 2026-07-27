@@ -20,7 +20,8 @@
     ```nushell
     const nuprm_path = "~/.config/nuprm"
     const nuprm_theme = $"($nuprm_path)/themes/simple-minimal.nu"
-    source $"($nuprm_path)/nuprm.nu"
+    use $"($nuprm_path)/nuprm-module.nu" nuprm
+    nuprm load
     ```
 
 - 重启您的 Nushell 会话。

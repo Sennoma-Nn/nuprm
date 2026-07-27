@@ -2,7 +2,7 @@
 def show-theme [
     theme_path: string # Theme path
 ] {
-    let utils_path = (($nuprm_path | path expand | path split) ++ ["utils" "prompt-utils.nu"] | path join | path expand)
+    let utils_path = (($nuprm_path | path expand | path split) ++ ["utils", "prompt-utils.nu"] | path join | path expand)
     let config_json = $env | get -o NUPRMCONFIG | default {} | to json
     let preview_prompt = if true {
         ^$nu.current-exe --no-config-file -c $"
@@ -46,6 +46,7 @@ def show-theme [
     return $preview_record
 }
 
+# Nushell Prompt Manager
 export module nuprm {
     export def main [
         --version (-v) # Show version
