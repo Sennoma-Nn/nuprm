@@ -1,52 +1,12 @@
-export const theme_info = [
-    {
-        name: "azure.nu",
-        by: "Sennoma-Nn",
-        tag: "Minimalist"
-    },
-    {
-        name: "power-blocks.nu",
-        by: "Sennoma-Nn",
-        tag: "Power Line"
-    },
-    {
-        name: "gxy.nu",
-        by: "Sennoma-Nn",
-        tag: "Power Line, Multiple Lines"
-    },
-    {
-        name: "neon-night.nu",
-        by: "Sennoma-Nn",
-        tag: "Minimalist, Multiple Lines"
-    },
-    {
-        name: "retro-console.nu",
-        by: "Sennoma-Nn",
-        tag: "Minimalist"
-    },
-    {
-        name: "simple-minimal.nu",
-        by: "Sennoma-Nn",
-        tag: "Minimalist"
-    },
-    {
-        name: "galaxy-dream.nu",
-        by: "Sennoma-Nn",
-        tag: "Emoji, Multiple Lines"
-    },
-    {
-        name: "sunset-ocean.nu",
-        by: "Sennoma-Nn",
-        tag: "Power Line, Multiple Lines"
-    },
-    {
-        name: "circuit.nu",
-        by: "Sennoma-Nn",
-        tag: "Minimalist, Multiple Lines"
-    },
-    {
-        name: "violet-line.nu",
-        by: "Sennoma-Nn",
-        tag: "Power Line, Multiple Lines"
-    }
+export const theme_list = [
+    "azure.nu",
+    "power-blocks.nu",
+    "gxy.nu",
+    "neon-night.nu",
+    "retro-console.nu",
+    "simple-minimal.nu",
+    "galaxy-dream.nu",
+    "sunset-ocean.nu",
+    "circuit.nu",
+    "violet-line.nu"
 ]

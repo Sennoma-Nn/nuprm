@@ -97,4 +97,14 @@ export module nuprm-theme {
     export alias get-transient-prompt-indicator-vi-insert = get-transient-prompt-indicator
 
     export alias get-transient-prompt-indicator-vi-normal = get-transient-prompt-indicator
+
+    export def get-info [] {
+        return {
+            by: "Sennoma-Nn",
+            tags: [
+                "Power Line",
+                "Multiple Lines"
+            ]
+        }
+    }
 }

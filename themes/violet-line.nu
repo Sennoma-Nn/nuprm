@@ -160,4 +160,14 @@ export module nuprm-theme {
     export def get-transient-prompt-indicator-vi-insert [] { }
 
     export def get-transient-prompt-indicator-vi-normal [] { }
+
+    export def get-info [] {
+        return {
+            by: "Sennoma-Nn",
+            tags: [
+                "Power Line",
+                "Multiple Lines"
+            ]
+        }
+    }
 }

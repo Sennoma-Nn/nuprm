@@ -62,4 +62,14 @@ export module nuprm-theme {
     export alias get-transient-prompt-indicator-vi-insert = get-prompt-indicator-vi-insert
 
     export alias get-transient-prompt-indicator-vi-normal = get-prompt-indicator
+
+    export def get-info [] {
+        return {
+            by: "Sennoma-Nn",
+            tags: [
+                "Emoji",
+                "Multiple Lines"
+            ]
+        }
+    }
 }

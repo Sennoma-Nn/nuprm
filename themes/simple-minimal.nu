@@ -60,4 +60,13 @@ export module nuprm-theme {
     export alias get-transient-prompt-indicator-vi-insert = get-prompt-indicator-vi-insert
 
     export alias get-transient-prompt-indicator-vi-normal = get-prompt-indicator-vi-normal
+
+    export def get-info [] {
+        return {
+            by: "Sennoma-Nn",
+            tags: [
+                "Minimalist"
+            ]
+        }
+    }
 }

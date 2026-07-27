@@ -146,37 +146,20 @@ You can use the `nuprm theme list` command to view available themes:
 
 ```nushell
 ❯ nuprm theme list
-# => ╭───┬───────────────────┬───────────────────────────────────────╮
-# => │ # │       name        │              information              │
-# => ├───┼───────────────────┼───────────────────────────────────────┤
-# => │ 0 │ azure.nu          │ ┌──────┬────────────┐                 │
-# => │   │                   │ │ tags │ Minimalist │                 │
-# => │   │                   │ └──────┴────────────┘                 │
-# => │ 1 │ circuit.nu        │ ┌──────┬────────────────────────────┐ │
-# => │   │                   │ │ tags │ Minimalist, Multiple Lines │ │
-# => │   │                   │ └──────┴────────────────────────────┘ │
-# => │ 2 │ galaxy-dream.nu   │ ┌──────┬───────────────────────┐      │
-# => │   │                   │ │ tags │ Emoji, Multiple Lines │      │
-# => │   │                   │ └──────┴───────────────────────┘      │
-# => │ 3 │ gxy.nu            │ ┌──────┬────────────────────────────┐ │
-# => │   │                   │ │ tags │ Power Line, Multiple Lines │ │
-# => │   │                   │ └──────┴────────────────────────────┘ │
-# => │ 4 │ neon-night.nu     │ ┌──────┬────────────────────────────┐ │
-# => │   │                   │ │ tags │ Minimalist, Multiple Lines │ │
-# => │   │                   │ └──────┴────────────────────────────┘ │
-# => │ 5 │ power-blocks.nu   │ ┌──────┬────────────┐                 │
-# => │   │                   │ │ tags │ Power Line │                 │
-# => │   │                   │ └──────┴────────────┘                 │
-# => │ 6 │ retro-console.nu  │ ┌──────┬────────────┐                 │
-# => │   │                   │ │ tags │ Minimalist │                 │
-# => │   │                   │ └──────┴────────────┘                 │
-# => │ 7 │ simple-minimal.nu │ ┌──────┬────────────┐                 │
-# => │   │                   │ │ tags │ Minimalist │                 │
-# => │   │                   │ └──────┴────────────┘                 │
-# => │ 8 │ sunset-ocean.nu   │ ┌──────┬────────────────────────────┐ │
-# => │   │                   │ │ tags │ Power Line, Multiple Lines │ │
-# => │   │                   │ └──────┴────────────────────────────┘ │
-# => ╰───┴───────────────────┴───────────────────────────────────────╯
+# => ╭───┬───────────────────╮
+# => │ # │       name        │
+# => ├───┼───────────────────┤
+# => │ 0 │ azure.nu          │
+# => │ 1 │ circuit.nu        │
+# => │ 2 │ galaxy-dream.nu   │
+# => │ 3 │ gxy.nu            │
+# => │ 4 │ neon-night.nu     │
+# => │ 5 │ power-blocks.nu   │
+# => │ 6 │ retro-console.nu  │
+# => │ 7 │ simple-minimal.nu │
+# => │ 8 │ sunset-ocean.nu   │
+# => │ 9 │ violet-line.nu    │
+# => ╰───┴───────────────────╯
 ```
 
 To set a theme, configure the `nuprm_theme` constant in your environment file:
