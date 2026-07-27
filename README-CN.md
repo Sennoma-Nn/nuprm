@@ -9,7 +9,9 @@
 
 ## 安装
 
-- 将此仓库克隆到您的 .config 目录：
+> `~/.config/nuprm` 目录可以修改为你想指定的任意目录，只要你的 `$nuprm_path` 常量正确的指向 `git clone` 到的位置
+
+- 将此仓库克隆到您的 `.config` 目录：
     ```nushell
     git clone -b stable https://github.com/Sennoma-Nn/nuprm.git ~/.config/nuprm
     ```
@@ -17,8 +19,8 @@
 - 在您的 Nushell 配置文件（`config nu`）中添加以下内容：
     ```nushell
     const nuprm_path = "~/.config/nuprm"
-    const nuprm_theme = "~/.config/nuprm/themes/simple-minimal.nu"
-    source ~/.config/nuprm/nuprm.nu
+    const nuprm_theme = $"($nuprm_path)/themes/simple-minimal.nu"
+    source $"($nuprm_path)/nuprm.nu"
     ```
 
 - 重启您的 Nushell 会话。
@@ -101,7 +103,7 @@ nuprm 支持智能目录缩写功能，让长路径显示更加短。
     - 5: `~/.t/a/b/c/ddd/eee/fff/ggg`
 
 - `directory_abbreviation.display_chars: 2` - 缩写后显示几个字符
-  - 例如设置为 3：`/home/laism/.test/123456/demo/path` 会显示为 `~/.tes/123/demo/path`
+  - 例如设置为 3：`/home/username/.test/123456/demo/path` 会显示为 `~/.tes/123/demo/path`
 
 - `directory_abbreviation.abbreviate_home: true` - 启用家目录缩写为 `~`
 - `directory_abbreviation.abbreviate_home: false` - 禁用家目录缩写

@@ -9,7 +9,9 @@
 
 ## Installation
 
-- Clone this repository to your .config directory:
+> You can change `~/.config/nuprm` to any directory you prefer, as long as the `$nuprm_path` constant correctly points to where you cloned the repository
+
+- Clone this repository into your `.config` directory:
     ```nushell
     git clone -b stable https://github.com/Sennoma-Nn/nuprm.git ~/.config/nuprm
     ```
@@ -17,8 +19,8 @@
 - Add the following to your Nushell configuration file (`config nu`):
     ```nushell
     const nuprm_path = "~/.config/nuprm"
-    const nuprm_theme = "~/.config/nuprm/themes/simple-minimal.nu"
-    source ~/.config/nuprm/nuprm.nu
+    const nuprm_theme = $"($nuprm_path)/themes/simple-minimal.nu"
+    source $"($nuprm_path)/nuprm.nu"
     ```
 
 - Restart your Nushell session:
@@ -101,7 +103,7 @@ nuprm supports intelligent directory abbreviation to make long paths more readab
     - 5: `~/.t/a/b/c/ddd/eee/fff/ggg`
 
 - `directory_abbreviation.display_chars: 2` - Number of characters to display after abbreviation
-  - For example, set to 3: `/home/laism/.test/123456/demo/path` will display as `~/.tes/123/demo/path`
+  - For example, set to 3: `/home/username/.test/123456/demo/path` will display as `~/.tes/123/demo/path`
 
 - `directory_abbreviation.abbreviate_home: "yes"` - Enable home directory abbreviation to `~`
 - `directory_abbreviation.abbreviate_home: "no"` - Disable home directory abbreviation
