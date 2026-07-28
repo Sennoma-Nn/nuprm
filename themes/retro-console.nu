@@ -1,7 +1,6 @@
 export module nuprm-theme {
     def get-color [color] {
         alias color-to-ansi = prompt-make-utils color-to-ansi
-        alias power-line-char = prompt-make-utils power-line-char
 
         let colors = {
             terminal_green: (color-to-ansi 57 255 20 "fg" "92"),

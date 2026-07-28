@@ -43,7 +43,9 @@ def show-theme [
             print $preview_json
         "
 
-        ^$nu.current-exe --no-config-file -c $run_code | complete | get -o "stdout"
+        ^$nu.current-exe --no-config-file -c $run_code
+            | complete
+            | get -o "stdout"
     }
 
     let preview_command_l = $preview_prompt | from json | get -o "command_l" | default ""

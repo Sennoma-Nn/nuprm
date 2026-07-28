@@ -1,7 +1,7 @@
 export module nuprm-theme {
     def get-color [color] {
         alias color-to-ansi = prompt-make-utils color-to-ansi
-        alias power-line-char = prompt-make-utils power-line-char
+        alias dividers-char = prompt-make-utils power-line dividers-char
 
         let colors = {
             black_fg: (color-to-ansi 0 0 0 "fg" "30"),
@@ -18,12 +18,12 @@ export module nuprm-theme {
             color5_bg: (color-to-ansi 35 70 94 "bg" "46"),
             grey_fg: (color-to-ansi  64 64 64 "fg" "90"),
 
-            power_line1: (power-line-char "right_hard_divider"), # 
-            power_line2: (power-line-char "left_hard_divider"), # 
-            power_line3: (power-line-char "right_soft_divider"), # 
-            power_line4: (power-line-char "left_soft_divider"), # 
-            power_line5: (power-line-char "left_half_circle_thick"), # 
-            power_line6: (power-line-char "right_half_circle_thick"), # 
+            power_line1: (dividers-char "right_hard_divider"), # 
+            power_line2: (dividers-char "left_hard_divider"), # 
+            power_line3: (dividers-char "right_soft_divider"), # 
+            power_line4: (dividers-char "left_soft_divider"), # 
+            power_line5: (dividers-char "left_half_circle_thick"), # 
+            power_line6: (dividers-char "right_half_circle_thick"), # 
 
             reset_bg: "\e[49m",
             bold: "\e[1m",

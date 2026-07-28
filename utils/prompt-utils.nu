@@ -433,6 +433,15 @@ def make-file-url [
     )
 }
 
+# Get path mode, DOS (?:\???\???\???), UNIX (/???/???/???)
+def get-path-mode []: nothing -> string {
+    if (is-os "windows") {
+        return "DOS"
+    } else {
+        return "UNIX"
+    }
+}
+
 # Get execution time (ms)
 def get-execution-time-ms []: nothing -> number {
     let is_show_execution_time = is-config-enable $.display_elements.execution_time true
@@ -540,17 +549,38 @@ def get-system-icon []: nothing -> string {
     }
 }
 
-# Get path mode, DOS (?:\???\???\???), UNIX (/???/???/???)
-def get-path-mode []: nothing -> string {
-    if (is-os "windows") {
-        return "DOS"
-    } else {
-        return "UNIX"
-    }
+# Make Power Line block
+def make-power-line-block [
+    start_dividers: string
+    end_dividers: string
+    block_fg: string
+    block_bg: string
+    block_text: any
+    text_fg: string
+    icon?: string = ""
+    --display_if (-d) = true
+] {
+    let block = if $display_if {
+        [
+            (ansi reset)
+            $block_fg
+            $start_dividers
+            (ansi reset)
+            $block_bg
+            $text_fg
+            $" ($icon)($block_text) "
+            (ansi reset)
+            $block_fg
+            $end_dividers
+            (ansi reset)
+        ] | str join ""
+    } else { "" }
+
+    return $block
 }
 
 # Get characters from Power Line
-def get-power-line-char [
+def get-power-line-dividers-char [
     name: string # Char name
 ]: nothing -> string {
     let char = match $name {
@@ -654,9 +684,16 @@ export module prompt-make-utils {
     # Convert RGB values to ANSI escape sequences for terminal colors
     export alias color-to-ansi = color2ansi
 
-    # Get Power Line characters for prompt styling
-    export alias power-line-char = get-power-line-char
-
     # Adds prefix and suffix decorators around the given text
     export alias surround = surround
+
+    export module power-line {
+        # Get Power Line characters for prompt styling
+        export alias dividers-char = get-power-line-dividers-char
+
+        # Make Power Line block
+        export alias make-block = make-power-line-block
+    }
+
+    export use power-line
 }

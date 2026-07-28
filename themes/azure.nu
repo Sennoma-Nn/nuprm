@@ -1,7 +1,7 @@
 export module nuprm-theme {
     def get-color [color] {
         alias color-to-ansi = prompt-make-utils color-to-ansi
-        alias power-line-char = prompt-make-utils power-line-char
+        alias dividers-char = prompt-make-utils power-line dividers-char
 
         let colors = {
             blue: (color-to-ansi 82 139 255 "fg" "34")

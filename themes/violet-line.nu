@@ -1,16 +1,16 @@
 export module nuprm-theme {
     def get-color [color] {
         alias color-to-ansi = prompt-make-utils color-to-ansi
-        alias power-line-char = prompt-make-utils power-line-char
+        alias dividers-char = prompt-make-utils power-line dividers-char
 
         let colors = {
             bold: "\e[1m",
             italic: "\e[3m"
             reset: "\e[0m"
-            power_line1: (power-line-char "right_hard_divider") # 
-            power_line2: (power-line-char "right_hard_divider_inverse") # 
-            power_line3: (power-line-char "left_hard_divider") # 
-            power_line4: (power-line-char "left_hard_divider_inverse") # 
+            power_line1: (dividers-char "right_hard_divider") # 
+            power_line2: (dividers-char "right_hard_divider_inverse") # 
+            power_line3: (dividers-char "left_hard_divider") # 
+            power_line4: (dividers-char "left_hard_divider_inverse") # 
             white_fg: (color-to-ansi 255 255 255 "fg" "37")
             black_fg: (color-to-ansi 0 0 0 "fg" "30")
             normal_fg: (color-to-ansi 255 255 255 "fg" "37")
@@ -23,34 +23,7 @@ export module nuprm-theme {
         return $return_prompt_chars
     }
 
-    def prompt-block [
-        start_char: string
-        end_char: string
-        block_fg: string
-        block_bg: string
-        block_text: any
-        text_fg: string
-        icon?: string
-        --display_if (-d) = true
-    ] {
-        let block = if $display_if {
-            [
-                (get-color reset)
-                $block_fg
-                $start_char
-                (get-color reset)
-                $block_bg
-                $text_fg
-                $" ($icon)($block_text) "
-                (get-color reset)
-                $block_fg
-                $end_char
-                (get-color reset)
-            ] | str join ""
-        } else { "" }
-
-        return $block
-    }
+    alias make-block = prompt-make-utils power-line make-block
 
     export def get-prompt-command-left [] {
         alias surround = prompt-make-utils surround
@@ -113,8 +86,8 @@ export module nuprm-theme {
                 )
                 "\n",
                 "│ ",
-                (prompt-block --display_if=($status.shells != "") (get-color power_line1) (get-color power_line2) (get-color normal_fg) (get-color normal_bg) $status.shells (get-color black_fg) "󰞷 "),
-                (prompt-block (get-color power_line1) (get-color power_line3) (get-color purple_fg) (get-color purple_bg) $status.path (get-color white_fg)),
+                (make-block --display_if=($status.shells != "") (get-color power_line1) (get-color power_line2) (get-color normal_fg) (get-color normal_bg) $status.shells (get-color black_fg) "󰞷 "),
+                (make-block (get-color power_line1) (get-color power_line3) (get-color purple_fg) (get-color purple_bg) $status.path (get-color white_fg)),
                 "\n",
                 "╰─"
             ] | str join ""
@@ -143,7 +116,7 @@ export module nuprm-theme {
         let path = (get-prompt-info last-pwd -u)
         
         return (
-            (prompt-block (get-color power_line1) (get-color power_line3) (get-color purple_fg) (get-color purple_bg) $path (get-color white_fg))
+            (make-block (get-color power_line1) (get-color power_line3) (get-color purple_fg) (get-color purple_bg) $path (get-color white_fg))
         )
     }
 
