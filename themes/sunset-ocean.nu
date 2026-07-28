@@ -49,23 +49,24 @@ export module nuprm-theme {
         let user_host = $"($user_name)($host_name)"
 
         let prompt = [
-            (make-block
-                (get-prompt-chars power_line5)
-                (get-prompt-chars power_line2)
-                (get-prompt-chars color1_fg)
-                (get-prompt-chars color1_bg)
-                $user_host
-                (get-prompt-chars black_fg)
-                -i $"((get-prompt-chars italic))($system_icon)"
-                -e (get-prompt-chars color2_bg)
+            (
+                make-block
+                    -s (get-prompt-chars power_line5)
+                    -e (get-prompt-chars power_line2)
+                    -E (get-prompt-chars color2_bg)
+                    -i $"((get-prompt-chars italic))($system_icon)"
+                    (get-prompt-chars color1_fg)
+                    (get-prompt-chars color1_bg)
+                    $user_host
+                    (get-prompt-chars black_fg)
             )
-            (make-block
-                ""
-                $"((get-prompt-chars power_line2))((get-prompt-chars power_line4))"
-                (get-prompt-chars color2_fg)
-                (get-prompt-chars color2_bg)
-                $"($shells_index)($path)"
-                ""
+            (
+                make-block
+                    -e $"((get-prompt-chars power_line2))((get-prompt-chars power_line4))"
+                    (get-prompt-chars color2_fg)
+                    (get-prompt-chars color2_bg)
+                    $"($shells_index)($path)"
+                    (get-prompt-chars black_fg)
             )
             "\n"
         ] | str join ""
@@ -88,38 +89,39 @@ export module nuprm-theme {
         )
 
         let prompt = [
-            (make-block
-                $"((get-prompt-chars power_line3))((get-prompt-chars power_line1))"
-                ""
-                (get-prompt-chars color3_fg)
-                (get-prompt-chars color3_bg)
-                $status_symbol
-                ""
-                -e (get-prompt-chars color4_bg)
+            (
+                make-block
+                    -s $"((get-prompt-chars power_line3))((get-prompt-chars power_line1))"
+                    -E (get-prompt-chars color4_bg)
+                    (get-prompt-chars color3_fg)
+                    (get-prompt-chars color3_bg)
+                    $status_symbol
+                    (get-prompt-chars color4_fg)
             )
-            (make-block
-                --display_if ($git_info != "")
-                --force_display_dividers
-                (get-prompt-chars power_line1)
-                ""
-                (get-prompt-chars color4_fg)
-                (get-prompt-chars color4_bg)
-                $git_info
-                (get-prompt-chars white_fg)
-                -s (get-prompt-chars color3_bg)
-                -e (get-prompt-chars color5_bg)
+            (
+                make-block
+                    --display_if ($git_info != "")
+                    --force_display_dividers
+                    -s (get-prompt-chars power_line1)
+                    -S (get-prompt-chars color3_bg)
+                    -E (get-prompt-chars color5_bg)
+                    (get-prompt-chars color4_fg)
+                    (get-prompt-chars color4_bg)
+                    $git_info
+                    (get-prompt-chars white_fg)
             )
-            (make-block
-                --display_if ($exec_time > 0.5)
-                --force_display_dividers
-                (get-prompt-chars power_line1)
-                (get-prompt-chars power_line6)
-                (get-prompt-chars color5_fg)
-                (get-prompt-chars color5_bg)
-                $execution_time
-                (get-prompt-chars white_fg)
-                -s (get-prompt-chars color4_bg)
-                -e (get-prompt-chars reset_bg)
+            (
+                make-block
+                    --display_if ($exec_time > 0.5)
+                    --force_display_dividers
+                    -s (get-prompt-chars power_line1)
+                    -e (get-prompt-chars power_line6)
+                    -S (get-prompt-chars color4_bg)
+                    -E (get-prompt-chars reset_bg)
+                    (get-prompt-chars color5_fg)
+                    (get-prompt-chars color5_bg)
+                    $execution_time
+                    (get-prompt-chars white_fg)
             )
         ] | str join ""
         return $prompt

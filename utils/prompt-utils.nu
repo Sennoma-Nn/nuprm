@@ -551,17 +551,17 @@ def get-system-icon []: nothing -> string {
 
 # Make Power Line block
 def make-power-line-block [
-    start_dividers: string
-    end_dividers: string
     block_fg: string
     block_bg: string
     block_text: any
     text_fg: string
+    --start_dividers: string (-s) = ""
+    --end_dividers: string (-e) = ""
     --icon: string (-i) = ""
     --display_if (-d) = true
     --force_display_dividers (-f)
-    --start_dividers_bg: string (-s) = ""
-    --end_dividers_bg: string (-e) = ""
+    --start_dividers_bg: string (-S) = ""
+    --end_dividers_bg: string (-E) = ""
 ] {
     let block = if $display_if {
         [

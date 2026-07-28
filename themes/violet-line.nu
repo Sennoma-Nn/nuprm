@@ -86,8 +86,8 @@ export module nuprm-theme {
                 )
                 "\n",
                 "│ ",
-                (make-block --display_if=($status.shells != "") (get-color power_line1) (get-color power_line2) (get-color normal_fg) (get-color normal_bg) $status.shells (get-color black_fg) -i "󰞷 "),
-                (make-block (get-color power_line1) (get-color power_line3) (get-color purple_fg) (get-color purple_bg) $status.path (get-color white_fg)),
+                (make-block --display_if=($status.shells != "") -s (get-color power_line1) -e (get-color power_line2) (get-color normal_fg) (get-color normal_bg) $status.shells (get-color black_fg) -i "󰞷 "),
+                (make-block -s (get-color power_line1) -e (get-color power_line3) (get-color purple_fg) (get-color purple_bg) $status.path (get-color white_fg)),
                 "\n",
                 "╰─"
             ] | str join ""
@@ -116,7 +116,7 @@ export module nuprm-theme {
         let path = (get-prompt-info last-pwd -u)
         
         return (
-            (make-block (get-color power_line1) (get-color power_line3) (get-color purple_fg) (get-color purple_bg) $path (get-color white_fg))
+            (make-block -s (get-color power_line1) -e (get-color power_line3) (get-color purple_fg) (get-color purple_bg) $path (get-color white_fg))
         )
     }
 

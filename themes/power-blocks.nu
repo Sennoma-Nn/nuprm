@@ -58,14 +58,14 @@ export module nuprm-theme {
         }
         return (
             [
-                (make-block "" (get-prompt-chars power_line2) (get-prompt-chars name_fg) (get-prompt-chars name_bg) $"($status.user)($status.host)" (get-prompt-chars black_fg) -i $status.icon)
-                (make-block (get-prompt-chars power_line1) (get-prompt-chars power_line2) (get-prompt-chars path_fg) (get-prompt-chars path_bg) $status.path (get-prompt-chars white_fg) -i " ")
-                (make-block --display_if ($status.git != "") (get-prompt-chars power_line1) (get-prompt-chars power_line2) (get-prompt-chars git_fg) (get-prompt-chars git_bg) $status.git (get-prompt-chars white_fg) -i " ")
-                (make-block --display_if ($status.time > 0.5) (get-prompt-chars power_line1) (get-prompt-chars power_line2) (get-prompt-chars time_fg) (get-prompt-chars time_bg) $"($status.time)s" (get-prompt-chars white_fg) -i " ")
-                (make-block --display_if ($status.exit == 0) (get-prompt-chars power_line1) (get-prompt-chars power_line3) (get-prompt-chars status_fg) (get-prompt-chars status_bg) (get-prompt-chars right_char) (get-prompt-chars white_fg))
-                (make-block --display_if ($status.exit != 0) (get-prompt-chars power_line1) (get-prompt-chars power_line3) (get-prompt-chars status_err_fg) (get-prompt-chars status_err_bg) $"(get-prompt-chars wrong_char) ($status.exit)" (get-prompt-chars white_fg))
-                (make-block --display_if ($status.shells != "") (get-prompt-chars power_line4) (get-prompt-chars power_line3) (get-prompt-chars shells_fg) (get-prompt-chars shells_bg) $status.shells (get-prompt-chars white_fg) -i "󰞷 ")
-                (make-block --display_if $status.admin (get-prompt-chars power_line4) (get-prompt-chars power_line3) (get-prompt-chars root_fg) (get-prompt-chars root_bg) (get-prompt-chars root_icon) (get-prompt-chars white_fg))
+                (make-block -e (get-prompt-chars power_line2) (get-prompt-chars name_fg) (get-prompt-chars name_bg) $"($status.user)($status.host)" (get-prompt-chars black_fg) -i $status.icon)
+                (make-block -s (get-prompt-chars power_line1) -e (get-prompt-chars power_line2) (get-prompt-chars path_fg) (get-prompt-chars path_bg) $status.path (get-prompt-chars white_fg) -i " ")
+                (make-block --display_if ($status.git != "") -s (get-prompt-chars power_line1) -e (get-prompt-chars power_line2) (get-prompt-chars git_fg) (get-prompt-chars git_bg) $status.git (get-prompt-chars white_fg) -i " ")
+                (make-block --display_if ($status.time > 0.5) -s (get-prompt-chars power_line1) -e (get-prompt-chars power_line2) (get-prompt-chars time_fg) (get-prompt-chars time_bg) $"($status.time)s" (get-prompt-chars white_fg) -i " ")
+                (make-block --display_if ($status.exit == 0) -s (get-prompt-chars power_line1) -e (get-prompt-chars power_line3) (get-prompt-chars status_fg) (get-prompt-chars status_bg) (get-prompt-chars right_char) (get-prompt-chars white_fg))
+                (make-block --display_if ($status.exit != 0) -s (get-prompt-chars power_line1) -e (get-prompt-chars power_line3) (get-prompt-chars status_err_fg) (get-prompt-chars status_err_bg) $"(get-prompt-chars wrong_char) ($status.exit)" (get-prompt-chars white_fg))
+                (make-block --display_if ($status.shells != "") -s (get-prompt-chars power_line4) -e (get-prompt-chars power_line3) (get-prompt-chars shells_fg) (get-prompt-chars shells_bg) $status.shells (get-prompt-chars white_fg) -i "󰞷 ")
+                (make-block --display_if $status.admin -s (get-prompt-chars power_line4) -e (get-prompt-chars power_line3) (get-prompt-chars root_fg) (get-prompt-chars root_bg) (get-prompt-chars root_icon) (get-prompt-chars white_fg))
             ] | str join ""
         )
     }
@@ -81,13 +81,31 @@ export module nuprm-theme {
     }
 
     export def get-prompt-indicator-vi-insert [] {
-        let prompt = (make-block $"(get-prompt-chars power_line4)" $"(get-prompt-chars power_line3) " (get-prompt-chars vi_fg) (get-prompt-chars vi_bg) "INS" (get-prompt-chars white_fg) -i " ")
+        let prompt = (
+            make-block
+                -i " "
+                -s $"(get-prompt-chars power_line4)"
+                -e $"(get-prompt-chars power_line3) "
+                (get-prompt-chars vi_fg)
+                (get-prompt-chars vi_bg)
+                "INS"
+                (get-prompt-chars white_fg)
+        )
 
         return $prompt
     }
 
     export def get-prompt-indicator-vi-normal [] {
-        let prompt = (make-block $"(get-prompt-chars power_line4)" $"(get-prompt-chars power_line3) " (get-prompt-chars vi_fg) (get-prompt-chars vi_bg) "NOR" (get-prompt-chars white_fg) -i " ")
+        let prompt = (
+            make-block
+                -i " "
+                -s $"(get-prompt-chars power_line4)"
+                -e $"(get-prompt-chars power_line3) "
+                (get-prompt-chars vi_fg)
+                (get-prompt-chars vi_bg)
+                "NOR"
+                (get-prompt-chars white_fg)
+        )
 
         return $prompt
     }
@@ -96,7 +114,13 @@ export module nuprm-theme {
         let path = (get-prompt-info last-pwd -u)
         
         return (
-            make-block "" $"(get-prompt-chars power_line3) " (get-prompt-chars path_fg) (get-prompt-chars path_bg) $path (get-prompt-chars white_fg) -i " "
+            make-block
+                -i " "
+                -e $"(get-prompt-chars power_line3) "
+                (get-prompt-chars path_fg)
+                (get-prompt-chars path_bg)
+                $path
+                (get-prompt-chars white_fg)
         )
     }
 
