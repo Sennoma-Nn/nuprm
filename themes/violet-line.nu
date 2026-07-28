@@ -86,7 +86,7 @@ export module nuprm-theme {
                 )
                 "\n",
                 "│ ",
-                (make-block --display_if=($status.shells != "") (get-color power_line1) (get-color power_line2) (get-color normal_fg) (get-color normal_bg) $status.shells (get-color black_fg) "󰞷 "),
+                (make-block --display_if=($status.shells != "") (get-color power_line1) (get-color power_line2) (get-color normal_fg) (get-color normal_bg) $status.shells (get-color black_fg) -i "󰞷 "),
                 (make-block (get-color power_line1) (get-color power_line3) (get-color purple_fg) (get-color purple_bg) $status.path (get-color white_fg)),
                 "\n",
                 "╰─"
