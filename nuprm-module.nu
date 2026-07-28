@@ -27,7 +27,7 @@ def show-theme [
             let command_r = do {|| nuprm-theme get-prompt-command-right } | default ''
             let theme_info = do {|| nuprm-theme get-info } | default ''
             let indicator = if $env.config.edit_mode == 'vi' {
-                do {|| nuprm-theme get-prompt-indicator-vi-insert } | default ''
+                do {|| nuprm-theme get-prompt-indicator-vi-normal } | default ''
             } else {
                 do {|| nuprm-theme get-prompt-indicator } | default ''
             }
