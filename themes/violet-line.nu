@@ -65,11 +65,6 @@ export module nuprm-theme {
                             [
                                 $status.git,
                                 (
-                                    if $status.exit != 0 {
-                                        $" ($status.exit)"
-                                    } else { "" }
-                                ),
-                                (
                                     if $status.time > 0.5 {
                                         $"󰔛 ($status.time)s"
                                     } else { "" }
@@ -86,8 +81,37 @@ export module nuprm-theme {
                 )
                 "\n",
                 "│ ",
-                (make-block --display_if=($status.shells != "") -s (get-color power_line1) -e (get-color power_line2) (get-color normal_fg) (get-color normal_bg) $status.shells (get-color black_fg) -i "󰞷 "),
-                (make-block -s (get-color power_line1) -e (get-color power_line3) (get-color purple_fg) (get-color purple_bg) $status.path (get-color white_fg)),
+                (
+                    make-block
+                        --display_if ($status.shells != "")
+                        -i "󰞷 "
+                        -s (get-color power_line1)
+                        -e (get-color power_line2)
+                        (get-color normal_fg)
+                        (get-color normal_bg)
+                        $status.shells
+                        (get-color black_fg)
+                ),
+                (
+                    make-block
+                        -s (get-color power_line1)
+                        -e (get-color power_line3)
+                        (get-color purple_fg)
+                        (get-color purple_bg)
+                        $status.path
+                        (get-color white_fg)
+                ),
+                (
+                    make-block
+                        --display_if ($status.exit != 0)
+                        -i " "
+                        -s (get-color power_line4)
+                        -e (get-color power_line3)
+                        (get-color normal_fg)
+                        (get-color normal_bg)
+                        $status.exit
+                        (get-color black_fg)
+                ),
                 "\n",
                 "╰─"
             ] | str join ""
@@ -115,9 +139,17 @@ export module nuprm-theme {
     export def get-transient-prompt-command [] {
         let path = (get-prompt-info last-pwd -u)
         
-        return (
-            (make-block -s (get-color power_line1) -e (get-color power_line3) (get-color purple_fg) (get-color purple_bg) $path (get-color white_fg))
-        )
+        let prompt = (
+            make-block
+                -s (get-color power_line1)
+                -e (get-color power_line3)
+                (get-color purple_fg)
+                (get-color purple_bg)
+                $path
+                (get-color white_fg)
+        ) + " "
+
+        return $prompt
     }
 
     export def get-transient-prompt-command-right [] { }
