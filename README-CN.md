@@ -42,7 +42,7 @@ $env.NUPRMCONFIG = {
         start_from_end: 3,
         display_chars: 2,
         abbreviate_home: true,
-        specific_mappings: {}
+        custom_abbreviate_mappings: {}
     },
     display_elements: {
         system_icon: false,
@@ -54,7 +54,7 @@ $env.NUPRMCONFIG = {
         exit: true
     },
     compatibility: {
-        enable_path_url: true,
+        path_url: true,
         true_color: true,
         system_icon_with_space: true
     },

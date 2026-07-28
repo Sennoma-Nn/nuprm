@@ -19,7 +19,7 @@ def specific-abbreviations []: string -> string {
     let abbr_enable = is-config-enable $.directory_abbreviation.enabled true
     let abbr_home = is-config-enable $.directory_abbreviation.abbreviate_home true
     let abbr_config = get-config $.directory_abbreviation {}
-    let specific_abbr = $abbr_config | get -o "specific_mappings" | default {}
+    let specific_abbr = $abbr_config | get -o "custom_abbreviate_mappings" | default {}
     let specific_abbr_record = $specific_abbr | transpose key value | update key {|r| $r.key | path expand --no-symlink } | transpose -rd
     let specific_abbr_key = $specific_abbr_record | columns
     let home_dir = $nu.home-path? | default $nu.home-dir? | default ("~" | path expand --no-symlink)
@@ -420,7 +420,7 @@ def make-file-url [
     file_path: string # Actual path for the link
 ]: string -> string {
     let display_path = $in
-    let enable_path_url = is-config-enable $.compatibility.enable_path_url true
+    let enable_path_url = is-config-enable $.compatibility.path_url true
 
     if not $enable_path_url {
         return $display_path
