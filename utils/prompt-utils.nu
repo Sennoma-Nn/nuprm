@@ -618,7 +618,7 @@ export module get-prompt-info {
     # Get shells index information for prompt
     export alias shells = get-where-shells
 
-    # Get user name information for prompt
+    # Get user name or full name information for prompt
     export alias user-name = get-user-name
 
     # Get host name information for prompt
@@ -630,11 +630,11 @@ export module get-prompt-info {
     # Get is full name enabled
     export alias full-name-enabled = is-full-name-enabled
 
-    # Get formatted path information for prompt
-    export alias path = format-pwd
+    # Get formatted pwd information for prompt
+    export alias pwd = format-pwd
 
-    # Get last directory of path information for prompt
-    export alias last-path = get-pwd-last
+    # Get last directory of pwd information for prompt
+    export alias last-pwd = get-pwd-last
 
     # Get execution time information for prompt
     export alias exec-time = get-execution-time-s

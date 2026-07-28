@@ -31,7 +31,7 @@ export module nuprm-theme {
         let user_name = get-prompt-info user-name
         let host_name = surround (get-prompt-info host-name) -l $" @ "
         let user_host = $"($user_name)($host_name)"
-        let path = surround (get-prompt-info path $" (get-color power_line3) " -d (get-color blue_fg) -s (get-color black_fg) -ku) -l $"(get-color power_line4)(get-color dark_blue_bg)(get-color blue_fg) " -r $" (get-color reset)(get-color dark_blue_fg)(get-color power_line2)"
+        let path = surround (get-prompt-info pwd $" (get-color power_line3) " -d (get-color blue_fg) -s (get-color black_fg) -ku) -l $"(get-color power_line4)(get-color dark_blue_bg)(get-color blue_fg) " -r $" (get-color reset)(get-color dark_blue_fg)(get-color power_line2)"
         let git_info = get-prompt-info git
         let shells_info = surround (get-prompt-info shells -d) -l $" ((get-color dark_blue_bg) + (get-color blue_fg))(get-color power_line5) №"
         let exit_code = get-prompt-info exit-code
@@ -75,7 +75,7 @@ export module nuprm-theme {
     export def get-transient-prompt-command [] {
         alias surround = prompt-make-utils surround
 
-        let path = surround (get-prompt-info path $" (get-color power_line3) " -d (get-color blue_fg) -s (get-color black_fg) -ku) -l $"(get-color power_line1)(get-color reset)((get-color dark_blue_bg) + (get-color blue_fg)) " -r $" (get-color reset)(get-color dark_blue_fg)(get-color power_line2)"
+        let path = surround (get-prompt-info pwd $" (get-color power_line3) " -d (get-color blue_fg) -s (get-color black_fg) -ku) -l $"(get-color power_line1)(get-color reset)((get-color dark_blue_bg) + (get-color blue_fg)) " -r $" (get-color reset)(get-color dark_blue_fg)(get-color power_line2)"
 
         mut prompt = ""
         $prompt += $"(get-color dark_blue_fg)($path)(get-color reset)"

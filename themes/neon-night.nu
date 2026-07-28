@@ -26,7 +26,7 @@ export module nuprm-theme {
         let user_host = $"($user_name)($host_name)"
         let user_info = $"($user_host)(ansi reset)"
         let path_sep = if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }
-        let path_info = surround (get-prompt-info path $path_sep -d (ansi reset) -s (get-color grey) -u) -r (get-color white)
+        let path_info = surround (get-prompt-info pwd $path_sep -d (ansi reset) -s (get-color grey) -u) -r (get-color white)
         let git_branch = (get-prompt-info git -d $"(get-color cyan)*" -s $"(get-color cyan)+")
         let shells_index = surround (get-prompt-info shells -d) -l $"(get-color grey) | (get-color cyan)dirs: (get-color magenta)№"
         let git_info = if not ($git_branch | is-empty) { $"(get-color grey) | (get-color cyan)git: (get-color magenta)($git_branch)(ansi reset)" } else { "" }

@@ -60,7 +60,7 @@ export module nuprm-theme {
             icon: (get-prompt-info system-icon)
             user: (get-prompt-info user-name)
             host: (get-prompt-info host-name)
-            path: (surround (get-prompt-info path $path_sep -d $"\e[0;1m(get-color white_fg)(get-color purple_bg)" -s $"\e[0;2m(get-color purple_bg)" -u))
+            path: (surround (get-prompt-info pwd $path_sep -d $"\e[0;1m(get-color white_fg)(get-color purple_bg)" -s $"\e[0;2m(get-color purple_bg)" -u))
             git: (surround (get-prompt-info git) -l "󰊢 ")
             exit: (get-prompt-info exit-code)
             shells: (get-prompt-info shells -d)
@@ -140,7 +140,7 @@ export module nuprm-theme {
     }
 
     export def get-transient-prompt-command [] {
-        let path = (get-prompt-info last-path -u)
+        let path = (get-prompt-info last-pwd -u)
         
         return (
             (prompt-block (get-color power_line1) (get-color power_line3) (get-color purple_fg) (get-color purple_bg) $path (get-color white_fg))

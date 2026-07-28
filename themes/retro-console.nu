@@ -20,7 +20,7 @@ export module nuprm-theme {
         let system_icon = surround (get-prompt-info system-icon) -l $"(get-color terminal_green)" -r $"(get-color dim_green) : "
         let shells_index = surround (get-prompt-info shells -d) -l $"(get-color terminal_green)#" -r $"(get-color dim_green) : "
         let path_sep = if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }
-        let path_str = get-prompt-info path $path_sep -u -d (get-color terminal_green) -s (get-color dim_green)
+        let path_str = get-prompt-info pwd $path_sep -u -d (get-color terminal_green) -s (get-color dim_green)
         let git_branch = (get-prompt-info git)
         let execution_time = if (get-prompt-info exec-time) > 0.5 { $" (get-color dim_green)(get-prompt-info exec-time)sec(get-color reset)" } else { "" }
         let git_str = if not ($git_branch | is-empty) { $" (get-color dim_green)($git_branch)(get-color reset)" } else { "" }

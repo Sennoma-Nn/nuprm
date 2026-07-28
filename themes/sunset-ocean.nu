@@ -41,7 +41,7 @@ export module nuprm-theme {
         let system_icon = surround (get-prompt-info system-icon) -r " "
         let shells_index = surround (get-prompt-info shells -d) -l $"((get-color black_fg))#" -r $" : "
         let path_sep = if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }
-        let path = (get-prompt-info path $path_sep -u -d (get-color black_fg) -s (get-color grey_fg))
+        let path = (get-prompt-info pwd $path_sep -u -d (get-color black_fg) -s (get-color grey_fg))
         let host_name = surround (get-prompt-info host-name) -l " @ "
         let user_name = get-prompt-info user-name
         let user_host = $"($user_name)($host_name)"

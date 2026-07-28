@@ -23,7 +23,7 @@ export module nuprm-theme {
         let user_host = $"($user_name)($host_name) "
         let shells_index = surround (get-prompt-info shells -d) -l $"($colors.1)№" -r $"($colors.0) : "
         let path_sep = if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }
-        let path_segment = surround (get-prompt-info path $path_sep -d $"\e[0;1m($colors.1)" -s "\e[0;2m" -u) -r "\e[0m"
+        let path_segment = surround (get-prompt-info pwd $path_sep -d $"\e[0;1m($colors.1)" -s "\e[0;2m" -u) -r "\e[0m"
         let execution_time = if (get-prompt-info exec-time) > 0.5 { $" ($colors.1)(get-prompt-info exec-time)sec " } else { "" }
         let git_info = surround (get-prompt-info git -d $"($colors.1)*" -s $"($colors.1)+") -l $"($colors.1) in ($colors.0)" -r (if ($execution_time | is-empty) { " " } else { "" })
         let exit_code = if (get-prompt-info exit-code) != 0 { surround (get-prompt-info exit-code) -l $colors.0 -r $"($colors.1) | " } else { "" }

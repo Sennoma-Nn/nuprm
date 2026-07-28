@@ -73,7 +73,7 @@ export module nuprm-theme {
             icon: (surround (get-prompt-info system-icon) -r " ")
             user: (get-prompt-info user-name)
             host: (surround (get-prompt-info host-name) -l $" @ ")
-            path: (surround (get-prompt-info path $path_sep -d $"\e[0;1m(get-prompt-chars white_fg)(get-prompt-chars path_bg)" -s $"\e[0;2m(get-prompt-chars path_bg)" -u))
+            path: (surround (get-prompt-info pwd $path_sep -d $"\e[0;1m(get-prompt-chars white_fg)(get-prompt-chars path_bg)" -s $"\e[0;2m(get-prompt-chars path_bg)" -u))
             git: (get-prompt-info git)
             exit: (get-prompt-info exit-code)
             admin: (is-admin)
@@ -138,7 +138,7 @@ export module nuprm-theme {
     }
 
     export def get-transient-prompt-command [] {
-        let path = (get-prompt-info last-path -u)
+        let path = (get-prompt-info last-pwd -u)
         
         return (
             prompt-block "" $"(get-prompt-chars power_line3) " (get-prompt-chars path_fg) (get-prompt-chars path_bg) $path (get-prompt-chars white_fg) " "
