@@ -69,29 +69,29 @@ $env.NUPRMCONFIG = {
   <summary>(Click here for detailed configuration)</summary>
 
 **Enable nuprm**
-- `enabled: "yes"` - Enable nuprm
-- `enabled: "no"` - Disable nuprm
+- `enabled: true` - Enable nuprm
+- `enabled: false` - Disable nuprm
 
 **Display full name**
-- `use_full_name: "yes"` - Display user's full name
-- `use_full_name: "no"` - Display username
+- `use_full_name: true` - Display user's full name
+- `use_full_name: false` - Display username
 
 **True color support**
-- `compatibility.true_color: "yes"` - Enable true color support
-- `compatibility.true_color: "no"` - Disable true color support
+- `compatibility.true_color: true` - Enable true color support
+- `compatibility.true_color: false` - Disable true color support
 
 **Path URL support**
-- `compatibility.enable_path_url: "yes"` - Enable path URL support
-- `compatibility.enable_path_url: "no"` - Disable path URL support
+- `compatibility.enable_path_url: true` - Enable path URL support
+- `compatibility.enable_path_url: false` - Disable path URL support
 
-- `compatibility.system_icon_with_space: "yes"` - Add a space after the system icon
-- `compatibility.system_icon_with_space: "no"` - Do not add a space after the system icon
+- `compatibility.system_icon_with_space: true` - Add a space after the system icon
+- `compatibility.system_icon_with_space: false` - Do not add a space after the system icon
 
 **Directory abbreviation configuration**
 nuprm supports intelligent directory abbreviation to make long paths more readable.
 
-- `directory_abbreviation.enabled: "yes"` - Enable directory abbreviation
-- `directory_abbreviation.enabled: "no"` - Disable directory abbreviation
+- `directory_abbreviation.enabled: true` - Enable directory abbreviation
+- `directory_abbreviation.enabled: false` - Disable directory abbreviation
 
 - `directory_abbreviation.start_from_end: 3` - Start abbreviation from the Nth directory from the end
   - Set to `0` to disable abbreviation from the end, showing full path
@@ -106,40 +106,40 @@ nuprm supports intelligent directory abbreviation to make long paths more readab
 - `directory_abbreviation.display_chars: 2` - Number of characters to display after abbreviation
   - For example, set to 3: `/home/username/.test/123456/demo/path` will display as `~/.tes/123/demo/path`
 
-- `directory_abbreviation.abbreviate_home: "yes"` - Enable home directory abbreviation to `~`
-- `directory_abbreviation.abbreviate_home: "no"` - Disable home directory abbreviation
+- `directory_abbreviation.abbreviate_home: true` - Enable home directory abbreviation to `~`
+- `directory_abbreviation.abbreviate_home: false` - Disable home directory abbreviation
 
 - `directory_abbreviation.specific_mappings: {}` - Custom special directory abbreviations
   - You can add custom directory abbreviations, for example set `~/Documents` to `📄`, set home directory to `🏠`
   > If you want to customize the home directory abbreviation display, you must disable `directory_abbreviation.abbreviate_home`
 
 **Display elements configuration**
-- `display_elements.system_icon: "yes"` - Display system icon
-- `display_elements.system_icon: "no"` - Do not display system icon
+- `display_elements.system_icon: true` - Display system icon
+- `display_elements.system_icon: false` - Do not display system icon
 
-- `display_elements.hostname: "yes"` - Display hostname
-- `display_elements.hostname: "no"` - Do not display hostname
+- `display_elements.hostname: true` - Display hostname
+- `display_elements.hostname: false` - Do not display hostname
 
-- `display_elements.git: "yes"` - Display Git repository information
-- `display_elements.git: "no"` - Do not display Git repository information
+- `display_elements.git: true` - Display Git repository information
+- `display_elements.git: false` - Do not display Git repository information
 
-- `display_elements.shells: "yes"` - Display Shells information
-- `display_elements.shells: "no"` - Do not display Shells information
+- `display_elements.shells: true` - Display Shells information
+- `display_elements.shells: false` - Do not display Shells information
 
 - `display_elements.startup_time: true` - Display startup time (on execution time information)
 - `display_elements.startup_time: false` - Do not display startup time (on execution time information)
 
-- `display_elements.execution_time: "yes"` - Display execution time information
-- `display_elements.execution_time: "no"` - Do not display execution time information
+- `display_elements.execution_time: true` - Display execution time information
+- `display_elements.execution_time: false` - Do not display execution time information
 
-- `display_elements.exit: "yes"` - Display exit code information
-- `display_elements.exit: "no"` - Do not display exit code information
+- `display_elements.exit: true` - Display exit code information
+- `display_elements.exit: false` - Do not display exit code information
 
-- `git.dirty: "yes"` - Appends the `*` indicator after the Git branch name if unstaged changes are detected.
-- `git.dirty: "no"` - Does not append the `*` indicator after the Git branch name, even if unstaged changes are detected.
+- `git.dirty: true` - Appends the `*` indicator after the Git branch name if unstaged changes are detected.
+- `git.dirty: false` - Does not append the `*` indicator after the Git branch name, even if unstaged changes are detected.
 
-- `git.staged: "yes"` - Appends the `+` indicator after the branch name if staged changes are detected.
-- `git.staged: "no"` - Does not append the `+` indicator after the branch name, even if staged changes are detected.
+- `git.staged: true` - Appends the `+` indicator after the branch name if staged changes are detected.
+- `git.staged: false` - Does not append the `+` indicator after the branch name, even if staged changes are detected.
 
 #### Theme Management
 You can use the `nuprm theme list` command to view available themes:
