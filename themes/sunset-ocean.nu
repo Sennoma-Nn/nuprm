@@ -1,9 +1,9 @@
 export module nuprm-theme {
-    def get-color [color] {
+    def get-prompt-chars [color] {
         alias color-to-ansi = prompt-make-utils color-to-ansi
         alias dividers-char = prompt-make-utils power-line dividers-char
 
-        let colors = {
+        let prompt_chars = {
             black_fg: (color-to-ansi 0 0 0 "fg" "30"),
             white_fg: (color-to-ansi 255 255 255 "fg" "37"),
             color1_fg: (color-to-ansi 253 172 65 "fg" "33"),
@@ -28,62 +28,105 @@ export module nuprm-theme {
             reset_bg: "\e[49m",
             bold: "\e[1m",
             italic: "\e[3m",
-            reset: "\e[0m"
+            reset: (ansi reset)
         }
         
-        let return_color = $colors | get -o $color | default ""
-        return $return_color
+        let return_prompt_chars = $prompt_chars | get -o $color | default ""
+        return $return_prompt_chars
     }
+
+    alias make-block = prompt-make-utils power-line make-block
 
     export def get-prompt-command-left [] {
         alias surround = prompt-make-utils surround
 
         let system_icon = surround (get-prompt-info system-icon) -r " "
-        let shells_index = surround (get-prompt-info shells -d) -l $"((get-color black_fg))#" -r $" : "
+        let shells_index = surround (get-prompt-info shells -d) -l $"((get-prompt-chars black_fg))#" -r $" : "
         let path_sep = if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }
-        let path = (get-prompt-info pwd $path_sep -u -d (get-color black_fg) -s (get-color grey_fg))
+        let path = (get-prompt-info pwd $path_sep -u -d (get-prompt-chars black_fg) -s (get-prompt-chars grey_fg))
         let host_name = surround (get-prompt-info host-name) -l " @ "
         let user_name = get-prompt-info user-name
         let user_host = $"($user_name)($host_name)"
 
-        let prompt_list = [
-            (get-color color1_fg), $"((get-color power_line5))", (get-color reset),
-            (get-color color1_bg), (get-color black_fg), " ", (get-color italic), $system_icon, $user_host, " ", (get-color reset),
-            (get-color color2_bg), (get-color color1_fg), $"((get-color power_line2))",
-            (get-color color2_bg), " ", $shells_index, $path, " ", (get-color reset),
-            (get-color color2_fg), $"((get-color power_line2))((get-color power_line4))",
-            (get-color reset), "\n"
-        ]
-        let prompt = ($prompt_list | str join "")
+        let prompt = [
+            (make-block
+                (get-prompt-chars power_line5)
+                (get-prompt-chars power_line2)
+                (get-prompt-chars color1_fg)
+                (get-prompt-chars color1_bg)
+                $user_host
+                (get-prompt-chars black_fg)
+                -i $"((get-prompt-chars italic))($system_icon)"
+                -e (get-prompt-chars color2_bg)
+            )
+            (make-block
+                ""
+                $"((get-prompt-chars power_line2))((get-prompt-chars power_line4))"
+                (get-prompt-chars color2_fg)
+                (get-prompt-chars color2_bg)
+                $"($shells_index)($path)"
+                ""
+            )
+            "\n"
+        ] | str join ""
         return $prompt
     }
 
     export def get-prompt-command-right [] {
         alias surround = prompt-make-utils surround
 
-        let git_info = (surround (get-prompt-info git) -l " 󰊢 " -r " ") | if $in != "" { $"($in)" }
-        let execution_time = if (get-prompt-info exec-time) > 0.5 { $" (get-prompt-info exec-time)sec " } else { "" }
+        let git_info = (surround (get-prompt-info git) -l "󰊢 ")
+        let exec_time = get-prompt-info exec-time
+        let execution_time = $"($exec_time)sec"
+        let exit_code = get-prompt-info exit-code
         let status_symbol = (
-            if (get-prompt-info exit-code) != 0 {
-                [(get-color color5_fg), " ", (get-prompt-info exit-code)] | str join ""
+            if $exit_code != 0 {
+                $"(get-prompt-chars color5_fg) ($exit_code)"
             } else {
-                [(get-color color5_fg), "󰄬"] | str join ""
+                $"(get-prompt-chars color5_fg)󰄬"
             }
         )
 
-        let prompt_list = [
-            (get-color color3_fg), $"((get-color power_line3))((get-color power_line1))", (get-color reset), (get-color color3_bg), " ", $status_symbol, " ", (get-color reset), (get-color color3_fg), (get-color color3_bg),
-            (get-color color4_fg), $"((get-color power_line1))", (get-color reset), (get-color color4_bg), (get-color white_fg), $git_info, (get-color reset), (get-color color4_fg), (get-color color4_bg),
-            (get-color color5_fg), $"((get-color power_line1))", (get-color color5_bg), (get-color white_fg), $execution_time, (get-color reset), (get-color color5_fg), (get-color color5_bg),
-            (get-color reset_bg), $"((get-color power_line6))", (get-color reset)
-        ]
-
-        let prompt = ($prompt_list | str join "")
+        let prompt = [
+            (make-block
+                $"((get-prompt-chars power_line3))((get-prompt-chars power_line1))"
+                ""
+                (get-prompt-chars color3_fg)
+                (get-prompt-chars color3_bg)
+                $status_symbol
+                ""
+                -e (get-prompt-chars color4_bg)
+            )
+            (make-block
+                --display_if ($git_info != "")
+                --force_display_dividers
+                (get-prompt-chars power_line1)
+                ""
+                (get-prompt-chars color4_fg)
+                (get-prompt-chars color4_bg)
+                $git_info
+                (get-prompt-chars white_fg)
+                -s (get-prompt-chars color3_bg)
+                -e (get-prompt-chars color5_bg)
+            )
+            (make-block
+                --display_if ($exec_time > 0.5)
+                --force_display_dividers
+                (get-prompt-chars power_line1)
+                (get-prompt-chars power_line6)
+                (get-prompt-chars color5_fg)
+                (get-prompt-chars color5_bg)
+                $execution_time
+                (get-prompt-chars white_fg)
+                -s (get-prompt-chars color4_bg)
+                -e (get-prompt-chars reset_bg)
+            )
+        ] | str join ""
         return $prompt
     }
 
     export def get-prompt-indicator [] {
-        return $"((get-color color2_fg))(if not (is-admin) { "❯" } else { $"((get-color bold))#" }) ((get-color reset))"
+        return $"((get-prompt-chars color2_fg))(if not (is-admin) { "❯" } else { $"((get-prompt-chars bold))#" }) ((get-prompt-chars reset))"
     }
 
     export def get-prompt-multiline-indicator [] {
@@ -92,7 +135,7 @@ export module nuprm-theme {
     }
 
     export def get-prompt-indicator-vi-insert [] {
-        return $"((get-color color2_fg))((get-color bold)): ((get-color reset))"
+        return $"((get-prompt-chars color2_fg))((get-prompt-chars bold)): ((get-prompt-chars reset))"
     }
 
     export def get-prompt-indicator-vi-normal [] {

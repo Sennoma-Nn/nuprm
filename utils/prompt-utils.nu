@@ -559,6 +559,7 @@ def make-power-line-block [
     text_fg: string
     --icon: string (-i) = ""
     --display_if (-d) = true
+    --force_display_dividers (-f)
     --start_dividers_bg: string (-s) = ""
     --end_dividers_bg: string (-e) = ""
 ] {
@@ -572,6 +573,18 @@ def make-power-line-block [
             $block_bg
             $text_fg
             $" ($icon)($block_text) "
+            (ansi reset)
+            $end_dividers_bg
+            $block_fg
+            $end_dividers
+            (ansi reset)
+        ] | str join ""
+    } else if $force_display_dividers {
+        [
+            (ansi reset)
+            $start_dividers_bg
+            $block_fg
+            $start_dividers
             (ansi reset)
             $end_dividers_bg
             $block_fg
