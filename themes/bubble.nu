@@ -24,14 +24,14 @@ export module nuprm-theme {
             pink2_fg: (color-to-ansi 255 90 190 "fg" "35")
             pink2_bg: (color-to-ansi 255 90 190 "bg" "45")
 
-            orange_fg: (color-to-ansi 255 160 100 "fg" "95")
-            orange_bg: (color-to-ansi 255 160 100 "bg" "105")
+            orange_fg: (color-to-ansi 255 160 100 "fg" "33")
+            orange_bg: (color-to-ansi 255 160 100 "bg" "43")
 
-            yellow_fg: (color-to-ansi 255 220 100 "fg" "95")
-            yellow_bg: (color-to-ansi 255 220 100 "bg" "105")
+            yellow_fg: (color-to-ansi 255 220 100 "fg" "93")
+            yellow_bg: (color-to-ansi 255 220 100 "bg" "103")
 
-            green_fg: (color-to-ansi 190 255 60 "fg" "95")
-            green_bg: (color-to-ansi 190 255 60 "bg" "105")
+            green_fg: (color-to-ansi 190 255 60 "fg" "92")
+            green_bg: (color-to-ansi 190 255 60 "bg" "102")
         }
         
         let return_prompt_chars = $prompt_chars | get -o $color | default ""
