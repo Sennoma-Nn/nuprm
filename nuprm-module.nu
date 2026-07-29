@@ -55,7 +55,7 @@ def show-theme [
     let preview_theme_info = $preview_prompt | from json | get -o "theme_info" | default { }
 
     let preview_record = {
-        tags: ($preview_theme_info | get -o "tags" | default [] | str join "\e[2m,\e[0m ")
+        tags: ($preview_theme_info | get -o "tags" | default [] | sort | str join "\e[2m,\e[0m ")
         left: $"($preview_command_l)($preview_indicator)",
         right: $preview_command_r
     }

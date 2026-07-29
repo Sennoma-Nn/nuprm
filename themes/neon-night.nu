@@ -31,7 +31,7 @@ export module nuprm-theme {
         let git_info = if not ($git_branch | is-empty) { $"(get-color grey) | (get-color cyan)git: (get-color magenta)($git_branch)(ansi reset)" } else { "" }
         let execution_time = if (get-prompt-info exec-time) > 0.5 { $"(get-color grey) | (get-color cyan)exec time: (get-color magenta)(get-prompt-info exec-time)sec(ansi reset)" } else { "" }
 
-        return $"($system_icon)($user_info) (get-color grey)in ($path_info)($git_info)($shells_index)($execution_time)\n"
+        return $"($system_icon)($user_info) (get-color grey)in ($path_info)($git_info)($shells_index)($execution_time)\n\r"
     }
 
     export def get-prompt-command-right [] {

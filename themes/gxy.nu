@@ -51,7 +51,7 @@ export module nuprm-theme {
         if not ($extra_info_list | is-empty) { $prompt += $" ($extra_info) " }
 
         $prompt += $"(get-color blue_fg)(get-color power_line3)(get-color reset)"
-        $prompt += "\n└ "
+        $prompt += "\n\r└ "
 
         return $prompt
     }

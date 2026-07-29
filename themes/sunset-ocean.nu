@@ -68,7 +68,7 @@ export module nuprm-theme {
                     $"($shells_index)($path)"
                     (get-prompt-chars black_fg)
             )
-            "\n"
+            "\n\r"
         ] | str join ""
         return $prompt
     }

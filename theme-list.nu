@@ -8,5 +8,6 @@ export const theme_list = [
     "galaxy-dream.nu",
     "sunset-ocean.nu",
     "circuit.nu",
-    "violet-line.nu"
+    "violet-line.nu",
+    "bubble.nu"
 ]
