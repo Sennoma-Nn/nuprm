@@ -1,4 +1,7 @@
 export module nuprm-theme {
+    alias make-block = prompt-make-utils power-line make-block
+    alias icon-with-space = prompt-make-utils power-line icon-with-space
+
     def get-prompt-chars [color] {
         alias color-to-ansi = prompt-make-utils color-to-ansi
         alias dividers-char = prompt-make-utils power-line dividers-char
@@ -38,8 +41,6 @@ export module nuprm-theme {
         return $return_prompt_chars
     }
 
-    alias make-block = prompt-make-utils power-line make-block
-
     export def get-prompt-command-left [] {
         alias surround = prompt-make-utils surround
 
@@ -55,7 +56,7 @@ export module nuprm-theme {
         let user_and_host_prompt = [
             (
                 make-block
-                    -i " "
+                    -Ii (icon-with-space "")
                     -s (get-prompt-chars left_half_circle)
                     -e (get-prompt-chars upper_left_triangle)
                     -E (get-prompt-chars purple2_bg)
@@ -68,7 +69,7 @@ export module nuprm-theme {
                 make-block
                     --display_if ($"($status.icon)($status.host)" != "")
                     --force_display_dividers
-                    -i ($status.icon | if $in != "" { $"($in) " } else { "󰍹 " })
+                    -Ii ($status.icon | if $in != "" { $in } else { icon-with-space "󰍹" })
                     -e (get-prompt-chars right_half_circle)
                     (get-prompt-chars purple2_fg)
                     (get-prompt-chars purple2_bg)
@@ -80,7 +81,7 @@ export module nuprm-theme {
         let shells_and_path = [
             (
                 make-block
-                    -i " "
+                    -Ii (icon-with-space "")
                     -s (get-prompt-chars left_half_circle)
                     -e (get-prompt-chars upper_left_triangle)
                     -E (get-prompt-chars pink2_bg)
@@ -93,7 +94,7 @@ export module nuprm-theme {
                 make-block
                     --display_if ($status.git != "")
                     --force_display_dividers
-                    -i "󰊢 "
+                    -Ii (icon-with-space "" 0)
                     -e (get-prompt-chars right_half_circle)
                     (get-prompt-chars pink2_fg)
                     (get-prompt-chars pink2_bg)
@@ -120,7 +121,7 @@ export module nuprm-theme {
         let shells = (
             make-block
                 --display_if ($status.shells != "")
-                -i "󰙁 "
+                -Ii (icon-with-space "󰙁")
                 -s (get-prompt-chars left_half_circle)
                 -e (get-prompt-chars right_half_circle)
                 (get-prompt-chars green_fg)
@@ -132,7 +133,7 @@ export module nuprm-theme {
         let exec_time = (
             make-block
                 --display_if ($status.time > 0.5)
-                -i "󱎫 "
+                -Ii (icon-with-space "󱎫")
                 -s (get-prompt-chars left_half_circle)
                 -e (get-prompt-chars right_half_circle)
                 (get-prompt-chars yellow_fg)
@@ -144,7 +145,7 @@ export module nuprm-theme {
         let exit_code = (
             make-block
                 --display_if ($status.exit != 0)
-                -i " "
+                -Ii (icon-with-space "")
                 -s (get-prompt-chars left_half_circle)
                 -e (get-prompt-chars right_half_circle)
                 (get-prompt-chars orange_fg)
@@ -163,14 +164,14 @@ export module nuprm-theme {
     }
 
     export def get-prompt-indicator [] {
-        let indicator = (get-prompt-chars reset) + " "
+        let indicator = (get-prompt-chars reset) + (icon-with-space "") + " "
         return $indicator
     }
 
     export alias get-prompt-multiline-indicator = get-prompt-indicator
 
     export def get-prompt-indicator-vi-insert [] {
-        let indicator = (get-prompt-chars reset) + " "
+        let indicator = (get-prompt-chars reset) + (icon-with-space "") + " "
         return $indicator
     }
 
@@ -181,7 +182,7 @@ export module nuprm-theme {
 
         let prompt = (
             make-block
-                -i " "
+                -i (icon-with-space "")
                 -s (get-prompt-chars left_half_circle)
                 -e (get-prompt-chars right_half_circle)
                 (get-prompt-chars pink1_fg)

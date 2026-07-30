@@ -1,4 +1,6 @@
 export module nuprm-theme {
+    alias icon-with-space = prompt-make-utils power-line icon-with-space
+
     def get-color [color] {
         alias color-to-ansi = prompt-make-utils color-to-ansi
         alias dividers-char = prompt-make-utils power-line dividers-char
@@ -36,18 +38,19 @@ export module nuprm-theme {
         let shells_info = surround (get-prompt-info shells -d) -l $" ((get-color dark_blue_bg) + (get-color blue_fg))(get-color power_line5) №"
         let exit_code = get-prompt-info exit-code
         let execution_time = surround (get-prompt-info exec-time) -r "sec"
+        let system_icon_sep = $"(icon-with-space "▕" 0) "
 
         mut prompt = $"(get-color reset)┌ "
         $prompt += $"(get-color blue_fg)(get-color power_line1)(get-color reset)"
-        $prompt += $"(get-color blue_bg)(get-color black_fg) (surround (get-prompt-info system-icon) -r '▕ ')($user_host)($shells_info) (get-color reset)"
+        $prompt += $"(get-color blue_bg)(get-color black_fg) (surround (get-prompt-info system-icon) -r $system_icon_sep)($user_host)($shells_info) (get-color reset)"
         $prompt += $"(if $shells_info != "" { (get-color dark_blue_fg) } else { (get-color blue_fg) })(get-color power_line2)(get-color reset)"
         $prompt += $"(get-color dark_blue_fg)($path)(get-color reset)"
 
         mut extra_info_list = []
-        if $git_info != "" { $extra_info_list ++= [$"(get-color pink_fg) ($git_info)(get-color reset)"] }
+        if $git_info != "" { $extra_info_list ++= [$"(get-color pink_fg)(icon-with-space "" 0) ($git_info)(get-color reset)"] }
         if (get-prompt-info exec-time) > 0.5 { $extra_info_list ++= [$"((get-color bold) + (get-color dark_blue_fg))($execution_time)(get-color reset)"] }
         if $exit_code != 0 { $extra_info_list ++= [$"((get-color bold) + (get-color dark_blue_fg))($exit_code)(get-color reset)"] }
-        let extra_info = ($extra_info_list | str join $" (get-color reset) ")
+        let extra_info = ($extra_info_list | str join $" (get-color reset)(icon-with-space "" 0) ")
         if not ($extra_info_list | is-empty) { $prompt += $" ($extra_info) " }
 
         $prompt += $"(get-color blue_fg)(get-color power_line3)(get-color reset)"

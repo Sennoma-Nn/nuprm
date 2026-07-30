@@ -56,7 +56,7 @@ $env.NUPRMCONFIG = {
     compatibility: {
         path_url: true,
         true_color: true,
-        system_icon_with_space: true
+        with_space: true
     },
     git: {
         dirty: true,
@@ -84,8 +84,9 @@ $env.NUPRMCONFIG = {
 - `compatibility.enable_path_url: true` - Enable path URL support
 - `compatibility.enable_path_url: false` - Disable path URL support
 
-- `compatibility.system_icon_with_space: true` - Add a space after the system icon
-- `compatibility.system_icon_with_space: false` - Do not add a space after the system icon
+- `compatibility.icon_with_space: true` - Add space after the Power Line icon
+- `compatibility.icon_with_space: false` - Do not add space after the Power Line icon
+  > `compatibility.icon_with_space` is needed because the display width of Powerline icons isn't always 1 character, even though the actual space the icon occupies is 1 character. Without it, this could cause visual overlapping. If you are using the Mono variant of a Nerd Font, where the display width of each icon is exactly 1, this option is not needed
 
 **Directory abbreviation configuration**
 nuprm supports intelligent directory abbreviation to make long paths more readable.

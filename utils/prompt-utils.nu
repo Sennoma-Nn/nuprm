@@ -486,37 +486,37 @@ def get-exit-code []: nothing -> number {
 # Get system icon (Nerd Font)
 def get-system-icon []: nothing -> string {
     let system_icon = is-config-enable $.display_elements.system_icon false
-    let whith_space = is-config-enable $.compatibility.system_icon_with_space true
+    let whith_space = is-config-enable $.compatibility.icon_with_space true
 
     let linux_distro_icons = {
-        "alma"               : ""
-        "almalinux"          : ""
-        "almalinux9"         : ""
-        "alpine"             : ""
-        "aosc os"            : "" # Tested
-        "arch linux"         : "" # Tested
-        "centos"             : ""
-        "coreos"             : ""
-        "debian"             : ""
-        "deepin"             : "" # Tested
-        "devuan"             : ""
-        "elementary"         : ""
-        "endeavouros"        : ""
-        "fedora linux"       : "" # Tested
-        "gentoo"             : ""
-        "mageia"             : ""
-        "manjaro"            : ""
-        "mint"               : ""
-        "nixos"              : "" # Tested
-        "opensuse"           : ""
-        "opensuse tumbleweed": "" # Tested
-        "raspbian"           : ""
-        "redhat"             : ""
-        "rocky"              : ""
-        "sabayon"            : ""
-        "slackware"          : ""
-        "ubuntu"             : "" # Tested
-        "void"               : "" # Tested
+        "alma"               : (icon-with-space "")
+        "almalinux"          : (icon-with-space "")
+        "almalinux9"         : (icon-with-space "")
+        "alpine"             : (icon-with-space "")
+        "aosc os"            : (icon-with-space "") # Tested
+        "arch linux"         : (icon-with-space "") # Tested
+        "centos"             : (icon-with-space "")
+        "coreos"             : (icon-with-space "")
+        "debian"             : (icon-with-space "")
+        "deepin"             : (icon-with-space "") # Tested
+        "devuan"             : (icon-with-space "")
+        "elementary"         : (icon-with-space "")
+        "endeavouros"        : (icon-with-space "")
+        "fedora linux"       : (icon-with-space "") # Tested
+        "gentoo"             : (icon-with-space "")
+        "mageia"             : (icon-with-space "")
+        "manjaro"            : (icon-with-space "")
+        "mint"               : (icon-with-space "")
+        "nixos"              : (icon-with-space "") # Tested
+        "opensuse"           : (icon-with-space "")
+        "opensuse tumbleweed": (icon-with-space "") # Tested
+        "raspbian"           : (icon-with-space "")
+        "redhat"             : (icon-with-space "")
+        "rocky"              : (icon-with-space "")
+        "sabayon"            : (icon-with-space "")
+        "slackware"          : (icon-with-space "")
+        "ubuntu"             : (icon-with-space "") # Tested
+        "void"               : (icon-with-space "") # Tested
     }
 
     if $system_icon {
@@ -524,26 +524,19 @@ def get-system-icon []: nothing -> string {
         let system_name = sys host | get name
 
         let icon = match $system_type {
-            "windows"   => ""
-            "linux"     => { $linux_distro_icons | get -o --ignore-case $system_name | default "" }
-            "android"   => ""
-            "macos"     => ""
-            "freebsd"   => ""
+            "windows"   => (icon-with-space "")
+            "linux"     => {
+                $linux_distro_icons
+                    | get -o --ignore-case $system_name
+                    | default (icon-with-space "")
+                }
+            "android"   => (icon-with-space "")
+            "macos"     => (icon-with-space "")
+            "freebsd"   => (icon-with-space "")
             _           => ""
         }
 
-        let return_icon_str = [
-            $icon,
-            (
-                if $whith_space {
-                    " "
-                } else {
-                    ""
-                }
-            )
-        ] | str join
-
-        return $return_icon_str
+        return $icon
     } else {
         ""
     }
@@ -558,11 +551,16 @@ def make-power-line-block [
     --start_dividers: string (-s) = ""
     --end_dividers: string (-e) = ""
     --icon: string (-i) = ""
+    --icon_with_space (-I)
     --display_if (-d) = true
     --force_display_dividers (-f)
     --start_dividers_bg: string (-S) = ""
     --end_dividers_bg: string (-E) = ""
 ] {
+    let icon_str = if $icon_with_space {
+        $icon + " "
+    } else { $icon }
+
     let block = if $display_if {
         [
             (ansi reset)
@@ -572,7 +570,7 @@ def make-power-line-block [
             (ansi reset)
             $block_bg
             $text_fg
-            $" ($icon)($block_text) "
+            $" ($icon_str)($block_text) "
             (ansi reset)
             $end_dividers_bg
             $block_fg
@@ -601,39 +599,39 @@ def get-power-line-dividers-char [
     name: string # Char name
 ]: nothing -> string {
     let char = match $name {
-        "left_hard_divider"                 => "\u{e0b0}" # 
-        "left_soft_divider"                 => "\u{e0b1}" # 
-        "right_hard_divider"                => "\u{e0b2}" # 
-        "right_soft_divider"                => "\u{e0b3}" # 
-        "right_half_circle_thick"           => "\u{e0b4}" # 
-        "right_half_circle_thin"            => "\u{e0b5}" # 
-        "left_half_circle_thick"            => "\u{e0b6}" # 
-        "left_half_circle_thin"             => "\u{e0b7}" # 
-        "lower_left_triangle"               => "\u{e0b8}" # 
-        "backslash_separator"               => "\u{e0b9}" # 
-        "lower_right_triangle"              => "\u{e0ba}" # 
-        "forwardslash_separator"            => "\u{e0bb}" # 
-        "upper_left_triangle"               => "\u{e0bc}" # 
-        "forwardslash_separator_redundant"  => "\u{e0bd}" # 
-        "upper_right_triangle"              => "\u{e0be}" # 
-        "backslash_separator_redundant"     => "\u{e0bf}" # 
-        "flame_thick"                       => "\u{e0c0}" # 
-        "flame_thin"                        => "\u{e0c1}" # 
-        "flame_thick_mirrored"              => "\u{e0c2}" # 
-        "flame_thin_mirrored"               => "\u{e0c3}" # 
-        "pixelated_squares_small"           => "\u{e0c4}" # 
-        "pixelated_squares_small_mirrored"  => "\u{e0c5}" # 
-        "pixelated_squares_big"             => "\u{e0c6}" # 
-        "pixelated_squares_big_mirrored"    => "\u{e0c7}" # 
-        "ice_waveform"                      => "\u{e0c8}" # 
-        "ice_waveform_mirrored"             => "\u{e0ca}" # 
-        "honeycomb"                         => "\u{e0cc}" # 
-        "honeycomb_outline"                 => "\u{e0cd}" # 
-        "lego_block_sideways"               => "\u{e0d1}" # 
-        "trapezoid_top_bottom"              => "\u{e0d2}" # 
-        "trapezoid_top_bottom_mirrored"     => "\u{e0d4}" # 
-        "right_hard_divider_inverse"        => "\u{e0d6}" # 
-        "left_hard_divider_inverse"         => "\u{e0d7}" # 
+        "left_hard_divider"                 => (icon-with-space "\u{e0b0}" 0   ) # 
+        "left_soft_divider"                 => (icon-with-space "\u{e0b1}" 0   ) # 
+        "right_hard_divider"                => (icon-with-space "\u{e0b2}" 0   ) # 
+        "right_soft_divider"                => (icon-with-space "\u{e0b3}" 0   ) # 
+        "right_half_circle_thick"           => (icon-with-space "\u{e0b4}" 0   ) # 
+        "right_half_circle_thin"            => (icon-with-space "\u{e0b5}" 0   ) # 
+        "left_half_circle_thick"            => (icon-with-space "\u{e0b6}" 0   ) # 
+        "left_half_circle_thin"             => (icon-with-space "\u{e0b7}" 0   ) # 
+        "lower_left_triangle"               => (icon-with-space "\u{e0b8}" 0   ) # 
+        "backslash_separator"               => (icon-with-space "\u{e0b9}" 0   ) # 
+        "lower_right_triangle"              => (icon-with-space "\u{e0ba}" 0   ) # 
+        "forwardslash_separator"            => (icon-with-space "\u{e0bb}" 0   ) # 
+        "upper_left_triangle"               => (icon-with-space "\u{e0bc}" 0   ) # 
+        "forwardslash_separator_redundant"  => (icon-with-space "\u{e0bd}" 0   ) # 
+        "upper_right_triangle"              => (icon-with-space "\u{e0be}" 0   ) # 
+        "backslash_separator_redundant"     => (icon-with-space "\u{e0bf}" 0   ) # 
+        "flame_thick"                       => (icon-with-space "\u{e0c0}" 1   ) # 
+        "flame_thin"                        => (icon-with-space "\u{e0c1}" 1   ) # 
+        "flame_thick_mirrored"              => (icon-with-space "\u{e0c2}" 1 -b) # 
+        "flame_thin_mirrored"               => (icon-with-space "\u{e0c3}" 1 -b) # 
+        "pixelated_squares_small"           => (icon-with-space "\u{e0c4}" 1   ) # 
+        "pixelated_squares_small_mirrored"  => (icon-with-space "\u{e0c5}" 1 -b) # 
+        "pixelated_squares_big"             => (icon-with-space "\u{e0c6}" 1   ) # 
+        "pixelated_squares_big_mirrored"    => (icon-with-space "\u{e0c7}" 1 -b) # 
+        "ice_waveform"                      => (icon-with-space "\u{e0c8}" 1   ) # 
+        "ice_waveform_mirrored"             => (icon-with-space "\u{e0ca}" 1 -b) # 
+        "honeycomb"                         => (icon-with-space "\u{e0cc}" 1   ) # 
+        "honeycomb_outline"                 => (icon-with-space "\u{e0cd}" 1   ) # 
+        "lego_block_sideways"               => (icon-with-space "\u{e0d1}" 1   ) # 
+        "trapezoid_top_bottom"              => (icon-with-space "\u{e0d2}" 0   ) # 
+        "trapezoid_top_bottom_mirrored"     => (icon-with-space "\u{e0d4}" 0   ) # 
+        "right_hard_divider_inverse"        => (icon-with-space "\u{e0d6}" 0   ) # 
+        "left_hard_divider_inverse"         => (icon-with-space "\u{e0d7}" 0   ) # 
         _                                   => ""
     }
 
@@ -652,6 +650,25 @@ def surround [
 
     let out = [ $left_char, $text, $right_char ] | str join ""
     return $out
+}
+
+# Add space after (or before) Power Line icon
+def icon-with-space [
+    icon_str: string = "" # Icon character
+    icon_len: int = 1     # Icon display length
+    --before (-b)         # Add space before Power Line icon
+]: nothing -> string {
+    let whith_space = is-config-enable $.compatibility.icon_with_space true
+    let icon = $icon_str | str trim
+
+    if $whith_space {
+        let space_len = [0, $icon_len] | math max
+        let space_str = if $space_len > 0 { 1..$space_len | each { " " } | str join } else { "" }
+
+        return $"($icon)($space_str)"
+    } else {
+        return $icon
+    }
 }
 
 # Get prompt information
@@ -710,6 +727,9 @@ export module prompt-make-utils {
 
         # Make Power Line block
         export alias make-block = make-power-line-block
+
+        # Add space after (or before) Power Line icon
+        export alias icon-with-space = icon-with-space
     }
 
     export use power-line

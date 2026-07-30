@@ -1,4 +1,7 @@
 export module nuprm-theme {
+    alias make-block = prompt-make-utils power-line make-block
+    alias icon-with-space = prompt-make-utils power-line icon-with-space
+
     def get-prompt-chars [color] {
         alias color-to-ansi = prompt-make-utils color-to-ansi
         alias dividers-char = prompt-make-utils power-line dividers-char
@@ -24,8 +27,6 @@ export module nuprm-theme {
         return $return_prompt_chars
     }
 
-    alias make-block = prompt-make-utils power-line make-block
-
     export def get-prompt-command-left [] {
         alias surround = prompt-make-utils surround
 
@@ -41,11 +42,14 @@ export module nuprm-theme {
                         -s $"(get-prompt-chars reset)(get-prompt-chars dimmed)(get-prompt-chars purple_bg)"
                 )
             )
-            git: (surround (get-prompt-info git) -l "󰊢 ")
+            git: (surround (get-prompt-info git) -l $"(icon-with-space "󰊢") ")
             exit: (get-prompt-info exit-code)
             shells: (get-prompt-info shells -d)
             time: (get-prompt-info exec-time)
         }
+
+        let sep_char = ["", "󰤃", ""]
+
         return (
             [
                 (get-prompt-chars white_fg)
@@ -55,43 +59,43 @@ export module nuprm-theme {
                         (
                             [
                                 $status.user,
-                                (if not ($"($status.icon)($status.host)" | is-empty) { "at " } else { "" }),
+                                (if not ($"($status.icon)($status.host)" | is-empty) { $"at ($sep_char.0)" } else { "" }),
                                 (
                                     [
                                         $status.icon,
                                         $status.host,
                                     ] | where $it != "" | str join " "
                                 ),
-                                (if not ($"($status.icon)($status.host)" | is-empty) { "" } else { "" })
+                                (if not ($"($status.icon)($status.host)" | is-empty) { $sep_char.2 } else { "" })
                             ] | where $it != "" | str join " "
                         ),
                         (
-                            if ($"($status.icon)($status.host)" | is-empty) { "󰤃" } else { "" }
+                            if ($"($status.icon)($status.host)" | is-empty) { $sep_char.1 } else { "" }
                         )
                         (
                             [
                                 $status.git,
                                 (
                                     if $status.time > 0.5 {
-                                        $"󰔛 ($status.time)s"
+                                        $"(icon-with-space "󰔛") ($status.time)s"
                                     } else { "" }
                                 ),
-                            ] | where $it != "" | str join " 󰤃 "
+                            ] | where $it != "" | str join $" ($sep_char.1) "
                         ),
                     ]
                         | where $it != ""
                         | str join " "
-                        | str trim -c "󰤃"
-                        | str replace --all "󰤃" $"(get-prompt-chars purple_fg)󰤃(get-prompt-chars reset)(get-prompt-chars white_fg)"
-                        | str replace --all "" $"(get-prompt-chars purple_fg)(get-prompt-chars bold)(get-prompt-chars reset)(get-prompt-chars white_fg)"
-                        | str replace --all "" $"(get-prompt-chars purple_fg)(get-prompt-chars bold)(get-prompt-chars reset)(get-prompt-chars white_fg)"
+                        | str trim -c ($sep_char.1)
+                        | str replace --all $sep_char.0 $"(get-prompt-chars purple_fg)(get-prompt-chars bold)($sep_char.0)(get-prompt-chars reset)(get-prompt-chars white_fg)"
+                        | str replace --all $sep_char.1 $"(get-prompt-chars purple_fg)($sep_char.1)(get-prompt-chars reset)(get-prompt-chars white_fg)"
+                        | str replace --all $sep_char.2 $"(get-prompt-chars purple_fg)(get-prompt-chars bold)($sep_char.2)(get-prompt-chars reset)(get-prompt-chars white_fg)"
                 )
                 "\n",
                 "│ ",
                 (
                     make-block
                         --display_if ($status.shells != "")
-                        -i "󰞷 "
+                        -Ii (icon-with-space "󰞷")
                         -s (get-prompt-chars power_line1)
                         -e (get-prompt-chars power_line2)
                         (get-prompt-chars normal_fg)
@@ -111,7 +115,7 @@ export module nuprm-theme {
                 (
                     make-block
                         --display_if ($status.exit != 0)
-                        -i " "
+                        -Ii (icon-with-space "")
                         -s (get-prompt-chars power_line4)
                         -e (get-prompt-chars power_line3)
                         (get-prompt-chars normal_fg)
@@ -128,11 +132,11 @@ export module nuprm-theme {
     export def get-prompt-command-right [] { }
 
     export def get-prompt-indicator [] {
-        return $"(get-prompt-chars white_fg)󰔰 "
+        return $"(get-prompt-chars white_fg)(icon-with-space "󰔰") (get-prompt-chars reset)"
     }
 
     export def get-prompt-multiline-indicator [] {
-        return $"(get-prompt-chars white_fg)  󰔰 (get-prompt-chars reset)"
+        return $"(get-prompt-chars white_fg)  (icon-with-space "󰔰") (get-prompt-chars reset)"
     }
 
     export def get-prompt-indicator-vi-insert [] {
@@ -140,7 +144,7 @@ export module nuprm-theme {
     }
 
     export def get-prompt-indicator-vi-normal [] {
-        return $"(get-prompt-chars white_fg)󰔰 (get-prompt-chars reset)"
+        return $"(get-prompt-chars white_fg)(icon-with-space "󰔰") (get-prompt-chars reset)"
     }
 
     export def get-transient-prompt-command [] {
@@ -166,7 +170,7 @@ export module nuprm-theme {
     }
 
     export def get-transient-prompt-multiline-indicator [] {
-        return $"(get-prompt-chars purple_fg)󰔰 (get-prompt-chars reset)"
+        return $"(get-prompt-chars purple_fg)(icon-with-space "󰔰") (get-prompt-chars reset)"
     }
 
     export def get-transient-prompt-indicator-vi-insert [] { }

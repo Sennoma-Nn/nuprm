@@ -56,7 +56,7 @@ $env.NUPRMCONFIG = {
     compatibility: {
         path_url: true,
         true_color: true,
-        system_icon_with_space: true
+        icon_with_space: true
     },
     git: {
         dirty: true,
@@ -84,8 +84,9 @@ $env.NUPRMCONFIG = {
 - `compatibility.enable_path_url: true` - 启用路径 URL 支持
 - `compatibility.enable_path_url: false` - 禁用路径 URL 支持
 
-- `compatibility.system_icon_with_space: true` - 在系统图标后添加一个空格
-- `compatibility.system_icon_with_space: false` - 在系统图标后不添加一个空格
+- `compatibility.icon_with_space: true` - 在 Power Line 图标后添加空格
+- `compatibility.icon_with_space: false` - 在 Power Line 图标后不添加空格
+  > `compatibility.icon_with_space` 之所以被需要是因为 Power Line 图标的显示宽度并非始终为 1 个字符，但是图标的实际体积却是 1 个字符，这可能会造成显示重叠。如果你正在使用 Nerd Font 的 Mono 变体，那么每个图标的显示宽度都是 1，你不须要开启它
 
 **目录缩写配置**
 nuprm 支持智能目录缩写功能，让长路径显示更加短。

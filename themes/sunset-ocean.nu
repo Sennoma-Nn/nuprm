@@ -1,4 +1,8 @@
 export module nuprm-theme {
+    alias make-block = prompt-make-utils power-line make-block
+    alias icon-with-space = prompt-make-utils power-line icon-with-space
+    alias surround = prompt-make-utils surround
+
     def get-prompt-chars [color] {
         alias color-to-ansi = prompt-make-utils color-to-ansi
         alias dividers-char = prompt-make-utils power-line dividers-char
@@ -35,11 +39,7 @@ export module nuprm-theme {
         return $return_prompt_chars
     }
 
-    alias make-block = prompt-make-utils power-line make-block
-
     export def get-prompt-command-left [] {
-        alias surround = prompt-make-utils surround
-
         let system_icon = surround (get-prompt-info system-icon) -r " "
         let shells_index = surround (get-prompt-info shells -d) -l $"((get-prompt-chars black_fg))#" -r $" : "
         let path_sep = if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }
@@ -74,17 +74,15 @@ export module nuprm-theme {
     }
 
     export def get-prompt-command-right [] {
-        alias surround = prompt-make-utils surround
-
-        let git_info = (surround (get-prompt-info git) -l "󰊢 ")
+        let git_info = get-prompt-info git
         let exec_time = get-prompt-info exec-time
         let execution_time = $"($exec_time)sec"
         let exit_code = get-prompt-info exit-code
         let status_symbol = (
             if $exit_code != 0 {
-                $"(get-prompt-chars color5_fg) ($exit_code)"
+                $"(get-prompt-chars color5_fg)(icon-with-space "") ($exit_code)"
             } else {
-                $"(get-prompt-chars color5_fg)󰄬"
+                $"(get-prompt-chars color5_fg)(icon-with-space "󰄬")"
             }
         )
 
@@ -102,6 +100,7 @@ export module nuprm-theme {
                 make-block
                     --display_if ($git_info != "")
                     --force_display_dividers
+                    -Ii (icon-with-space "󰊢")
                     -s (get-prompt-chars power_line1)
                     -S (get-prompt-chars color3_bg)
                     -E (get-prompt-chars color5_bg)
