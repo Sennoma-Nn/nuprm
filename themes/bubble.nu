@@ -137,7 +137,7 @@ export module nuprm-theme {
                 -e (get-prompt-chars right_half_circle)
                 (get-prompt-chars yellow_fg)
                 (get-prompt-chars yellow_bg)
-                $status.time
+                $"($status.time)s"
                 (get-prompt-chars black_fg)
         )
 
