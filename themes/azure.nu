@@ -4,7 +4,10 @@ export module nuprm-theme {
         alias dividers-char = prompt-make-utils power-line dividers-char
 
         let colors = {
-            blue: (color-to-ansi 82 139 255 "fg" "34")
+            bold: (ansi bo),
+            reset: (ansi rst),
+            dimmed: (ansi d),
+            blue: (color-to-ansi 82 139 255 "fg" "34"),
             white: (color-to-ansi 255 255 255 "fg" "37")
         }
         
@@ -23,12 +26,34 @@ export module nuprm-theme {
         let user_host = $"($user_name)($host_name) "
         let shells_index = surround (get-prompt-info shells -d) -l $"($colors.1)№" -r $"($colors.0) : "
         let path_sep = if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }
-        let path_segment = surround (get-prompt-info pwd $path_sep -d $"\e[0;1m($colors.1)" -s "\e[0;2m" -u) -r "\e[0m"
+        let path_segment = surround (get-prompt-info pwd $path_sep -d $"(get-color reset)(get-color bold)($colors.1)" -s (get-color reset)(get-color dimmed) -u) -r (get-color reset)
         let execution_time = if (get-prompt-info exec-time) > 0.5 { $" ($colors.1)(get-prompt-info exec-time)sec " } else { "" }
         let git_info = surround (get-prompt-info git -d $"($colors.1)*" -s $"($colors.1)+") -l $"($colors.1) in ($colors.0)" -r (if ($execution_time | is-empty) { " " } else { "" })
         let exit_code = if (get-prompt-info exit-code) != 0 { surround (get-prompt-info exit-code) -l $colors.0 -r $"($colors.1) | " } else { "" }
 
-        return $"($system_icon)($exit_code)($colors.0)($user_host)\e[1m[ ($shells_index)\e[0;1m($colors.1)($path_segment)($colors.0) \e[1m]\e[0m($git_info)($execution_time)(ansi reset)"
+        let prompt = [
+            $system_icon,
+            $exit_code,
+            $colors.0,
+            $user_host,
+            (get-color bold)
+            "[ ",
+            $shells_index,
+            (get-color reset),
+            (get-color bold),
+            $colors.1,
+            $path_segment
+            $colors.0,
+            " ",
+            (get-color bold),
+            "]",
+            (get-color reset),
+            $git_info,
+            $execution_time,
+            (get-color reset)
+        ] | str join
+
+        return $prompt
     }
 
     export def get-prompt-command-right [] { }

@@ -209,8 +209,8 @@ def color2ansi [
     let is_true_color = is-config-enable $.compatibility.true_color true
     if $is_true_color {
         let ansi_str = match $color_type {
-            "fg" => $"\e[38;2;($r);($g);($b)m"
-            "bg" => $"\e[48;2;($r);($g);($b)m"
+            "fg" => (ansi -e $"38;2;($r);($g);($b)m")
+            "bg" => (ansi -e $"48;2;($r);($g);($b)m")
             _    => ""
         }
         return $"($ansi_str)"
@@ -265,8 +265,9 @@ def get-full-name []: nothing -> string {
                 | split column ":"
                 | get "column8"
                 | first
-                | str replace "," " " --all
-                | str trim
+                | split column ","
+                | get "column0"
+                | first
         } else {
             $full_name = open "/etc/passwd"
                 | lines
@@ -274,8 +275,9 @@ def get-full-name []: nothing -> string {
                 | where "column0" == $username
                 | get "column4"
                 | first
-                | str replace "," " " --all
-                | str trim
+                | split column ","
+                | get "column0"
+                | first
         }
     } catch {
         return $username
@@ -426,11 +428,9 @@ def make-file-url [
         return $display_path
     }
 
-    return (
-        [
-            "\e]8;;file://", $file_path, "\a", $display_path, "\e]8;;\a"
-        ] | str join ""
-    )
+    let text_with_url = "file://" + $file_path | ansi link --text $display_path
+
+    return $text_with_url
 }
 
 # Get path mode, DOS (?:\???\???\???), UNIX (/???/???/???)

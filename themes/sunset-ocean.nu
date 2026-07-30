@@ -25,10 +25,10 @@ export module nuprm-theme {
             power_line5: (dividers-char "left_half_circle_thick"), # 
             power_line6: (dividers-char "right_half_circle_thick"), # 
 
-            reset_bg: "\e[49m",
-            bold: "\e[1m",
-            italic: "\e[3m",
             reset: (ansi reset)
+            reset_bg: (ansi -e "49m"),
+            bold: (ansi bo),
+            italic: (ansi i),
         }
         
         let return_prompt_chars = $prompt_chars | get -o $color | default ""

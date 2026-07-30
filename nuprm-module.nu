@@ -44,8 +44,8 @@ def show-theme [
         "
 
         ^$nu.current-exe --no-config-file -c $run_code
-            | complete
-            | get -o "stdout"
+            # | complete
+            # | get -o "stdout"
     }
 
     let preview_command_l = $preview_prompt | from json | get -o "command_l" | default ""
@@ -55,7 +55,7 @@ def show-theme [
     let preview_theme_info = $preview_prompt | from json | get -o "theme_info" | default { }
 
     let preview_record = {
-        tags: ($preview_theme_info | get -o "tags" | default [] | sort | str join "\e[2m,\e[0m ")
+        tags: ($preview_theme_info | get -o "tags" | default [] | sort | str join $"(ansi d),(ansi rst) ")
         left: $"($preview_command_l)($preview_indicator)",
         right: $preview_command_r
     }
@@ -69,11 +69,11 @@ export module nuprm {
         --version (-v) # Show version
     ] {
         if not $version {
-            let color = "\e[32m"
-            let reset = (ansi reset)
+            let green = ansi g
+            let reset = ansi rst
             let info = [
-                $"Run ($color)nuprm load($reset) load NuPrm!"
-                $"Run ($color)nuprm theme list -p($reset) preview theme!"
+                $"Run ($green)nuprm load($reset) load NuPrm!"
+                $"Run ($green)nuprm theme list -p($reset) preview theme!"
             ]
             $info | str join "\n" | [$in] | table --collapse | print
         } else if $version {
@@ -109,7 +109,7 @@ export module nuprm {
                 $env.TRANSIENT_PROMPT_INDICATOR_VI_NORMAL = {|| nuprm-theme get-transient-prompt-indicator-vi-normal }
             }
         } catch {|e|
-            print "\e[31mNuPrm ERROR!\e[0m\n" $e
+            print $"(ansi r)NuPrm ERROR!(ansi rst)\n" $e
         }
     }
 

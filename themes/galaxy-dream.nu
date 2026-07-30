@@ -22,7 +22,7 @@ export module nuprm-theme {
         let host_name = surround (get-prompt-info host-name) -l $"(get-color purple) at (get-color pink)"
         let user_host = $"($user_name)($host_name) (get-color purple)✨"
         let path_sep = if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }
-        let path_seg = $"(get-color pink)🪐 " + (surround (get-prompt-info pwd $path_sep -d $"(get-color purple)" -s $"(get-color pink)" -u) -r "\e[0m")
+        let path_seg = $"(get-color pink)🪐 " + (surround (get-prompt-info pwd $path_sep -d $"(get-color purple)" -s $"(get-color pink)" -u) -r (get-color reset))
         let git_info = surround (get-prompt-info git) -l " (" -r ")"
         let git_status = if ($git_info | str length) > 0 { $" (get-color pink)🌟(get-color star)($git_info)" } else { "" }
         let exit_status = if (get-prompt-info exit-code) != 0 { $" (get-color pink)💥(get-color purple) (get-prompt-info exit-code)" } else { "" }

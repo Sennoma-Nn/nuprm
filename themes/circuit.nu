@@ -25,7 +25,7 @@ export module nuprm-theme {
         let user_name = $"(get-color white)(get-prompt-info user-name)"
         let user_host = $"($user_name)($host_name)"
         let path_sep = if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }
-        let path_info = surround (get-prompt-info pwd -u $path_sep -d $"($status_color)" -s $"(get-color white)" -u) -r "\e[0m"
+        let path_info = surround (get-prompt-info pwd -u $path_sep -d $"($status_color)" -s $"(get-color white)" -u) -r (get-color reset)
         let path_show = $"[ ($path_info) (get-color white)]"
         let git_info = surround (get-prompt-info git -d $"(get-color white)*" -s $"(get-color white)+") -l $" in ($status_color)" -r (get-color reset)
         let execution_time = if (get-prompt-info exec-time) > 0.5 { $" ($status_color)- (get-color white)(get-prompt-info exec-time)sec" } else { "" }

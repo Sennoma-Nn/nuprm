@@ -7,8 +7,8 @@ export module nuprm-theme {
             right_char: "󰄬"
             wrong_char: ""
             root_icon: ""
-            italic: "\e[3m"
-            reset: "\e[0m"
+            italic: (ansi i)
+            reset: (ansi rst)
             power_line1: (dividers-char "lower_right_triangle") # 
             power_line2: (dividers-char "upper_left_triangle") # 
             power_line3: (dividers-char "left_hard_divider") # 
@@ -49,7 +49,13 @@ export module nuprm-theme {
             icon: (surround (get-prompt-info system-icon) -r " ")
             user: (get-prompt-info user-name)
             host: (surround (get-prompt-info host-name) -l $" @ ")
-            path: (surround (get-prompt-info pwd $path_sep -d $"\e[0;1m(get-prompt-chars white_fg)(get-prompt-chars path_bg)" -s $"\e[0;2m(get-prompt-chars path_bg)" -u))
+            path: (
+                surround (
+                    get-prompt-info pwd $path_sep -u
+                        -d $"(get-prompt-chars reset)(get-prompt-chars reset)(get-prompt-chars white_fg)(get-prompt-chars path_bg)"
+                        -s $"(get-prompt-chars reset)(get-prompt-chars dimmed)(get-prompt-chars path_bg)"
+                )
+            )
             git: (get-prompt-info git)
             exit: (get-prompt-info exit-code)
             admin: (is-admin)

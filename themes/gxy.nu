@@ -16,9 +16,9 @@ export module nuprm-theme {
             power_line3: (dividers-char "left_soft_divider") # 
             power_line4: (dividers-char "left_hard_divider_inverse") # 
             power_line5: (dividers-char "upper_left_triangle") # 
-            bold: "\e[1m"
-            reset: "\e[0m"
-            faint: "\e[2m"
+            bold: (ansi bo),
+            reset: (ansi rst),
+            dimmed: (ansi d),
         }
 
         let return_color = $colors | get -o $color | default ""
@@ -91,7 +91,7 @@ export module nuprm-theme {
     }
 
     export def get-transient-prompt-multiline-indicator [] {
-        return ((get-color dark_blue_fg) + (get-color faint) + "┆ - " + (get-color reset))
+        return ((get-color dark_blue_fg) + (get-color dimmed) + "┆ - " + (get-color reset))
     }
 
     export alias get-transient-prompt-indicator-vi-insert = get-transient-prompt-indicator

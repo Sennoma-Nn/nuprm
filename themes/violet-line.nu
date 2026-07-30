@@ -1,25 +1,26 @@
 export module nuprm-theme {
-    def get-color [color] {
+    def get-prompt-chars [color] {
         alias color-to-ansi = prompt-make-utils color-to-ansi
         alias dividers-char = prompt-make-utils power-line dividers-char
 
-        let colors = {
-            bold: "\e[1m",
-            italic: "\e[3m"
-            reset: "\e[0m"
-            power_line1: (dividers-char "right_hard_divider") # 
-            power_line2: (dividers-char "right_hard_divider_inverse") # 
-            power_line3: (dividers-char "left_hard_divider") # 
-            power_line4: (dividers-char "left_hard_divider_inverse") # 
-            white_fg: (color-to-ansi 255 255 255 "fg" "37")
-            black_fg: (color-to-ansi 0 0 0 "fg" "30")
-            normal_fg: (color-to-ansi 255 255 255 "fg" "37")
-            normal_bg: (color-to-ansi 255 255 255 "bg" "47")
-            purple_fg: (color-to-ansi 191 90 218 "fg" "35")
-            purple_bg: (color-to-ansi 191 90 218 "bg" "45")
+        let prompt_chars = {
+            bold: (ansi bo),
+            italic: (ansi i),
+            reset: (ansi rst),
+            dimmed: (ansi d),
+            power_line1: (dividers-char "right_hard_divider"),         # 
+            power_line2: (dividers-char "right_hard_divider_inverse"), # 
+            power_line3: (dividers-char "left_hard_divider"),          # 
+            power_line4: (dividers-char "left_hard_divider_inverse"),  # 
+            white_fg: (color-to-ansi 255 255 255 "fg" "37"),
+            black_fg: (color-to-ansi 0 0 0 "fg" "30"),
+            normal_fg: (color-to-ansi 255 255 255 "fg" "37"),
+            normal_bg: (color-to-ansi 255 255 255 "bg" "47"),
+            purple_fg: (color-to-ansi 191 90 218 "fg" "35"),
+            purple_bg: (color-to-ansi 191 90 218 "bg" "45"),
         }
         
-        let return_prompt_chars = $colors | get -o $color | default ""
+        let return_prompt_chars = $prompt_chars | get -o $color | default ""
         return $return_prompt_chars
     }
 
@@ -33,7 +34,13 @@ export module nuprm-theme {
             icon: (get-prompt-info system-icon)
             user: (get-prompt-info user-name)
             host: (get-prompt-info host-name)
-            path: (surround (get-prompt-info pwd $path_sep -d $"\e[0;1m(get-color white_fg)(get-color purple_bg)" -s $"\e[0;2m(get-color purple_bg)" -u))
+            path: (
+                surround (
+                    get-prompt-info pwd $path_sep -u
+                        -d $"(get-prompt-chars reset)(get-prompt-chars bold)(get-prompt-chars white_fg)(get-prompt-chars purple_bg)"
+                        -s $"(get-prompt-chars reset)(get-prompt-chars dimmed)(get-prompt-chars purple_bg)"
+                )
+            )
             git: (surround (get-prompt-info git) -l "󰊢 ")
             exit: (get-prompt-info exit-code)
             shells: (get-prompt-info shells -d)
@@ -41,7 +48,7 @@ export module nuprm-theme {
         }
         return (
             [
-                (get-color white_fg)
+                (get-prompt-chars white_fg)
                 "╭── ",
                 (
                     [
@@ -75,9 +82,9 @@ export module nuprm-theme {
                         | where $it != ""
                         | str join " "
                         | str trim -c "󰤃"
-                        | str replace --all "󰤃" $"(get-color purple_fg)󰤃(get-color reset)(get-color white_fg)"
-                        | str replace --all "" $"(get-color purple_fg)(get-color bold)(get-color reset)(get-color white_fg)"
-                        | str replace --all "" $"(get-color purple_fg)(get-color bold)(get-color reset)(get-color white_fg)"
+                        | str replace --all "󰤃" $"(get-prompt-chars purple_fg)󰤃(get-prompt-chars reset)(get-prompt-chars white_fg)"
+                        | str replace --all "" $"(get-prompt-chars purple_fg)(get-prompt-chars bold)(get-prompt-chars reset)(get-prompt-chars white_fg)"
+                        | str replace --all "" $"(get-prompt-chars purple_fg)(get-prompt-chars bold)(get-prompt-chars reset)(get-prompt-chars white_fg)"
                 )
                 "\n",
                 "│ ",
@@ -85,32 +92,32 @@ export module nuprm-theme {
                     make-block
                         --display_if ($status.shells != "")
                         -i "󰞷 "
-                        -s (get-color power_line1)
-                        -e (get-color power_line2)
-                        (get-color normal_fg)
-                        (get-color normal_bg)
+                        -s (get-prompt-chars power_line1)
+                        -e (get-prompt-chars power_line2)
+                        (get-prompt-chars normal_fg)
+                        (get-prompt-chars normal_bg)
                         $status.shells
-                        (get-color black_fg)
+                        (get-prompt-chars black_fg)
                 ),
                 (
                     make-block
-                        -s (get-color power_line1)
-                        -e (get-color power_line3)
-                        (get-color purple_fg)
-                        (get-color purple_bg)
+                        -s (get-prompt-chars power_line1)
+                        -e (get-prompt-chars power_line3)
+                        (get-prompt-chars purple_fg)
+                        (get-prompt-chars purple_bg)
                         $status.path
-                        (get-color white_fg)
+                        (get-prompt-chars white_fg)
                 ),
                 (
                     make-block
                         --display_if ($status.exit != 0)
                         -i " "
-                        -s (get-color power_line4)
-                        -e (get-color power_line3)
-                        (get-color normal_fg)
-                        (get-color normal_bg)
+                        -s (get-prompt-chars power_line4)
+                        -e (get-prompt-chars power_line3)
+                        (get-prompt-chars normal_fg)
+                        (get-prompt-chars normal_bg)
                         $status.exit
-                        (get-color black_fg)
+                        (get-prompt-chars black_fg)
                 ),
                 "\n",
                 "╰─"
@@ -121,19 +128,19 @@ export module nuprm-theme {
     export def get-prompt-command-right [] { }
 
     export def get-prompt-indicator [] {
-        return $"(get-color white_fg)󰔰 "
+        return $"(get-prompt-chars white_fg)󰔰 "
     }
 
     export def get-prompt-multiline-indicator [] {
-        return $"(get-color white_fg)  󰔰 (get-color reset)"
+        return $"(get-prompt-chars white_fg)  󰔰 (get-prompt-chars reset)"
     }
 
     export def get-prompt-indicator-vi-insert [] {
-        return $"(get-color white_fg)(get-color bold): (get-color reset)"
+        return $"(get-prompt-chars white_fg)(get-prompt-chars bold): (get-prompt-chars reset)"
     }
 
     export def get-prompt-indicator-vi-normal [] {
-        return $"(get-color white_fg)󰔰 (get-color reset)"
+        return $"(get-prompt-chars white_fg)󰔰 (get-prompt-chars reset)"
     }
 
     export def get-transient-prompt-command [] {
@@ -141,12 +148,12 @@ export module nuprm-theme {
         
         let prompt = (
             make-block
-                -s (get-color power_line1)
-                -e (get-color power_line3)
-                (get-color purple_fg)
-                (get-color purple_bg)
+                -s (get-prompt-chars power_line1)
+                -e (get-prompt-chars power_line3)
+                (get-prompt-chars purple_fg)
+                (get-prompt-chars purple_bg)
                 $path
-                (get-color white_fg)
+                (get-prompt-chars white_fg)
         ) + " "
 
         return $prompt
@@ -159,7 +166,7 @@ export module nuprm-theme {
     }
 
     export def get-transient-prompt-multiline-indicator [] {
-        return $"(get-color purple_fg)󰔰 (get-color reset)"
+        return $"(get-prompt-chars purple_fg)󰔰 (get-prompt-chars reset)"
     }
 
     export def get-transient-prompt-indicator-vi-insert [] { }
