@@ -6,10 +6,6 @@ export module nuprm-theme {
         let prompt_chars = {
             reset: (ansi reset)
 
-            left_half_circle: (dividers-char "left_half_circle_thick")   # 
-            right_half_circle: (dividers-char "right_half_circle_thick") # 
-            upper_left_triangle: (dividers-char "upper_left_triangle")   # 
-
             white_fg: (color-to-ansi 255 255 255 "fg" "37")
             black_fg: (color-to-ansi 0 0 0 "fg" "30")
             grey_fg: (color-to-ansi  64 64 64 "fg" "90"),
@@ -32,6 +28,10 @@ export module nuprm-theme {
 
             green_fg: (color-to-ansi 190 255 60 "fg" "92")
             green_bg: (color-to-ansi 190 255 60 "bg" "102")
+
+            left_half_circle: (dividers-char "left_half_circle_thick")   # 
+            right_half_circle: (dividers-char "right_half_circle_thick") # 
+            upper_left_triangle: (dividers-char "upper_left_triangle")   # 
         }
         
         let return_prompt_chars = $prompt_chars | get -o $color | default ""
@@ -125,7 +125,7 @@ export module nuprm-theme {
                 -e (get-prompt-chars right_half_circle)
                 (get-prompt-chars green_fg)
                 (get-prompt-chars green_bg)
-                $status.shells
+                $"#($status.shells)"
                 (get-prompt-chars black_fg)
         )
 
@@ -144,7 +144,7 @@ export module nuprm-theme {
         let exit_code = (
             make-block
                 --display_if ($status.exit != 0)
-                -i " "
+                -i " "
                 -s (get-prompt-chars left_half_circle)
                 -e (get-prompt-chars right_half_circle)
                 (get-prompt-chars orange_fg)
