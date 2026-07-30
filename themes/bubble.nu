@@ -182,7 +182,7 @@ export module nuprm-theme {
 
         let prompt = (
             make-block
-                -i (icon-with-space "")
+                -Ii (icon-with-space "")
                 -s (get-prompt-chars left_half_circle)
                 -e (get-prompt-chars right_half_circle)
                 (get-prompt-chars pink1_fg)
