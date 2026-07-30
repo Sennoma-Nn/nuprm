@@ -147,20 +147,21 @@ nuprm 支持智能目录缩写功能，让长路径显示更加短。
 
 ```nushell
 ❯ nuprm theme list
-# => ╭───┬───────────────────╮
-# => │ # │       name        │
-# => ├───┼───────────────────┤
-# => │ 0 │ azure.nu          │
-# => │ 1 │ circuit.nu        │
-# => │ 2 │ galaxy-dream.nu   │
-# => │ 3 │ gxy.nu            │
-# => │ 4 │ neon-night.nu     │
-# => │ 5 │ power-blocks.nu   │
-# => │ 6 │ retro-console.nu  │
-# => │ 7 │ simple-minimal.nu │
-# => │ 8 │ sunset-ocean.nu   │
-# => │ 9 │ violet-line.nu    │
-# => ╰───┴───────────────────╯
+# => ╭────┬───────────────────╮
+# => │ #  │       name        │
+# => ├────┼───────────────────┤
+# => │ 0  │ azure.nu          │
+# => │ 1  │ bubble.nu         │
+# => │ 2  │ circuit.nu        │
+# => │ 3  │ galaxy-dream.nu   │
+# => │ 4  │ gxy.nu            │
+# => │ 5  │ neon-night.nu     │
+# => │ 6  │ power-blocks.nu   │
+# => │ 7  │ retro-console.nu  │
+# => │ 8  │ simple-minimal.nu │
+# => │ 9  │ sunset-ocean.nu   │
+# => │ 10 │ violet-line.nu    │
+# => ╰────┴───────────────────╯
 ```
 
 要设置主题，在您的环境配置文件中设置 `nuprm_theme` 常量：
