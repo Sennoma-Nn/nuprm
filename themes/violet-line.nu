@@ -165,9 +165,7 @@ export module nuprm-theme {
 
     export def get-transient-prompt-command-right [] { }
 
-    export def get-transient-prompt-indicator [] {
-        return " "
-    }
+    export def get-transient-prompt-indicator [] { }
 
     export def get-transient-prompt-multiline-indicator [] {
         return $"(get-prompt-chars purple_fg)(icon-with-space "󰔰") (get-prompt-chars reset)"
