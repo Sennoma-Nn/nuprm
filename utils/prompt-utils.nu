@@ -557,7 +557,7 @@ def make-power-line-block [
     --start_dividers_bg: string (-S) = ""
     --end_dividers_bg: string (-E) = ""
 ] {
-    let icon_str = if $icon_with_space {
+    let icon_str = if $icon != "" and $block_text != "" and $icon_with_space {
         $icon + " "
     } else { $icon }
 
