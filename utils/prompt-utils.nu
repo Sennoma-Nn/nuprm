@@ -495,6 +495,7 @@ def get-system-icon []: nothing -> string {
         "alpine"             : (icon-with-space "")
         "aosc os"            : (icon-with-space "") # Tested
         "arch linux"         : (icon-with-space "") # Tested
+        "artix linux"        : (icon-with-space "") # Tested
         "centos"             : (icon-with-space "")
         "coreos"             : (icon-with-space "")
         "debian"             : (icon-with-space "")
