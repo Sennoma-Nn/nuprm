@@ -44,15 +44,18 @@ export module nuprm-theme {
     }
 
     export def get-prompt-indicator [] {
-        return $"(get-color cyan)❯ (get-color reset)"
+        let color = if (is-admin) { get-color magenta } else { get-color cyan }
+        return $"($color)❯ (get-color reset)"
     }
 
     export def get-prompt-multiline-indicator [] {
-        return $"(get-color grey)· (get-color reset)"
+        let color = if (is-admin) { get-color magenta } else { get-color cyan }
+        return $"($color)· (get-color reset)"
     }
 
     export def get-prompt-indicator-vi-insert [] {
-        return $"(get-color cyan): (get-color reset)"
+        let color = if (is-admin) { get-color magenta } else { get-color cyan }
+        return $"($color): (get-color reset)"
     }
 
     export def get-prompt-indicator-vi-normal [] {

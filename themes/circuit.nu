@@ -22,8 +22,9 @@ export module nuprm-theme {
         let status_mark = if $exit_code != 0 { $" ($status_color)×(get-color reset) ($exit_code)" } else { "" }
         let system_icon = surround (get-prompt-info system-icon) -l $status_color -r " "
         let host_name = surround (get-prompt-info host-name) -l $"($status_color) @ (get-color white)"
-        let user_name = $"(get-color white)(get-prompt-info user-name)"
-        let user_host = $"($user_name)($host_name)"
+        let user_name = get-prompt-info user-name
+        let show_name = if (is-admin) { $"(get-color white)[ (get-color red)($user_name) (get-color white)]" } else { $"(get-color white)($user_name)" }
+        let user_host = $"($show_name)($host_name)"
         let path_sep = if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }
         let path_info = surround (get-prompt-info pwd -u $path_sep -d $"($status_color)" -s $"(get-color white)" -u) -r (get-color reset)
         let path_show = $"[ ($path_info) (get-color white)]"

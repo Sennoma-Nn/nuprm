@@ -34,15 +34,18 @@ export module nuprm-theme {
     export def get-prompt-command-right [] { }
 
     export def get-prompt-indicator [] {
-        return $"((get-color green))❯ ((get-color reset))"
+        let color = if (is-admin) { get-color red } else { get-color green }
+        return $"($color)❯ (get-color reset)"
     }
 
     export def get-prompt-multiline-indicator [] {
-        return $"((get-color green))::: ((get-color reset))"
+        let color = if (is-admin) { get-color red } else { get-color green }
+        return $"($color)::: (get-color reset)"
     }
 
     export def get-prompt-indicator-vi-insert [] {
-        return $"((get-color green)): ((get-color reset))"
+        let color = if (is-admin) { get-color red } else { get-color green }
+        return $"($color): (get-color reset)"
     }
 
     export alias get-prompt-indicator-vi-normal = get-prompt-indicator

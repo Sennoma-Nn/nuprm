@@ -58,7 +58,7 @@ export module nuprm-theme {
                     [
                         (
                             [
-                                $status.user,
+                                ($status.user | if (is-admin) { $"($sep_char.0) ($in) ($sep_char.2)" } else { $in }),
                                 (if not ($"($status.icon)($status.host)" | is-empty) { $"at ($sep_char.0)" } else { "" }),
                                 (
                                     [

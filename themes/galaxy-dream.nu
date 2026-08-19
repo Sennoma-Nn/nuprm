@@ -7,6 +7,7 @@ export module nuprm-theme {
             purple: (color-to-ansi 180 100 255 "fg" "35"),
             pink: (color-to-ansi 255 100 200 "fg" "95"),
             star: (color-to-ansi 255 255 150 "fg" "33"),
+            red: (color-to-ansi 255 100 100 "fg" "91")
             reset: (ansi reset)
         }
         
@@ -38,7 +39,8 @@ export module nuprm-theme {
     }
 
     export def get-prompt-indicator [] {
-        return $"(get-color pink)➜ (get-color reset)"
+        let color = if (is-admin) { get-color red } else { get-color pink }
+        return $"($color)➜ (get-color reset)"
     }
 
     export def get-prompt-multiline-indicator [] {
@@ -46,7 +48,8 @@ export module nuprm-theme {
     }
 
     export def get-prompt-indicator-vi-insert [] {
-        return $"(get-color pink): (get-color reset)"
+        let color = if (is-admin) { get-color red } else { get-color pink }
+        return $"($color): (get-color reset)"
     }
 
     export alias get-prompt-indicator-vi-normal = get-prompt-indicator

@@ -32,6 +32,8 @@ export module nuprm-theme {
             green_fg: (color-to-ansi 190 255 60 "fg" "92")
             green_bg: (color-to-ansi 190 255 60 "bg" "102")
 
+            red_fg: (color-to-ansi 255 90 90 "fg" "91")
+
             left_half_circle: (dividers-char "left_half_circle_thick")   # 
             right_half_circle: (dividers-char "right_half_circle_thick") # 
             upper_left_triangle: (dividers-char "upper_left_triangle")   # 
@@ -164,14 +166,20 @@ export module nuprm-theme {
     }
 
     export def get-prompt-indicator [] {
-        let indicator = (get-prompt-chars reset) + (icon-with-space "") + " "
+        let color = if (is-admin) { get-prompt-chars red_fg } else { get-prompt-chars purple1_fg }
+        let indicator = $color + (icon-with-space "") + " "
         return $indicator
     }
 
-    export alias get-prompt-multiline-indicator = get-prompt-indicator
+    export def get-prompt-multiline-indicator [] {
+        let color = if (is-admin) { get-prompt-chars red_fg } else { get-prompt-chars purple1_fg }
+        let indicator = $color + (icon-with-space "") + " "
+        return $indicator
+    }
 
     export def get-prompt-indicator-vi-insert [] {
-        let indicator = (get-prompt-chars reset) + (icon-with-space "") + " "
+        let color = if (is-admin) { get-prompt-chars red_fg } else { get-prompt-chars purple1_fg }
+        let indicator = $color + (icon-with-space "") + " "
         return $indicator
     }
 
@@ -198,7 +206,7 @@ export module nuprm-theme {
 
     export alias get-transient-prompt-indicator = get-prompt-indicator
 
-    export alias get-transient-prompt-multiline-indicator = get-prompt-indicator
+    export alias get-transient-prompt-multiline-indicator = get-prompt-multiline-indicator
 
     export alias get-transient-prompt-indicator-vi-insert = get-prompt-indicator-vi-insert
 

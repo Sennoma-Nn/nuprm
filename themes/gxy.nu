@@ -62,7 +62,8 @@ export module nuprm-theme {
     export def get-prompt-command-right [] { }
 
     export def get-prompt-indicator [] {
-        return ((get-color reset) + "> ")
+        let indicator = if (is-admin) { "» " } else { "> " }
+        return ((get-color reset) + $indicator)
     }
 
     export def get-prompt-multiline-indicator [] {

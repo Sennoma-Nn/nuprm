@@ -31,7 +31,7 @@ export module nuprm-theme {
 
     export def get-prompt-indicator [] {
         if (get-prompt-info exit-code) == 0 {
-            return $"(get-color terminal_green)> (get-color reset)"
+            return $"(get-color terminal_green)(if (is-admin) { "#" } else { ">" }) (get-color reset)"
         } else {
             return $"(get-color error_red)! (get-color reset)"
         }
@@ -49,13 +49,7 @@ export module nuprm-theme {
         }
     }
 
-    export def get-prompt-indicator-vi-normal [] {
-        if (get-prompt-info exit-code) == 0 {
-        return $"(get-color terminal_green)> (get-color reset)"
-        } else {
-            return $"(get-color error_red)> (get-color reset)"
-        }
-    }
+    export alias get-prompt-indicator-vi-normal = get-prompt-indicator
 
     export def get-transient-prompt-command [] { }
 
