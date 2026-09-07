@@ -81,8 +81,8 @@ $env.NUPRMCONFIG = {
 - `compatibility.true_color: false` - 禁用真彩色支持
 
 **路径 URL 支持**
-- `compatibility.enable_path_url: true` - 启用路径 URL 支持
-- `compatibility.enable_path_url: false` - 禁用路径 URL 支持
+- `compatibility.path_url: true` - 启用路径 URL 支持
+- `compatibility.path_url: false` - 禁用路径 URL 支持
 
 **Power Line 图标间距**
 - `compatibility.icon_with_space: true` - 在 Power Line 图标后添加空格

@@ -81,8 +81,8 @@ $env.NUPRMCONFIG = {
 - `compatibility.true_color: false` - Disable true color support
 
 **Path URL support**
-- `compatibility.enable_path_url: true` - Enable path URL support
-- `compatibility.enable_path_url: false` - Disable path URL support
+- `compatibility.path_url: true` - Enable path URL support
+- `compatibility.path_url: false` - Disable path URL support
 
 **Power Line icon space**
 - `compatibility.icon_with_space: true` - Add space after the Power Line icon
