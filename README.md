@@ -56,7 +56,7 @@ $env.NUPRMCONFIG = {
     compatibility: {
         path_url: true,
         true_color: true,
-        with_space: true
+        icon_with_space: true
     },
     git: {
         dirty: true,

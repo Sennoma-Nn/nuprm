@@ -8,6 +8,8 @@ def show-theme [
     let config_json = $env | get -o NUPRMCONFIG | default {} | to json
     let shells_index = get-prompt-info shells | if $in == "" { 0 } else { $in | into int }
     let shells_json = 0..$shells_index | each { { active: false } } | update $shells_index { active: true } | to json
+    let utils_nuon_path = $utils_path | to nuon
+    let theme_nuon_path = $theme_path | to nuon
     let preview_prompt = with-env {
         CONFIG_JSON: $config_json
         SHELLS_JSON: $shells_json
@@ -20,8 +22,8 @@ def show-theme [
 
             alias shells = echo $shells_data
 
-            use " + $utils_path + " *
-            use " + $theme_path + " nuprm-theme
+            use " + $utils_nuon_path + " *
+            use " + $theme_nuon_path + " nuprm-theme
 
             let command_l = do {|| nuprm-theme get-prompt-command-left } | default ''
             let command_r = do {|| nuprm-theme get-prompt-command-right } | default ''
