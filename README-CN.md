@@ -58,9 +58,15 @@ $env.NUPRMCONFIG = {
         true_color: true,
         icon_with_space: true
     },
-    git: {
-        dirty: true,
-        staged: true
+    elements: {
+        git: {
+            dirty: true,
+            staged: true
+        },
+        time: {
+            startup_threshold: 0.5sec,
+            execution_threshold: 0.5sec
+        }
     }
 }
 ```
