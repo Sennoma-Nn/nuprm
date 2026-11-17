@@ -31,6 +31,7 @@ export module nuprm-theme {
         alias surround = prompt-make-utils surround
 
         let path_sep = if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }
+        let display_time = get-prompt-info display-time
         let status = {
             icon: (get-prompt-info system-icon)
             user: (get-prompt-info user-name)
@@ -76,7 +77,7 @@ export module nuprm-theme {
                             [
                                 $status.git,
                                 (
-                                    if $status.time > 0.5 {
+                                    if $display_time {
                                         $"(icon-with-space "󰔛") ($status.time)s"
                                     } else { "" }
                                 ),

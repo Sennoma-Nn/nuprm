@@ -75,6 +75,7 @@ export module nuprm-theme {
 
     export def get-prompt-command-right [] {
         let git_info = get-prompt-info git
+        let display_time = get-prompt-info display-time
         let exec_time = get-prompt-info exec-time
         let execution_time = $"($exec_time)sec"
         let exit_code = get-prompt-info exit-code
@@ -111,7 +112,7 @@ export module nuprm-theme {
             )
             (
                 make-block
-                    --display_if ($exec_time > 0.5)
+                    --display_if ($display_time)
                     --force_display_dividers
                     -s (get-prompt-chars power_line1)
                     -e (get-prompt-chars power_line6)

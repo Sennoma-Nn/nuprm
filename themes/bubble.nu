@@ -114,6 +114,7 @@ export module nuprm-theme {
     }
 
     export def get-prompt-command-right [] {
+        let display_time = get-prompt-info display-time
         let status = {
             exit: (get-prompt-info exit-code)
             shells: (get-prompt-info shells -d)
@@ -134,7 +135,7 @@ export module nuprm-theme {
 
         let exec_time = (
             make-block
-                --display_if ($status.time > 0.5)
+                --display_if ($display_time)
                 -Ii (icon-with-space "󱎫")
                 -s (get-prompt-chars left_half_circle)
                 -e (get-prompt-chars right_half_circle)

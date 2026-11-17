@@ -73,7 +73,7 @@ def get-git-branch []: nothing -> string {
 
 # Check if git working directory is dirty
 def get-is-git-dirty []: nothing -> bool {
-    let is_show_git_dirty = is-config-enable $.git.dirty true
+    let is_show_git_dirty = is-config-enable $.elements.git.dirty true
 
     if not $is_show_git_dirty {
         return false
@@ -99,7 +99,7 @@ def get-is-git-dirty []: nothing -> bool {
 
 # Check if git has staged changes
 def git-has-staged []: nothing -> bool {
-    let is_show_git_staged = is-config-enable $.git.staged true
+    let is_show_git_staged = is-config-enable $.elements.git.staged true
 
     if not $is_show_git_staged {
         return false
@@ -443,20 +443,21 @@ def get-path-mode []: nothing -> string {
 }
 
 # Get execution time (ms)
-def get-execution-time-ms []: nothing -> number {
-    let is_show_execution_time = is-config-enable $.display_elements.execution_time true
-    let show_startup_time_on_init = is-config-enable $.display_elements.startup_time true
-    let time = $env.CMD_DURATION_MS? | default 0
+def get-time-ms []: nothing -> number {
+    let execution_time_enable = is-config-enable $.display_elements.execution_time true
+    let startup_time_enable = is-config-enable $.display_elements.startup_time true
+    let execution_time = $env.CMD_DURATION_MS? | default 0
     let startup_time = $nu.startup-time
 
-    if not $is_show_execution_time {
+    if not $execution_time_enable and not $startup_time_enable {
         return (-1)
     }
 
-    if $time != "0823" {
-        return ($time | into int)
+    # A newly started Nushell will display the string "0823" at startup
+    if $execution_time != "0823" {
+        return ($execution_time | into int)
     } else {
-        if $show_startup_time_on_init {
+        if $startup_time_enable {
             return (($startup_time / 1ms) | into int)
         } else {
             return 0
@@ -465,12 +466,41 @@ def get-execution-time-ms []: nothing -> number {
 }
 
 # Get execution time (s)
-def get-execution-time-s []: nothing -> number {
-    let time_s = get-execution-time-ms
+def get-time-s []: nothing -> number {
+    let time_s = get-time-ms
         | $in / 1000
         | math round --precision 2
 
     return $time_s
+}
+
+# Check whether timing information should be displayed
+def display-time []: nothing -> bool {
+    let execution_time_enable = is-config-enable $.display_elements.execution_time true
+    let startup_time_enable = is-config-enable $.display_elements.startup_time true
+    let startup_threshold = get-config $.elements.time.startup_threshold 0.5sec | into duration
+    let execution_threshold = get-config $.elements.time.execution_threshold 0.5sec | into duration
+    let execution_time = $env.CMD_DURATION_MS? | default 0
+    let time_nu_type = $execution_time | into duration --unit ms
+    let startup_time = $nu.startup-time
+
+    if not $execution_time_enable and not $startup_time_enable {
+        return false
+    }
+
+    if $execution_time == "0823" {
+        if $startup_time_enable {
+            let show = $startup_time >= $startup_threshold
+            return $show
+        }
+    } else {
+        if $execution_time_enable {
+            let show = $time_nu_type >= $execution_threshold
+            return $show
+        }
+    }
+
+    return false
 }
 
 # Get exit code
@@ -702,7 +732,10 @@ export module get-prompt-info {
     export alias last-pwd = get-pwd-last
 
     # Get execution time information for prompt
-    export alias exec-time = get-execution-time-s
+    export alias exec-time = get-time-s
+
+    # Get has the display time condition been met
+    export alias display-time = display-time
 
     # Get exit code information for prompt
     export alias exit-code = get-exit-code

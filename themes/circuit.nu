@@ -29,7 +29,8 @@ export module nuprm-theme {
         let path_info = surround (get-prompt-info pwd -u $path_sep -d $"($status_color)" -s $"(get-color white)" -u) -r (get-color reset)
         let path_show = $"[ ($path_info) (get-color white)]"
         let git_info = surround (get-prompt-info git -d $"(get-color white)*" -s $"(get-color white)+") -l $" in ($status_color)" -r (get-color reset)
-        let execution_time = if (get-prompt-info exec-time) > 0.5 { $" ($status_color)- (get-color white)(get-prompt-info exec-time)sec" } else { "" }
+        let display_time = get-prompt-info display-time
+        let execution_time = if $display_time { $" ($status_color)- (get-color white)(get-prompt-info exec-time)sec" } else { "" }
 
         return $"(get-color white)╭── ($system_icon)($user_host) ($path_show)($status_mark)($git_info)($execution_time)\n(get-color white)╰─(get-color reset)"
     }

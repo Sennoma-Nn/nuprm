@@ -27,7 +27,8 @@ export module nuprm-theme {
         let shells_index = surround (get-prompt-info shells -d) -l $"($colors.1)№" -r $"($colors.0) : "
         let path_sep = if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }
         let path_segment = surround (get-prompt-info pwd $path_sep -d $"(get-color reset)(get-color bold)($colors.1)" -s (get-color reset)(get-color dimmed) -u) -r (get-color reset)
-        let execution_time = if (get-prompt-info exec-time) > 0.5 { $" ($colors.1)(get-prompt-info exec-time)sec " } else { "" }
+        let display_time = get-prompt-info display-time
+        let execution_time = if $display_time { $" ($colors.1)(get-prompt-info exec-time)sec " } else { "" }
         let git_info = surround (get-prompt-info git -d $"($colors.1)*" -s $"($colors.1)+") -l $"($colors.1) in ($colors.0)" -r (if ($execution_time | is-empty) { " " } else { "" })
         let exit_code = if (get-prompt-info exit-code) != 0 { surround (get-prompt-info exit-code) -l $colors.0 -r $"($colors.1) | " } else { "" }
 

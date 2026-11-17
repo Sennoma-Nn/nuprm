@@ -29,7 +29,8 @@ export module nuprm-theme {
         let git_branch = (get-prompt-info git -d $"(get-color cyan)*" -s $"(get-color cyan)+")
         let shells_index = surround (get-prompt-info shells -d) -l $"(get-color grey) | (get-color cyan)dirs: (get-color magenta)№"
         let git_info = if not ($git_branch | is-empty) { $"(get-color grey) | (get-color cyan)git: (get-color magenta)($git_branch)(ansi reset)" } else { "" }
-        let execution_time = if (get-prompt-info exec-time) > 0.5 { $"(get-color grey) | (get-color cyan)exec time: (get-color magenta)(get-prompt-info exec-time)sec(ansi reset)" } else { "" }
+        let display_time = get-prompt-info display-time
+        let execution_time = if $display_time { $"(get-color grey) | (get-color cyan)exec time: (get-color magenta)(get-prompt-info exec-time)sec(ansi reset)" } else { "" }
 
         return $"($system_icon)($user_info) (get-color grey)in ($path_info)($git_info)($shells_index)($execution_time)\n\r"
     }

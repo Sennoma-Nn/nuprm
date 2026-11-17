@@ -27,7 +27,8 @@ export module nuprm-theme {
         let git_info = surround (get-prompt-info git) -l " (" -r ")"
         let git_status = if ($git_info | str length) > 0 { $" (get-color pink)🌟(get-color star)($git_info)" } else { "" }
         let exit_status = if (get-prompt-info exit-code) != 0 { $" (get-color pink)💥(get-color purple) (get-prompt-info exit-code)" } else { "" }
-        let execution_time = if (get-prompt-info exec-time) > 0.5 { $" (get-color pink)⌛(get-color purple) (get-prompt-info exec-time)sec" } else { "" }
+        let display_time = get-prompt-info display-time
+        let execution_time = if $display_time { $" (get-color pink)⌛(get-color purple) (get-prompt-info exec-time)sec" } else { "" }
         return $"($user_host)\n($path_seg)($git_status)($exit_status)($execution_time)\n"
     }
 

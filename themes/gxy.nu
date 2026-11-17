@@ -39,6 +39,7 @@ export module nuprm-theme {
         let exit_code = get-prompt-info exit-code
         let execution_time = surround (get-prompt-info exec-time) -r "sec"
         let system_icon_sep = $"(icon-with-space "▕" 0) "
+        let display_time = get-prompt-info display-time
 
         mut prompt = $"(get-color reset)┌ "
         $prompt += $"(get-color blue_fg)(get-color power_line1)(get-color reset)"
@@ -48,7 +49,7 @@ export module nuprm-theme {
 
         mut extra_info_list = []
         if $git_info != "" { $extra_info_list ++= [$"(get-color pink_fg)(icon-with-space "" 0) ($git_info)(get-color reset)"] }
-        if (get-prompt-info exec-time) > 0.5 { $extra_info_list ++= [$"((get-color bold) + (get-color dark_blue_fg))($execution_time)(get-color reset)"] }
+        if $display_time { $extra_info_list ++= [$"((get-color bold) + (get-color dark_blue_fg))($execution_time)(get-color reset)"] }
         if $exit_code != 0 { $extra_info_list ++= [$"((get-color bold) + (get-color dark_blue_fg))($exit_code)(get-color reset)"] }
         let extra_info = ($extra_info_list | str join $" (get-color reset)(icon-with-space "" 0) ")
         if not ($extra_info_list | is-empty) { $prompt += $" ($extra_info) " }

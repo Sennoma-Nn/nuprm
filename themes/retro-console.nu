@@ -21,7 +21,8 @@ export module nuprm-theme {
         let path_sep = if (get-prompt-info path-mode) == "DOS" { "\\" } else { "/" }
         let path_str = get-prompt-info pwd $path_sep -u -d (get-color terminal_green) -s (get-color dim_green)
         let git_branch = (get-prompt-info git)
-        let execution_time = if (get-prompt-info exec-time) > 0.5 { $" (get-color dim_green)(get-prompt-info exec-time)sec(get-color reset)" } else { "" }
+        let display_time = get-prompt-info display-time
+        let execution_time = if $display_time { $" (get-color dim_green)(get-prompt-info exec-time)sec(get-color reset)" } else { "" }
         let git_str = if not ($git_branch | is-empty) { $" (get-color dim_green)($git_branch)(get-color reset)" } else { "" }
 
         return $"($system_icon)($shells_index)(get-color terminal_green)($path_str)($git_str)($execution_time)(get-color reset) "
