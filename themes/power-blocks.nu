@@ -69,6 +69,7 @@ export module nuprm-theme {
                 (
                     make-block
                         -Ii $status.icon
+                        -s (get-prompt-chars power_line4)
                         -e (get-prompt-chars power_line2)
                         (get-prompt-chars name_fg)
                         (get-prompt-chars name_bg)
@@ -199,6 +200,7 @@ export module nuprm-theme {
         return (
             make-block
                 -Ii (icon-with-space "")
+                -s (get-prompt-chars power_line4)
                 -e $"(get-prompt-chars power_line3) "
                 (get-prompt-chars path_fg)
                 (get-prompt-chars path_bg)
