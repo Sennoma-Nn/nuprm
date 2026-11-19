@@ -65,6 +65,46 @@ def show-theme [
     return $preview_record
 }
 
+# Configuration check in load
+def config-check [] {
+    use utils/config-utils.nu *
+
+    if ($env.NUPRMCONFIG? | describe) == "nothing" {
+        error make --unspanned { msg: "Config not defined." }
+    }
+
+    for cfg in [$.directory_abbreviation.start_from_end, $.directory_abbreviation.display_chars] {
+        if (get-config $cfg | describe | $in in ["nothing", "int"] | not $in) {
+            error make --unspanned { msg: $"The ($cfg) expected value is int." }
+        }
+    }
+
+    for cfg in [$.elements.time.startup_threshold, $.elements.time.execution_threshold] {
+        if (get-config $cfg | describe | $in in ["nothing", "duration"] | not $in) {
+            error make --unspanned { msg: $"The ($cfg) expected value is duration." }
+        }
+    }
+
+    let check_bool = {|cfg|
+        if not (is-config-bool $cfg -n) {
+            error make --unspanned { msg: $"The ($cfg) expected value is bool." }
+        }
+    }
+
+    let bool_configs = [
+        $.enabled, $.use_full_name,
+        $.directory_abbreviation.enabled, $.directory_abbreviation.abbreviate_home,
+        $.display_elements.system_icon, $.display_elements.hostname, $.display_elements.git,
+        $.display_elements.shells, $.display_elements.startup_time, $.display_elements.execution_time, $.display_elements.exit,
+        $.compatibility.path_url, $.compatibility.true_color, $.compatibility.icon_with_space,
+        $.elements.git.dirty, $.elements.git.staged
+    ]
+
+    for cfg in $bool_configs {
+        do $check_bool $cfg
+    }
+}
+
 export module nuprm {
     # Nushell Prompt Manager
     export def main [
@@ -87,6 +127,8 @@ export module nuprm {
     export def --env load [] {
         try {
             let is_enable = get-prompt-info nuprm-enabled
+
+            config-check
 
             if (get-prompt-info full-name-enabled) {
                 if ($env.FULLNAME? == null) {
