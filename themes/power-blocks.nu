@@ -88,7 +88,7 @@ export module nuprm-theme {
                 )
                 (
                     make-block
-                        --display_if ($status.git != "")
+                        --display-if ($status.git != "")
                         -Ii (icon-with-space "" 0)
                         -s (get-prompt-chars power_line1)
                         -e (get-prompt-chars power_line2)
@@ -99,7 +99,7 @@ export module nuprm-theme {
                 )
                 (
                     make-block
-                        --display_if ($display_time)
+                        --display-if ($display_time)
                         -Ii (icon-with-space "")
                         -s (get-prompt-chars power_line1)
                         -e (get-prompt-chars power_line2)
@@ -110,7 +110,7 @@ export module nuprm-theme {
                 )
                 (
                     make-block
-                        --display_if ($status.exit == 0)
+                        --display-if ($status.exit == 0)
                         -s (get-prompt-chars power_line1)
                         -e (get-prompt-chars power_line3)
                         (get-prompt-chars status_fg)
@@ -120,7 +120,7 @@ export module nuprm-theme {
                 )
                 (
                     make-block
-                        --display_if ($status.exit != 0)
+                        --display-if ($status.exit != 0)
                         -Ii (get-prompt-chars wrong_char)
                         -s (get-prompt-chars power_line1)
                         -e (get-prompt-chars power_line3)
@@ -131,7 +131,7 @@ export module nuprm-theme {
                 )
                 (
                     make-block
-                        --display_if ($status.shells != "")
+                        --display-if ($status.shells != "")
                         -Ii (icon-with-space "󰞷")
                         -s (get-prompt-chars power_line4)
                         -e (get-prompt-chars power_line3)
@@ -142,7 +142,7 @@ export module nuprm-theme {
                 )
                 (
                     make-block
-                        --display_if $status.admin
+                        --display-if $status.admin
                         -s (get-prompt-chars power_line4)
                         -e (get-prompt-chars power_line3)
                         (get-prompt-chars root_fg)

@@ -69,8 +69,8 @@ export module nuprm-theme {
             ),
             (
                 make-block
-                    --display_if ($"($status.icon)($status.host)" != "")
-                    --force_display_dividers
+                    --display-if ($"($status.icon)($status.host)" != "")
+                    --force-display-dividers
                     -Ii ($status.icon | if $in != "" { $in } else { icon-with-space "󰍹" })
                     -e (get-prompt-chars right_half_circle)
                     (get-prompt-chars purple2_fg)
@@ -94,8 +94,8 @@ export module nuprm-theme {
             ),
             (
                 make-block
-                    --display_if ($status.git != "")
-                    --force_display_dividers
+                    --display-if ($status.git != "")
+                    --force-display-dividers
                     -Ii (icon-with-space "" 0)
                     -e (get-prompt-chars right_half_circle)
                     (get-prompt-chars pink2_fg)
@@ -123,7 +123,7 @@ export module nuprm-theme {
 
         let shells = (
             make-block
-                --display_if ($status.shells != "")
+                --display-if ($status.shells != "")
                 -Ii (icon-with-space "󰙁")
                 -s (get-prompt-chars left_half_circle)
                 -e (get-prompt-chars right_half_circle)
@@ -135,7 +135,7 @@ export module nuprm-theme {
 
         let exec_time = (
             make-block
-                --display_if ($display_time)
+                --display-if ($display_time)
                 -Ii (icon-with-space "󱎫")
                 -s (get-prompt-chars left_half_circle)
                 -e (get-prompt-chars right_half_circle)
@@ -147,7 +147,7 @@ export module nuprm-theme {
 
         let exit_code = (
             make-block
-                --display_if ($status.exit != 0)
+                --display-if ($status.exit != 0)
                 -Ii (icon-with-space "")
                 -s (get-prompt-chars left_half_circle)
                 -e (get-prompt-chars right_half_circle)

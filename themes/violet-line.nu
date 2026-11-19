@@ -95,7 +95,7 @@ export module nuprm-theme {
                 "│ ",
                 (
                     make-block
-                        --display_if ($status.shells != "")
+                        --display-if ($status.shells != "")
                         -Ii (icon-with-space "󰞷")
                         -s (get-prompt-chars power_line1)
                         -e (get-prompt-chars power_line2)
@@ -115,7 +115,7 @@ export module nuprm-theme {
                 ),
                 (
                     make-block
-                        --display_if ($status.exit != 0)
+                        --display-if ($status.exit != 0)
                         -Ii (icon-with-space "")
                         -s (get-prompt-chars power_line4)
                         -e (get-prompt-chars power_line3)

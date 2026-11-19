@@ -123,8 +123,8 @@ def git-has-staged []: nothing -> bool {
 
 # Retrieves current git branch information with optional formatting
 def get-git-info [
-    --dirty_char (-d) = "*"     # Character to display when working directory is dirty
-    --staged_char (-s) = "+"    # Character to display when there are staged changes
+    --dirty-char (-d) = "*"     # Character to display when working directory is dirty
+    --staged-char (-s) = "+"    # Character to display when there are staged changes
 ]: nothing -> string {
     let is_show_git = is-config-enable $.display_elements.git true
     let is_git_dir = git rev-parse --git-dir | complete | get "exit_code" | $in == 0
@@ -162,7 +162,7 @@ def get-git-info [
 
 # Gets current shells index from directory stack with display options
 def get-where-shells [
-    --dont_display_shells_if_not_used_shells (-d)  # Suppress output when only 1 shell exists
+    --dont-display-shells-if-not-used-shells (-d)  # Suppress output when only 1 shell exists
 ]: nothing -> string {
     let is_show_shells = is-config-enable $.display_elements.shells true
 
@@ -308,10 +308,10 @@ def get-pwd []: nothing -> string {
 # Formats path
 def format-path [
     new_separators: string          # Custom separator
-    --keep_root (-k)                # Keep root directory ( on: / > aaa > bbb | off: > aaa > bbb)
-    --dir_style: string (-d) = ""   # Directory styling (ANSI codes)
-    --sep_style: string (-s) = ""   # Separator styling (ANSI codes)
-    --file_url (-u)                 # Format as clickable terminal hyperlink
+    --keep-root (-k)                # Keep root directory ( on: / > aaa > bbb | off: > aaa > bbb)
+    --dir-style: string (-d) = ""   # Directory styling (ANSI codes)
+    --sep-style: string (-s) = ""   # Separator styling (ANSI codes)
+    --file-url (-u)                 # Format as clickable terminal hyperlink
 ]: string -> string {
     let path = $in
     let input_path = $path | specific-abbreviations
@@ -352,12 +352,12 @@ def format-path [
 
 def format-pwd [
     new_separators: string          # Custom separator
-    --keep_root (-k)                # Keep root directory ( on: / > aaa > bbb | off: > aaa > bbb) in `path` info
-    --dir_style: string (-d) = ""   # Directory styling (ANSI codes) in `path` info
-    --sep_style: string (-s) = ""   # Separator styling (ANSI codes) in `path` info
-    --file_url (-u)                 # Format as clickable terminal hyperlink in `path` or `last-path` info
+    --keep-root (-k)                # Keep root directory ( on: / > aaa > bbb | off: > aaa > bbb) in `path` info
+    --dir-style: string (-d) = ""   # Directory styling (ANSI codes) in `path` info
+    --sep-style: string (-s) = ""   # Separator styling (ANSI codes) in `path` info
+    --file-url (-u)                 # Format as clickable terminal hyperlink in `path` or `last-path` info
 ]: nothing -> string {
-    let out = get-pwd | format-path $new_separators --keep_root=$keep_root --dir_style=$dir_style --sep_style=$sep_style --file_url=$file_url
+    let out = get-pwd | format-path $new_separators --keep-root=$keep_root --dir-style=$dir_style --sep-style=$sep_style --file-url=$file_url
     return $out
 }
 
@@ -398,7 +398,7 @@ def abbr_path []: list -> list {
 
 # Get last directory of path
 def get-path-last [
-    --file_url (-u) # Format as clickable terminal hyperlink
+    --file-url (-u) # Format as clickable terminal hyperlink
 ]: string -> string {
     let path = $in
     let last_path = $path | specific-abbreviations | path split | last
@@ -411,9 +411,9 @@ def get-path-last [
 }
 
 def get-pwd-last [
-    --file_url (-u) # Format as clickable terminal hyperlink in `path` or `last-path` info
+    --file-url (-u) # Format as clickable terminal hyperlink in `path` or `last-path` info
 ]: nothing -> string {
-    let out = get-pwd | get-path-last --file_url=$file_url
+    let out = get-pwd | get-path-last --file-url=$file_url
     return $out
 }
 
@@ -579,14 +579,14 @@ def make-power-line-block [
     block_bg: string
     block_text: any
     text_fg: string
-    --start_dividers: string (-s) = ""
-    --end_dividers: string (-e) = ""
+    --start-dividers: string (-s) = ""
+    --end-dividers: string (-e) = ""
     --icon: string (-i) = ""
-    --icon_with_space (-I)
-    --display_if (-d) = true
-    --force_display_dividers (-f)
-    --start_dividers_bg: string (-S) = ""
-    --end_dividers_bg: string (-E) = ""
+    --icon-with-space (-I)
+    --display-if (-d) = true
+    --force-display-dividers (-f)
+    --start-dividers-bg: string (-S) = ""
+    --end-dividers-bg: string (-E) = ""
 ] {
     let icon_str = if $icon != "" and $block_text != "" and $icon_with_space {
         $icon + " "
@@ -672,8 +672,8 @@ def get-power-line-dividers-char [
 # Adds prefix and suffix decorators around the given text
 def surround [
     text: any                      # Info text
-    --left_char: string (-l) = ""  # Left decorator for info
-    --right_char: string (-r) = "" # Right decorator for info
+    --left-char: string (-l) = ""  # Left decorator for info
+    --right-char: string (-r) = "" # Right decorator for info
 ]: nothing -> string {
     if $text == "" {
         return ""

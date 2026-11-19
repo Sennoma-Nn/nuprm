@@ -99,8 +99,8 @@ export module nuprm-theme {
             )
             (
                 make-block
-                    --display_if ($git_info != "")
-                    --force_display_dividers
+                    --display-if ($git_info != "")
+                    --force-display-dividers
                     -Ii (icon-with-space "󰊢")
                     -s (get-prompt-chars power_line1)
                     -S (get-prompt-chars color3_bg)
@@ -112,8 +112,8 @@ export module nuprm-theme {
             )
             (
                 make-block
-                    --display_if ($display_time)
-                    --force_display_dividers
+                    --display-if ($display_time)
+                    --force-display-dividers
                     -s (get-prompt-chars power_line1)
                     -e (get-prompt-chars power_line6)
                     -S (get-prompt-chars color4_bg)
