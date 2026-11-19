@@ -103,6 +103,13 @@ def config-check [] {
     for cfg in $bool_configs {
         do $check_bool $cfg
     }
+
+    let custom_abbr_map = get-config $.directory_abbreviation.custom_abbreviate_mappings
+    if ($custom_abbr_map | describe) != "nothing" {
+        if ($custom_abbr_map | values | describe) != "list<string> (stream)" {
+            error make --unspanned { msg: "The $.directory_abbreviation.custom_abbreviate_mappings expected value is list<string>." }
+        }
+    }
 }
 
 export module nuprm {
