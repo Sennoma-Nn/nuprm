@@ -95,7 +95,7 @@ $env.NUPRMCONFIG = {
 - `compatibility.icon_with_space: false` - 在 Power Line 图标后不添加空格
   > `compatibility.icon_with_space` 之所以被需要是因为 Power Line 图标的显示宽度并非始终为 1 个字符，但是图标的实际体积却是 1 个字符，这可能会造成显示重叠。如果你正在使用 Nerd Font 的 Mono 变体，那么每个图标的显示宽度都是 1，你不须要开启它
 
-**目录缩写配置**
+**目录缩写配置**  
 nuprm 支持智能目录缩写功能，让长路径显示更加短。
 
 - `directory_abbreviation.enabled: true` - 启用目录缩写
@@ -143,11 +143,15 @@ nuprm 支持智能目录缩写功能，让长路径显示更加短。
 - `display_elements.exit: true` - 显示退出码信息
 - `display_elements.exit: false` - 不显示退出码信息
 
-- `git.dirty: true` - 如果检测到未暂存的更改，在 Git 分支名称后附加 `*` 指示符。
-- `git.dirty: false` - 即使检测到未暂存的更改，也不在 Git 分支名称后附加 `*` 指示符。
+**显示元素详细设置**
+- `elements.git.dirty: true` - 如果检测到未暂存的更改，在 Git 分支名称后附加 `*` 指示符。
+- `elements.git.dirty: false` - 即使检测到未暂存的更改，也不在 Git 分支名称后附加 `*` 指示符。
 
-- `git.staged: true` - 如果检测到已暂存的更改，在分支名称后附加 `+` 指示符。
-- `git.staged: false` - 即使检测到已暂存的更改，也不分支名称后附加 `+` 指示符。
+- `elements.git.staged: true` - 如果检测到已暂存的更改，在分支名称后附加 `+` 指示符。
+- `elements.git.staged: false` - 即使检测到已暂存的更改，也不分支名称后附加 `+` 指示符。
+
+- `elements.time.startup_threshold: 0.5sec` - 当启动时间大于等于指定时间时显示时间信息
+- `elements.time.execution_threshold: 0.5sec` - 当运行时间大于等于指定时间时显示时间信息
 
 #### 主题管理
 您可以使用 `nuprm theme list` 命令来查看可用的主题：

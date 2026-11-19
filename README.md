@@ -95,7 +95,7 @@ $env.NUPRMCONFIG = {
 - `compatibility.icon_with_space: false` - Do not add space after the Power Line icon
   > `compatibility.icon_with_space` is needed because the display width of Powerline icons isn't always 1 character, even though the actual space the icon occupies is 1 character. Without it, this could cause visual overlapping. If you are using the Mono variant of a Nerd Font, where the display width of each icon is exactly 1, this option is not needed
 
-**Directory abbreviation configuration**
+**Directory abbreviation configuration**  
 nuprm supports intelligent directory abbreviation to make long paths more readable.
 
 - `directory_abbreviation.enabled: true` - Enable directory abbreviation
@@ -134,8 +134,8 @@ nuprm supports intelligent directory abbreviation to make long paths more readab
 - `display_elements.shells: true` - Display Shells information
 - `display_elements.shells: false` - Do not display Shells information
 
-- `display_elements.startup_time: true` - Display startup time (on execution time information)
-- `display_elements.startup_time: false` - Do not display startup time (on execution time information)
+- `display_elements.startup_time: true` - Display startup time (in place of execution time information)
+- `display_elements.startup_time: false` - Do not display startup time (in place of execution time information)
 
 - `display_elements.execution_time: true` - Display execution time information
 - `display_elements.execution_time: false` - Do not display execution time information
@@ -143,11 +143,14 @@ nuprm supports intelligent directory abbreviation to make long paths more readab
 - `display_elements.exit: true` - Display exit code information
 - `display_elements.exit: false` - Do not display exit code information
 
-- `git.dirty: true` - Appends the `*` indicator after the Git branch name if unstaged changes are detected.
-- `git.dirty: false` - Does not append the `*` indicator after the Git branch name, even if unstaged changes are detected.
+- `elements.git.dirty: true` - Appends the `*` indicator after the Git branch name if unstaged changes are detected
+- `elements.git.dirty: false` - Does not append the `*` indicator after the Git branch name, even if unstaged changes are detected
 
-- `git.staged: true` - Appends the `+` indicator after the branch name if staged changes are detected.
-- `git.staged: false` - Does not append the `+` indicator after the branch name, even if staged changes are detected.
+- `elements.git.staged: true` - Appends the `+` indicator after the branch name if staged changes are detected
+- `elements.git.staged: false` - Does not append the `+` indicator after the branch name, even if staged changes are detected
+
+- `elements.time.startup_threshold: 0.5sec` - Display time information when the startup time is greater than or equal to the specified time
+- `elements.time.execution_threshold: 0.5sec` - Display time information when the execution time is greater than or equal to the specified time
 
 #### Theme Management
 You can use the `nuprm theme list` command to view available themes:
