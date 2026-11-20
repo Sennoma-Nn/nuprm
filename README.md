@@ -117,7 +117,7 @@ nuprm supports intelligent directory abbreviation to make long paths more readab
 - `directory_abbreviation.abbreviate_home: true` - Enable home directory abbreviation to `~`
 - `directory_abbreviation.abbreviate_home: false` - Disable home directory abbreviation
 
-- `directory_abbreviation.specific_mappings: {}` - Custom special directory abbreviations
+- `directory_abbreviation.custom_abbreviate_mappings: {}` - Custom special directory abbreviations
   - You can add custom directory abbreviations, for example set `~/Documents` to `📄`, set home directory to `🏠`
   > If you want to customize the home directory abbreviation display, you must disable `directory_abbreviation.abbreviate_home`
 

@@ -117,7 +117,7 @@ nuprm 支持智能目录缩写功能，让长路径显示更加短。
 - `directory_abbreviation.abbreviate_home: true` - 启用家目录缩写为 `~`
 - `directory_abbreviation.abbreviate_home: false` - 禁用家目录缩写
 
-- `directory_abbreviation.specific_mappings: {}` - 自定义特殊目录缩写
+- `directory_abbreviation.custom_abbreviate_mappings: {}` - 自定义特殊目录缩写
   - 您可以添加自定义目录缩写，例如将 `~/Documents` 设置为 `📄`，将家目录设置为 `🏠`
   > 如果你想要把家目录重新设置缩写显示，你必须禁用 `directory_abbreviation.abbreviate_home`
 

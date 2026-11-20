@@ -74,13 +74,13 @@ def config-check [] {
     }
 
     for cfg in [$.directory_abbreviation.start_from_end, $.directory_abbreviation.display_chars] {
-        if (get-config $cfg | describe | $in in ["nothing", "int"] | not $in) {
+        if not (get-config $cfg | describe | $in in ["nothing", "int"]) {
             error make --unspanned { msg: $"The ($cfg) expected value is int." }
         }
     }
 
     for cfg in [$.elements.time.startup_threshold, $.elements.time.execution_threshold] {
-        if (get-config $cfg | describe | $in in ["nothing", "duration"] | not $in) {
+        if not (get-config $cfg | describe | $in in ["nothing", "duration"]) {
             error make --unspanned { msg: $"The ($cfg) expected value is duration." }
         }
     }
@@ -105,9 +105,16 @@ def config-check [] {
     }
 
     let custom_abbr_map = get-config $.directory_abbreviation.custom_abbreviate_mappings
-    if ($custom_abbr_map | describe) != "nothing" {
-        if ($custom_abbr_map | values | describe) != "list<string> (stream)" {
-            error make --unspanned { msg: "The $.directory_abbreviation.custom_abbreviate_mappings expected value is list<string>." }
+    let custom_abbr_type = $custom_abbr_map | describe -d | get type
+    let custom_abbr_error_msg = "The $.directory_abbreviation.custom_abbreviate_mappings expected value is list<string>."
+    if ($custom_abbr_type | $in != "nothing") {
+        if $custom_abbr_type == "record" {
+            let other_type_list = $custom_abbr_map | items {|k, v| $v | describe } | where $it != string
+            if ($other_type_list | length) > 0 {
+                error make --unspanned { msg: $custom_abbr_error_msg }
+            }
+        } else {
+            error make --unspanned { msg: $custom_abbr_error_msg }
         }
     }
 }
