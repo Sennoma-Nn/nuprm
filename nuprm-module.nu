@@ -87,7 +87,6 @@ def config-check [] {
     let record_configs = [
         $.
         $.directory_abbreviation, $.directory_abbreviation.custom_abbreviate_mappings,
-        $.display_elements,
         $.compatibility,
         $.display_elements,
         $.elements, $.elements.git, $.elements.time
@@ -130,13 +129,16 @@ def config-check [] {
         }
     }
 
-    let custom_abbr_map = get-config $.directory_abbreviation.custom_abbreviate_mappings
-    if ($custom_abbr_map | describe -d | get "type") != "nothing" {
-        let other_type_list = $custom_abbr_map | items {|k, v| $v | describe | if $in != string { $k } else { "" }} | where $it != ""
-        if ($other_type_list | length) > 0 {
-            for i in $other_type_list {
-                let cfg_path = ["directory_abbreviation", "custom_abbreviate_mappings", $i] | into cell-path
-                $labels ++= (make-error-labels $cfg_path "string")
+    let custom_abbr_path = $.directory_abbreviation.custom_abbreviate_mappings
+    let custom_abbr_map = get-config $custom_abbr_path
+    if (check-config-type $custom_abbr_path ["record"]) {
+        if ($custom_abbr_map | describe -d | get "type") != "nothing" {
+            let other_type_list = $custom_abbr_map | items {|k, v| $v | describe | if $in != string { $k } else { "" }} | where $it != ""
+            if ($other_type_list | length) > 0 {
+                for i in $other_type_list {
+                    let cfg_path = ["directory_abbreviation", "custom_abbreviate_mappings", $i] | into cell-path
+                    $labels ++= (make-error-labels $cfg_path "string")
+                }
             }
         }
     }
