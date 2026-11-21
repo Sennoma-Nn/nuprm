@@ -170,9 +170,9 @@ export module nuprm {
     # Load nuprm
     export def --env load [] {
         try {
-            let is_enable = get-prompt-info nuprm-enabled
-
             config-check
+
+            let is_enable = get-prompt-info nuprm-enabled
 
             if (get-prompt-info full-name-enabled) {
                 if ($env.FULLNAME? == null) {
@@ -206,6 +206,13 @@ export module nuprm {
         export def list [
             --preview (-p) # Preview theme
         ] {
+            try {
+                if $preview { config-check }
+            } catch {|e|
+                print $"(ansi r)NuPrm ERROR!(ansi rst)\n" $e.rendered
+                return
+            }
+
             use theme-list.nu theme_list
 
             let theme_name_list = $theme_list | sort
