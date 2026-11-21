@@ -73,6 +73,17 @@ def config-check [] {
         error make --unspanned { msg: "Config not defined." }
     }
 
+    def make-error-labels [cfg_path, type] {
+        return [
+            {
+                text: $"Expected value is ($type)",
+                span: ($env.NUPRMCONFIG | get $cfg_path -o | metadata $in | get "span")
+            }
+        ]
+    }
+
+    mut labels = []
+
     let record_configs = [
         $.
         $.directory_abbreviation, $.directory_abbreviation.custom_abbreviate_mappings,
@@ -81,60 +92,26 @@ def config-check [] {
         $.display_elements,
         $.elements, $.elements.git, $.elements.time
     ]
-
-    for cfg_path in $record_configs {
-        if not (check-type -n $cfg_path ["record"]) {
-            error make {
-                msg: "Config type error"
-                labels: [
-                    {
-                        text: $"Expected value is record",
-                        span: ($env.NUPRMCONFIG | get $cfg_path | metadata $in | get "span")
-                    }
-                ]
-            }
+    let record_configs_error_list = find-config-type-error -n $record_configs ["record"]
+    if ($record_configs_error_list | length) > 0 {
+        for cfg_path in $record_configs_error_list {
+            $labels ++= (make-error-labels $cfg_path "record")
         }
     }
 
-    for cfg_path in [$.directory_abbreviation.start_from_end, $.directory_abbreviation.display_chars] {
-        if not (check-type -n $cfg_path ["int"]) {
-            error make {
-                msg: "Config type error",
-                labels: [
-                    {
-                        text: $"Expected value is int",
-                        span: ($env.NUPRMCONFIG | get $cfg_path | metadata $in | get "span")
-                    }
-                ]
-            }
+    let int_configs = [$.directory_abbreviation.start_from_end, $.directory_abbreviation.display_chars]
+    let int_configs_error_list = find-config-type-error -n $int_configs ["int"]
+    if ($int_configs_error_list | length) > 0 {
+        for cfg_path in $int_configs_error_list {
+            $labels ++= (make-error-labels $cfg_path "int")
         }
     }
 
-    for cfg_path in [$.elements.time.startup_threshold, $.elements.time.execution_threshold] {
-        if not (check-type -n $cfg_path ["duration"]) {
-            error make {
-                msg: "Config type error",
-                labels: [
-                    {
-                        text: "Expected value is duration",
-                        span: ($env.NUPRMCONFIG | get $cfg_path | metadata $in | get "span")
-                    }
-                ]
-            }
-        }
-    }
-
-    let check_bool = {|cfg_path|
-        if not (check-type -n $cfg_path ["bool"]) {
-            error make {
-                msg: "Config type error",
-                labels: [
-                    {
-                        text: "Expected value is bool",
-                        span: ($env.NUPRMCONFIG | get $cfg_path | metadata $in | get "span")
-                    }
-                ]
-            }
+    let duration_configs = [$.elements.time.startup_threshold, $.elements.time.execution_threshold]
+    let duration_configs_error_list = find-config-type-error -n $duration_configs ["duration"]
+    if ($duration_configs_error_list | length) > 0 {
+        for cfg_path in $duration_configs_error_list {
+            $labels ++= (make-error-labels $cfg_path "duration")
         }
     }
 
@@ -146,24 +123,28 @@ def config-check [] {
         $.compatibility.path_url, $.compatibility.true_color, $.compatibility.icon_with_space,
         $.elements.git.dirty, $.elements.git.staged
     ]
-
-    for cfg in $bool_configs {
-        do $check_bool $cfg
+    let bool_configs_error_list = find-config-type-error -n $bool_configs ["bool"]
+    if ($bool_configs_error_list | length) > 0 {
+        for cfg_path in $bool_configs_error_list {
+            $labels ++= (make-error-labels $cfg_path "bool")
+        }
     }
 
     let custom_abbr_map = get-config $.directory_abbreviation.custom_abbreviate_mappings
     if ($custom_abbr_map | describe -d | get "type") != "nothing" {
-        let other_type_list = $custom_abbr_map | items {|k, v| $v | describe } | where $it != string
+        let other_type_list = $custom_abbr_map | items {|k, v| $v | describe | if $in != string { $k } else { "" }} | where $it != ""
         if ($other_type_list | length) > 0 {
-            error make {
-                msg: "Config type error",
-                labels: [
-                    {
-                        text: "Expected value is record<path: string, ...>",
-                        span: ($env.NUPRMCONFIG | get $.directory_abbreviation.custom_abbreviate_mappings | metadata $in | get "span")
-                    }
-                ]
+            for i in $other_type_list {
+                let cfg_path = ["directory_abbreviation", "custom_abbreviate_mappings", $i] | into cell-path
+                $labels ++= (make-error-labels $cfg_path "string")
             }
+        }
+    }
+
+    if ($labels | length) > 0 {
+        error make {
+            msg: "Config type mismatch",
+            labels: $labels
         }
     }
 }
@@ -216,7 +197,7 @@ export module nuprm {
                 $env.TRANSIENT_PROMPT_INDICATOR_VI_NORMAL = {|| nuprm-theme get-transient-prompt-indicator-vi-normal }
             }
         } catch {|e|
-            print $"(ansi r)NuPrm ERROR!(ansi rst)\n" $e
+            print $"(ansi r)NuPrm ERROR!(ansi rst)\n" $e.rendered
         }
     }
 
