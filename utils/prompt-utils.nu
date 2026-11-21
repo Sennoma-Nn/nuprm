@@ -688,10 +688,10 @@ def icon-with-space [
     icon_len: int = 1     # Icon display length
     --before (-b)         # Add space before Power Line icon
 ]: nothing -> string {
-    let whith_space = is-config-enable $.compatibility.icon_with_space true
+    let with_space = is-config-enable $.compatibility.icon_with_space true
     let icon = $icon_str | str trim
 
-    if $whith_space {
+    if $with_space {
         let space_len = [0, $icon_len] | math max
         let space_str = if $space_len > 0 { 1..$space_len | each { " " } | str join } else { "" }
 
