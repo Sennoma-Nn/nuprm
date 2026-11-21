@@ -7,6 +7,8 @@
 
 **NuPrm** is a Nushell theme framework and theme management script that allows you to easily switch between different prompt themes, customize the appearance of your Nushell prompt, and manage prompt configurations through environment variables. It is written using Nushell scripts and integrates with Nushell functionality, while providing common interfaces to make it easier to build prompts
 
+> A key design **difference** between NuPrm and projects like Oh-My-Posh is that NuPrm lets you configure detailed prompt formatting without modifying the theme files
+
 ## Installation
 
 > You can change `~/.config/nuprm` to any directory you prefer, as long as the `$nuprm_path` constant correctly points to where you cloned the repository
