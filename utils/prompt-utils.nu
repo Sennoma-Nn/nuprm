@@ -516,7 +516,6 @@ def get-exit-code []: nothing -> number {
 # Get system icon (Nerd Font)
 def get-system-icon []: nothing -> string {
     let system_icon = is-config-enable $.display_elements.system_icon false
-    let whith_space = is-config-enable $.compatibility.icon_with_space true
 
     let linux_distro_icons = {
         "alma"               : (icon-with-space "")
@@ -696,7 +695,11 @@ def icon-with-space [
         let space_len = [0, $icon_len] | math max
         let space_str = if $space_len > 0 { 1..$space_len | each { " " } | str join } else { "" }
 
-        return $"($icon)($space_str)"
+        if not $before {
+            return $"($icon)($space_str)"
+        } else {
+            return $"($space_str)($icon)"
+        }
     } else {
         return $icon
     }
