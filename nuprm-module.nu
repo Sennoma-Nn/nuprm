@@ -82,56 +82,56 @@ def config-check [] {
         $.elements, $.elements.git, $.elements.time
     ]
 
-    for cfg in $record_configs {
-        if not (get-config $cfg | describe -d | get "type" | $in in ["nothing", "record"]) {
+    for cfg_path in $record_configs {
+        if not (check-type -n $cfg_path ["record"]) {
             error make {
                 msg: "Config type error"
                 labels: [
                     {
                         text: $"Expected value is record",
-                        span: ($env.NUPRMCONFIG | get $cfg | metadata $in | get "span")
+                        span: ($env.NUPRMCONFIG | get $cfg_path | metadata $in | get "span")
                     }
                 ]
             }
         }
     }
 
-    for cfg in [$.directory_abbreviation.start_from_end, $.directory_abbreviation.display_chars] {
-        if not (get-config $cfg | describe | $in in ["nothing", "int"]) {
+    for cfg_path in [$.directory_abbreviation.start_from_end, $.directory_abbreviation.display_chars] {
+        if not (check-type -n $cfg_path ["int"]) {
             error make {
                 msg: "Config type error",
                 labels: [
                     {
                         text: $"Expected value is int",
-                        span: ($env.NUPRMCONFIG | get $cfg | metadata $in | get "span")
+                        span: ($env.NUPRMCONFIG | get $cfg_path | metadata $in | get "span")
                     }
                 ]
             }
         }
     }
 
-    for cfg in [$.elements.time.startup_threshold, $.elements.time.execution_threshold] {
-        if not (get-config $cfg | describe | $in in ["nothing", "duration"]) {
+    for cfg_path in [$.elements.time.startup_threshold, $.elements.time.execution_threshold] {
+        if not (check-type -n $cfg_path ["duration"]) {
             error make {
                 msg: "Config type error",
                 labels: [
                     {
                         text: "Expected value is duration",
-                        span: ($env.NUPRMCONFIG | get $cfg | metadata $in | get "span")
+                        span: ($env.NUPRMCONFIG | get $cfg_path | metadata $in | get "span")
                     }
                 ]
             }
         }
     }
 
-    let check_bool = {|cfg|
-        if not (is-config-bool $cfg -n) {
+    let check_bool = {|cfg_path|
+        if not (check-type -n $cfg_path ["bool"]) {
             error make {
                 msg: "Config type error",
                 labels: [
                     {
                         text: "Expected value is bool",
-                        span: ($env.NUPRMCONFIG | get $cfg | metadata $in | get "span")
+                        span: ($env.NUPRMCONFIG | get $cfg_path | metadata $in | get "span")
                     }
                 ]
             }
