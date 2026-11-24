@@ -62,12 +62,7 @@ def get-git-branch []: nothing -> string {
             | str trim
     }
 
-    let branch = try {
-        do -i $get_branch
-    } catch {
-        ""
-    }
-
+    let branch = try { do -i $get_branch } catch { "" }
     return $branch
 }
 
@@ -88,12 +83,7 @@ def get-is-git-dirty []: nothing -> bool {
             | not $in
     }
 
-    let dirty = try {
-        do -i $get_dirty
-    } catch {
-        false
-    }
-
+    let dirty = try { do -i $get_dirty } catch { false }
     return $dirty
 }
 
@@ -112,12 +102,7 @@ def git-has-staged []: nothing -> bool {
             | $in != 0
     }
 
-    let staged = try {
-        do -i $get_staged
-    } catch {
-        false
-    }
-
+    let staged = try { do -i $get_staged } catch { false }
     return $staged
 }
 
@@ -141,20 +126,8 @@ def get-git-info [
     let show_string = [
         $git_branch,
         " ",
-        (
-            if $is_git_dirty {
-                $dirty_char
-            } else {
-                ""
-            }
-        ),
-        (
-            if $git_has_staged {
-                $staged_char
-            } else {
-                ""
-            }
-        )
+        (if $is_git_dirty { $dirty_char } else { "" }),
+        (if $git_has_staged { $staged_char } else { "" })
     ] | str join | str trim
 
     return $show_string
@@ -172,12 +145,8 @@ def get-where-shells [
 
     try {
         if (((which "dirs") ++ (which "shells")) | length) > 0 {
-            let shells_data = if (which "dirs" | length) > 0 {
-                dirs
-            } else {
-                shells
-            }
-            
+            let shells_data = if (which "dirs" | length) > 0 { dirs } else { shells }
+
             if $dont_display_shells_if_not_used_shells and ($shells_data | length) == 1 {
                 return ""
             } else {
@@ -373,12 +342,7 @@ def abbr_path []: list -> list {
         let path_len = $path_list | length
 
         let get_each_of_abbr_display_chars = {|item|
-            let substring_offset = if ($item.item | str starts-with ".") {
-                1
-            } else {
-                0
-            }
-
+            let substring_offset = if ($item.item | str starts-with ".") { 1 } else { 0 }
             let substring_range = $display_chars + $substring_offset - 1 | [0, $in] | math max | 0..$in
 
             if ($path_len - $item.index >= $start_from_end) and ($start_from_end > 0) {
